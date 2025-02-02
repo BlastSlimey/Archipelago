@@ -134,7 +134,7 @@ class GOIWorld(World):
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         spots: List[str] = []
-        for location in self.get_locations():
+        for location in self.multiworld.get_locations(self.player):
             if location.name in spots_list:
                 spots.append(location.name)
         return {"spots": spots}
