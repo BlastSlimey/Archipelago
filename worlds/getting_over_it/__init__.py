@@ -2,6 +2,8 @@ from typing import Dict
 
 from BaseClasses import Item, Location, ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
+from .items import items_list, GOIItem
+from .locations import locations_list, GOILocation
 from .options import GOIOptions
 
 
@@ -31,23 +33,6 @@ class GOIWorld(World):
     web = GOIWeb()
 
     base_id = 22220107
-    items_list: Dict[str, ItemClassification] = {
-        "Gravity Reduction": ItemClassification.progression,
-        "Wind Trap": ItemClassification.trap,
-        "Goal Height Reduction": ItemClassification.progression,
-        "Frustration": ItemClassification.filler,
-    }
-    instant_spots = ["Tree", "Paddle"]
-    early_spots = ["Concrete Pipe", "Barrels", "Cup", "Trash", "First Lamp", "Second Lamp", "Bathtub", "Grill",
-                   "Kids Slide"]
-    midgame_spots = ["Pliers", "Child", "Car", "Staircase", "Security Cam", "Toilet", "Orange Table", "Gargoyle",
-                     "Church Top", "Hedge", "Hat", "Anvil"]
-    late_spots = ["Telephone Booth", "Snake Ride", "Bucket", "Landing Stage", "Ice Mountain", "Shopping Cart", "Temple",
-                  "Antenna Top"]
-    float_only_spots = ["Big Balloon", "Sexy Hiking Character"]
-    spots_list = instant_spots + early_spots + midgame_spots + late_spots + float_only_spots
-    completions_list = [f"Got Over It #{count}" for count in range(1, 10)]
-    locations_list = spots_list + completions_list
 
     item_name_to_id = {name: id for id, name in enumerate(items_list.keys(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(locations_list, base_id)}
@@ -99,6 +84,7 @@ class GOIWorld(World):
                 region_float.locations.append(GOILocation(self.player, loc_name, self.location_name_to_id[loc_name],
                                                           region_float))
 
+        # Goal event
         goal_location = GOILocation(self.player, "Goal", None, region_late)
         goal_location.place_locked_item(GOIItem("Goal", ItemClassification.progression_skip_balancing,
                                                 None, self.player))
@@ -111,11 +97,3 @@ class GOIWorld(World):
         self.multiworld.itempool.extend([self.create_item("Gravity Reduction") for _ in range(4)] +
                                         [self.create_item("Wind Trap") for _ in range(6)] +
                                         [self.create_item("Goal Height Reduction") for _ in range(6)])
-
-
-class GOIItem(Item):
-    game = "Getting Over It"
-
-
-class GOILocation(Location):
-    game = "Getting Over It"
