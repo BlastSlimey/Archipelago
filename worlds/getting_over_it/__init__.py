@@ -1,6 +1,6 @@
 from typing import Dict
 
-from BaseClasses import Item, Location, ItemClassification, Region
+from BaseClasses import Item, Location, ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .options import GOIOptions
 
@@ -8,6 +8,16 @@ from .options import GOIOptions
 class GOIWeb(WebWorld):
     rich_text_options_doc = True
     theme = "stone"
+    game_info_languages = ['en']
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Getting Over It with Archipelago:",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["BlastSlimey"]
+    )
+    tutorials = [setup_en]
 
 
 class GOIWorld(World):
