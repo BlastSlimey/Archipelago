@@ -12,7 +12,7 @@ class GOIWeb(WebWorld):
 
 class GOIWorld(World):
     """
-    Getting Over It is a game.
+    Getting Over It is a frustrating psychological horror game about climbing a mountain.
     """
     game = "Getting Over It"
     options_dataclass = GOIOptions
