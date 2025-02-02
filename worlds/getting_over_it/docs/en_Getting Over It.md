@@ -14,8 +14,8 @@ and export a config file.
 
 ## What does randomization do to this game?
 
-The gameplay is not randomized in any way, but movement is nerved to create some kind of dependency on items and saving 
-is disabled to prevent cheating.
+The gameplay is not randomized in any way, but movement is nerved to create some kind of dependency on items and 
+continuing saves is disabled to prevent cheating.
 
 ## What is the goal of Getting Over It in Archipelago?
 

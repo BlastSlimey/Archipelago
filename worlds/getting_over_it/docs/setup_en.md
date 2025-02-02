@@ -46,4 +46,4 @@ You can generate a yaml or download a template by visiting the
 
 Open the config file of the client mod, which can be found at `<game root>/BepInEx/config/BlastSlimey.CheckingOverIt.cfg`, 
 with a text editor and read the config descriptions for how to correctly enter your connection details. 
-Then you can just start a new game (but remember that saving progress is disabled in AP).
+Then you can just start a new game (but remember that continuing saved progress is disabled in AP).
