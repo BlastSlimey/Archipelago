@@ -1,6 +1,6 @@
-from typing import Dict
+from typing import Dict, Mapping, Any, List
 
-from BaseClasses import Item, Location, ItemClassification, Region, Tutorial
+from BaseClasses import Item, ItemClassification, Region, Tutorial, MultiWorld
 from worlds.AutoWorld import WebWorld, World
 from .items import items_list, GOIItem
 from .locations import locations_list, GOILocation
@@ -37,6 +37,22 @@ class GOIWorld(World):
     item_name_to_id = {name: id for id, name in enumerate(items_list.keys(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(locations_list, base_id)}
 
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+
+        # Universal Tracker support
+        self.ut_active: bool = False
+        self.passthrough: Dict[str, any] = {}
+        self.ut_spots: List[str] = []
+
+    def generate_early(self) -> None:
+        # Load values from UT if this is a regenerated world
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "Getting Over It" in self.multiworld.re_gen_passthrough:
+                self.ut_active = True
+                self.passthrough = self.multiworld.re_gen_passthrough["Getting Over It"]
+                self.ut_spots = self.passthrough["spots"]
+
     def create_item(self, name: str) -> Item:
         return GOIItem(name, self.items_list[name], self.item_name_to_id[name], self.player)
 
@@ -45,44 +61,60 @@ class GOIWorld(World):
 
     def create_regions(self) -> None:
 
+        # Define regions
         region_menu = Region("Menu", self.player, self.multiworld)
         region_early = Region("Early spots", self.player, self.multiworld)
         region_mid = Region("Midgame spots", self.player, self.multiworld)
         region_late = Region("Late spots", self.player, self.multiworld)
         region_float = Region("Float-only spots", self.player, self.multiworld)
 
-        region_menu.connect(region_early, "Past tree and paddle",
-                            lambda state: state.has("Gravity Reduction", self.player, self.options.difficulty.value))
-        region_early.connect(region_mid, "Getting on to the slide",
-                             lambda state: state.has("Gravity Reduction", self.player,
-                                                     self.options.difficulty.value + 1))
-        region_mid.connect(region_late, "Jumping from the anvil",
-                           lambda state: state.has("Gravity Reduction", self.player, self.options.difficulty.value + 2)
-                                         or state.has("Goal Height Reduction", self.player, 4))
-        region_late.connect(region_float, "Jumping to very high places",
-                            lambda state: state.has("Gravity Reduction", self.player, 4))
+        # Connect regions
+        region_menu.connect(
+            region_early, "Past tree and paddle",
+            lambda state: state.has("Gravity Reduction", self.player, self.options.difficulty.value))
+        region_early.connect(
+            region_mid, "Getting on to the slide",
+            lambda state: state.has("Gravity Reduction", self.player, self.options.difficulty.value + 1))
+        region_mid.connect(
+            region_late, "Jumping from the anvil",
+            lambda state: state.has("Gravity Reduction", self.player, self.options.difficulty.value + 2) or
+                          state.has("Goal Height Reduction", self.player, 4))
+        region_menu.connect(
+            region_float, "Jumping to very high places",
+            lambda state: state.has("Gravity Reduction", self.player, 4))
 
-        for loc in self.instant_spots:  # always 2 locations
+        # Add tree and paddle (guaranteed locations) and "Got Over It #X" locations
+        for loc in self.instant_spots:
             region_menu.locations.append(GOILocation(self.player, loc, self.location_name_to_id[loc], region_menu))
         for count in range(1, self.options.required_completions.value):  # 0-9 locations
             loc_name = f"Got Over It #{count}"
-            region_late.locations.append(GOILocation(self.player, loc_name,
-                                                     self.location_name_to_id[loc_name], region_late))
-        remaining_spots = self.early_spots + self.midgame_spots + self.late_spots + self.float_only_spots
-        for _ in range(15 - self.options.required_completions.value):  # => 14-5 extra locations
-            loc_name = remaining_spots.pop(self.random.randint(0, len(remaining_spots)-1))
-            if loc_name in self.early_spots:
-                region_early.locations.append(GOILocation(self.player, loc_name, self.location_name_to_id[loc_name],
-                                                          region_early))
-            elif loc_name in self.midgame_spots:
-                region_mid.locations.append(GOILocation(self.player, loc_name, self.location_name_to_id[loc_name],
-                                                        region_mid))
-            elif loc_name in self.late_spots:
-                region_late.locations.append(GOILocation(self.player, loc_name, self.location_name_to_id[loc_name],
-                                                         region_late))
-            elif loc_name in self.float_only_spots:
-                region_float.locations.append(GOILocation(self.player, loc_name, self.location_name_to_id[loc_name],
-                                                          region_float))
+            region_late.locations.append(
+                GOILocation(self.player, loc_name, self.location_name_to_id[loc_name], region_late))
+
+        # Choose 5-14 random additional locations from the remaining spots
+        def add(name: str):
+            if name in self.early_spots:
+                region_early.locations.append(
+                    GOILocation(self.player, name, self.location_name_to_id[name], region_early))
+            elif name in self.midgame_spots:
+                region_mid.locations.append(
+                    GOILocation(self.player, name, self.location_name_to_id[name], region_mid))
+            elif name in self.late_spots:
+                region_late.locations.append(
+                    GOILocation(self.player, name, self.location_name_to_id[name], region_late))
+            elif name in self.float_only_spots:
+                region_float.locations.append(
+                    GOILocation(self.player, name, self.location_name_to_id[name], region_float))
+            else:
+                raise ValueError(f"Tried to add spot {name} without having a region defined")
+
+        if self.ut_active:
+            for spot in self.ut_spots:
+                add(spot)
+        else:
+            remaining_spots = self.early_spots + self.midgame_spots + self.late_spots + self.float_only_spots
+            for _ in range(15 - self.options.required_completions.value):
+                add(remaining_spots.pop(self.random.randint(0, len(remaining_spots)-1)))
 
         # Goal event
         goal_location = GOILocation(self.player, "Goal", None, region_late)
@@ -91,9 +123,17 @@ class GOIWorld(World):
         region_late.locations.append(goal_location)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Goal", self.player)
 
+        # Adding finalized regions to multiworld
         self.multiworld.regions.extend([region_menu, region_early, region_mid, region_late, region_float])
 
     def create_items(self) -> None:
         self.multiworld.itempool.extend([self.create_item("Gravity Reduction") for _ in range(4)] +
                                         [self.create_item("Wind Trap") for _ in range(6)] +
                                         [self.create_item("Goal Height Reduction") for _ in range(6)])
+
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        spots: List[str] = []
+        for location in self.get_locations():
+            if not location.name.startswith("Got Over It"):
+                spots.append(location.name)
+        return {"spots": spots}
