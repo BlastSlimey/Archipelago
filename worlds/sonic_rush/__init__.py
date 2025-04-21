@@ -1,23 +1,19 @@
 import os
 import pkgutil
-from typing import Mapping, Any, ClassVar
+import typing
+from typing import Any, List, Dict, Tuple, Mapping
 
 import settings
-from BaseClasses import Tutorial, MultiWorld, Item
-from worlds.AutoWorld import WebWorld, World
-from .items import SonicRushItem, item_table
+from .Rom import SonicRushProcedurePatch, write_tokens
+from .items import item_table, SonicRushItem, filler, progressive_level_selects, emeralds, zone_unlocks, traps, trap, \
+    item_lookup_by_name
+from .locations import act_locations, boss_locations, special_stage_locations, add_bosses, \
+    add_special_stages, add_base_acts, location_lookup_by_name
 from .options import SonicRushOptions
-
-
-class SonicRushSettings(settings.Group):
-    class RomFile(settings.UserFilePath):
-        """File name of the Sonic Rush (USA) rom"""
-        copy_to = "Sonic_Rush_USA.nds"
-        description = "Sonic Rush (USA) ROM File"
-        md5s = ["bd4dcf6ad27de0e3212b8c67864df0ec"]
-
-    rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: bool = True
+from worlds.AutoWorld import World, WebWorld
+from BaseClasses import Item, Tutorial, LocationProgressType, MultiWorld
+from .regions import create_regions
+from .Client import SonicRushClient  # Unused, but required to register with BizHawkClient
 
 
 class SonicRushWeb(WebWorld):
@@ -33,49 +29,125 @@ class SonicRushWeb(WebWorld):
         ["BlastSlimey"]
     )
     tutorials = [setup_en]
+    # item_descriptions = item_descriptions
+    # location_descriptions = location_description
+
+
+class SonicRushSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Sonic Rush USA rom"""
+
+        copy_to = "SONICRUSH_USA.nds"
+        description = "Sonic Rush (USA) ROM File"
+        md5s = ["bd4dcf6ad27de0e3212b8c67864df0ec"]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: bool = True
 
 
 class SonicRushWorld(World):
     """
-    Sonic Rush is 2.5D platformer from 2005 for the Nintendo DS, that introduced Blaze the Cat and the boost ability.
+    Sonic Rush is a 2.5D platformer for the Nintendo DS from 2005.
+    It's the game that introduced Blaze the Cat and the boost ability.
     """
     game = "Sonic Rush"
     options_dataclass = SonicRushOptions
     options: SonicRushOptions
     topology_present = True
     web = SonicRushWeb()
-    settings: ClassVar[SonicRushSettings]
-    item_name_to_id = {}
-    location_name_to_id = {}
+    settings: typing.ClassVar[SonicRushSettings]
+    item_name_to_id = item_lookup_by_name
+    location_name_to_id = location_lookup_by_name
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
+
+        self.location_count: int = 0
+        self.included_locations: Dict[str, Tuple[str, LocationProgressType]] = {}
 
     def generate_early(self) -> None:
         pass
 
     def create_item(self, name: str) -> Item:
-        return SonicRushItem(name, item_table[name], self.item_name_to_id[name], self.player)
+        return SonicRushItem(name, item_table[name](self.options), self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
-        return "Filler"
+        return filler(self.random.random())
 
     def create_regions(self) -> None:
-        pass
+        # Create list of all included level and upgrade locations based on player options
+        # This already includes the region to be placed in and the LocationProgressType
+        self.included_locations = {
+            **add_base_acts(self.options),
+            **add_bosses(self.options),
+            **add_special_stages(self.options),
+        }
+
+        # Save the final amount of to-be-filled locations
+        self.location_count = len(self.included_locations)
+
+        # Create regions and entrances based on included locations and player options
+        self.multiworld.regions.extend(create_regions(
+            self.player, self.multiworld, self.options, self.location_name_to_id, self.included_locations
+        ))
 
     def create_items(self) -> None:
-        pass
+        # Include guaranteed items
+        included_items: List[Item] = (
+            [self.create_item(name) for name in progressive_level_selects for _ in range(7)] +
+            [self.create_item(name) for name in emeralds]
+        )
+
+        included_zone_unlocks: List[Item] = [self.create_item(name) for name in zone_unlocks]
+        for _ in range(self.options.amount_of_starting_zones):
+            self.multiworld.push_precollected(
+                included_zone_unlocks.pop(self.random.randint(0, len(included_zone_unlocks)-1))
+            )
+        included_items += included_zone_unlocks
+
+        if self.options.tails_and_cream_substory == "always_present":
+            self.multiworld.push_precollected(self.create_item("Tails"))
+            self.multiworld.push_precollected(self.create_item("Cream"))
+        elif self.options.tails_and_cream_substory == "appearing_later":
+            included_items += [self.create_item("Tails"), self.create_item("Cream")]
+        elif self.options.tails_and_cream_substory == "getting_kidnapped":
+            self.multiworld.push_precollected(self.create_item("Tails"))
+            self.multiworld.push_precollected(self.create_item("Cream"))
+            included_items += [self.create_item("Kidnapping Tails"), self.create_item("Kidnapping Cream")]
+        elif self.options.tails_and_cream_substory == "appearing_later":
+            pass
+
+        traps_probability = self.options.traps_percentage/100
+        for _ in range(self.location_count - len(included_items)):
+            if self.random.random() < traps_probability:
+                # Fill with trap
+                included_items.append(self.create_item(trap(self.random.random())))
+            else:
+                # Fil with random filler item
+                included_items.append(self.create_item(self.get_filler_item_name()))
+
+        # Add correct number of items to itempool
+        self.multiworld.itempool += included_items
 
     def set_rules(self) -> None:
-        pass
-
-    def fill_slot_data(self) -> Mapping[str, Any]:
+        # Rules get instantly applied after initializing the regions
         pass
 
     def generate_output(self, output_directory: str) -> None:
         patch = SonicRushProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
-        patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "data/archipelago-base.bsdiff"))
+        patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "data/SonicRushAPPatch.bsdiff"))
+        write_tokens(patch)
         rom_path = os.path.join(
             output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}" f"{patch.patch_file_ending}"
         )
         patch.write(rom_path)
+
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        # Options that are relevant to the client
+        option_data = {
+            "goal": self.options.goal.current_key,
+            "screw_f_zone": bool(self.options.screw_f_zone.value),
+            "include_s_rank_checks": self.options.include_s_rank_checks.current_key,
+        }
+
+        return option_data
