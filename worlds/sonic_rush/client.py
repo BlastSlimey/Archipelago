@@ -177,6 +177,8 @@ class SonicRushClient(BizHawkClient):
                 network_item = ctx.items_received[index]
                 name = item_lookup_by_id[network_item.item]
                 match name:
+                    # Blaze's zone unlock bits have to stay in numerical order here,
+                    # because of the rom already converting current location to zone on flag checking
                     case "Unlock Zone 1 (Sonic)":
                         await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 0)
                     case "Unlock Zone 2 (Sonic)":
@@ -210,9 +212,11 @@ class SonicRushClient(BizHawkClient):
                     case "Unlock F-Zone (Blaze)":
                         await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 7)
                     case "Progressive Level Select (Sonic)":
-                        await self.receive_increase_byte(self.progressive_level_unlocks_sonic_offset, ctx)
+                        if index >= received_in_sav:
+                            await self.receive_increase_byte(self.progressive_level_unlocks_sonic_offset, ctx)
                     case "Progressive Level Select (Blaze)":
-                        await self.receive_increase_byte(self.progressive_level_unlocks_blaze_offset, ctx)
+                        if index >= received_in_sav:
+                            await self.receive_increase_byte(self.progressive_level_unlocks_blaze_offset, ctx)
                     case "Red Chaos Emerald":
                         await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 0)
                     case "Blue Chaos Emerald":
