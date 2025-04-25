@@ -1,7 +1,7 @@
 from typing import Dict, Tuple, List
 
 from BaseClasses import Region, MultiWorld, LocationProgressType, ItemClassification, CollectionState
-from worlds.generic.Rules import add_rule
+from worlds.generic.Rules import set_rule
 from .items import SonicRushItem, emeralds
 from .locations import SonicRushLocation
 from .options import SonicRushOptions
@@ -62,7 +62,7 @@ def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOption
     goal_location = SonicRushLocation(player, "Goal", None, regions["Goal"], LocationProgressType.DEFAULT)
     goal_location.place_locked_item(SonicRushItem("Goal", ItemClassification.progression_skip_balancing, None, player))
     if options.goal == "bosses_once":
-        add_rule(
+        set_rule(
             goal_location,
             lambda state: (can_play_zone(state, player, 1, "Sonic") or can_play_zone(state, player, 2, "Blaze")) and
                           (can_play_zone(state, player, 2, "Sonic") or can_play_zone(state, player, 4, "Blaze")) and
@@ -75,25 +75,25 @@ def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOption
                            can_play_f_zone(state, player, "Sonic") or can_play_f_zone(state, player, "Blaze"))
         )
     elif options.goal == "bosses_both":
-        add_rule(
+        set_rule(
             goal_location,
             lambda state: can_play_all_main_zones(state, player, "Sonic", options) and
                           can_play_all_main_zones(state, player, "Blaze", options)
         )
     elif options.goal == "extra_zone":
-        add_rule(
+        set_rule(
             goal_location,
             lambda state: can_play_extra_zone(state, player)
         )
     elif options.goal == "100_percent":
-        add_rule(
+        set_rule(
             goal_location,
             lambda state: can_play_all_main_zones(state, player, "Sonic", options) and
                           can_play_all_main_zones(state, player, "Blaze", options) and
                           can_play_extra_zone(state, player)
         )
     else:
-        add_rule(goal_location, lambda state: False)  # In case I add another goal and forget to add a rule for it
+        set_rule(goal_location, lambda state: False)  # In case I add another goal and forget to add a rule for it
     regions["Goal"].locations.append(goal_location)
     multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 
