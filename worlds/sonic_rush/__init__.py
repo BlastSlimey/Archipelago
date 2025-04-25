@@ -53,7 +53,6 @@ class SonicRushWorld(World):
     game = "Sonic Rush"
     options_dataclass = SonicRushOptions
     options: SonicRushOptions
-    topology_present = True
     web = SonicRushWeb()
     settings: typing.ClassVar[SonicRushSettings]
     item_name_to_id = item_lookup_by_name
