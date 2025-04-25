@@ -8,10 +8,19 @@ from .options import SonicRushOptions
 
 
 def can_play_zone(state: CollectionState, player: int, zone: int, char: str) -> bool:
-    return state.has(f"Unlock Zone {zone} ({char})", player) or (
-        state.has(f"Progressive Level Select ({char})", player, zone) and
-        state.has_any([f"Unlock Zone {any_zone} ({char})" for any_zone in range(1, zone+1)], player)
-    )
+    if state.has(f"Unlock Zone {zone} ({char})", player):
+        # Zone is unlocked, no further checking needed
+        return True
+    progressive_level_selects = state.count(f"Progressive Level Select ({char})", player)
+    if not progressive_level_selects >= zone:
+        # Not enough progressive level selects, zone is unreachable
+        return False
+    for any_zone in range(1, progressive_level_selects+1):
+        # Zone is reachable through level select, but level select must be accessible through another zone
+        if state.has(f"Unlock Zone {any_zone} ({char})", player):
+            return True
+    # Neither unlocked nor through level select accessible
+    return False
 
 
 def can_play_f_zone(state: CollectionState, player: int, char: str) -> bool:
