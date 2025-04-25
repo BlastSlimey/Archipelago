@@ -92,17 +92,33 @@ class SonicRushWorld(World):
 
     def create_items(self) -> None:
         # Include guaranteed items
-        included_items: List[Item] = (
+        always_items: List[Item] = (
             [self.create_item(name) for name in progressive_level_selects for _ in range(7)] +
             [self.create_item(name) for name in emeralds]
         )
 
-        included_zone_unlocks: List[Item] = [self.create_item(name) for name in zone_unlocks]
+        # Multiworlds with very few slots regularly fail generation on default settings.
+        # But a higher amount of starting zones tends to make goal reachable in sphere 1.
+        # This raises that option to a higher minimum value if there are few worlds, so that unittests don't fail.
+        match len(self.multiworld.worlds):
+            case 1:
+                self.options.amount_of_starting_zones.value = 10
+            case 2:
+                self.options.amount_of_starting_zones.value = 6
+            case 3:
+                self.options.amount_of_starting_zones.value = 4
+            case 4:
+                self.options.amount_of_starting_zones.value = 2
+
+        included_items: List[Item] = [self.create_item(name) for name in zone_unlocks]
         for _ in range(self.options.amount_of_starting_zones):
             self.multiworld.push_precollected(
-                included_zone_unlocks.pop(self.random.randint(0, len(included_zone_unlocks)-1))
+                included_items.pop(self.random.randint(0, len(included_items)-1))
             )
-        included_items += included_zone_unlocks
+        if len(included_items):
+            for _ in range(6):
+                self.multiworld.early_items[self.player][self.random.choice(included_items).name] = 1
+        included_items += always_items
 
         if self.options.tails_and_cream_substory == "always_present":
             self.multiworld.push_precollected(self.create_item("Tails"))
