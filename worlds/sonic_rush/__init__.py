@@ -102,13 +102,13 @@ class SonicRushWorld(World):
         # This raises that option to a higher minimum value if there are few worlds, so that unittests don't fail.
         match len(self.multiworld.worlds):
             case 1:
-                self.options.amount_of_starting_zones.value = 10
+                self.options.amount_of_starting_zones.value = max(10, self.options.amount_of_starting_zones.value)
             case 2:
-                self.options.amount_of_starting_zones.value = 6
+                self.options.amount_of_starting_zones.value = max(6, self.options.amount_of_starting_zones.value)
             case 3:
-                self.options.amount_of_starting_zones.value = 4
+                self.options.amount_of_starting_zones.value = max(4, self.options.amount_of_starting_zones.value)
             case 4:
-                self.options.amount_of_starting_zones.value = 2
+                self.options.amount_of_starting_zones.value = max(2, self.options.amount_of_starting_zones.value)
 
         included_items: List[Item] = [self.create_item(name) for name in zone_unlocks]
         for _ in range(self.options.amount_of_starting_zones):
