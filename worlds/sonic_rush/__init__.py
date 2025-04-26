@@ -58,13 +58,32 @@ class SonicRushWorld(World):
     item_name_to_id = item_lookup_by_name
     location_name_to_id = location_lookup_by_name
 
-    emerald_colors = ["Red", "Blue", "Yellow", "Green", "White", "Turquoise", "Purple"]
-    item_name_groups = {
-        **{f"Zone Unlocks ({char})": {
-            f"Unlock Zone {zone} ({char})" for zone in range(1, 8)
-        }.add(f"Unlock F-Zone ({char})") for char in ["Sonic", "Blaze"]},
-        "Emeralds": {f"{color} {dim} Emerald" for color in emerald_colors for dim in ["Chaos", "Sol"]},
-        **{f"{dim} Emeralds": {f"{color} {dim} Emerald" for color in emerald_colors} for dim in ["Chaos", "Sol"]},
+    item_name_groups: typing.ClassVar[Dict[str, typing.Set[str]]] = {
+        "Zone Unlocks (Sonic)": {
+            f"Unlock Zone {zone} (Sonic)"
+            for zone in range(1, 8)
+        } | {
+            "Unlock F-Zone (Sonic)"
+        },
+        "Zone Unlocks (Blaze)": {
+            f"Unlock Zone {zone} (Blaze)"
+            for zone in range(1, 8)
+        } | {
+            "Unlock F-Zone (Blaze)"
+        },
+        "Emeralds": {
+            f"{color} {dim} Emerald"
+            for color in ["Red", "Blue", "Yellow", "Green", "White", "Turquoise", "Purple"]
+            for dim in ["Chaos", "Sol"]
+        },
+        "Chaos Emeralds": {
+            f"{color} Chaos Emerald"
+            for color in ["Red", "Blue", "Yellow", "Green", "White", "Turquoise", "Purple"]
+        },
+        "Sol Emeralds": {
+            f"{color} Sol Emerald"
+            for color in ["Red", "Blue", "Yellow", "Green", "White", "Turquoise", "Purple"]
+        },
     }
 
     def __init__(self, multiworld: MultiWorld, player: int):
