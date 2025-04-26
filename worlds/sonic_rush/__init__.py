@@ -58,6 +58,15 @@ class SonicRushWorld(World):
     item_name_to_id = item_lookup_by_name
     location_name_to_id = location_lookup_by_name
 
+    emerald_colors = ["Red", "Blue", "Yellow", "Green", "White", "Turquoise", "Purple"]
+    item_name_groups = {
+        **{f"Zone Unlocks ({char})": {
+            f"Unlock Zone {zone} ({char})" for zone in range(1, 8)
+        }.add(f"Unlock F-Zone ({char})") for char in ["Sonic", "Blaze"]},
+        "Emeralds": {f"{color} {dim} Emerald" for color in emerald_colors for dim in ["Chaos", "Sol"]},
+        **{f"{dim} Emeralds": {f"{color} {dim} Emerald" for color in emerald_colors} for dim in ["Chaos", "Sol"]},
+    }
+
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
 
