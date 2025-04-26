@@ -22,13 +22,16 @@ shuffled into the item pool. Both characters and the overworld are completely ac
 enter any zone before having it unlocked.
 
 Additionally, to being individually unlocked, zones can be progressively unlocked through the level select screen, which
-can be entered by unlocking another zone and having enough progressive level selects to include both zones. To give an
-example: Sonic's Zone 5 will be...
+can be entered by unlocking another zone and having enough progressive level selects to include both zones. 
+
+To give an example: Sonic's Zone 5 will be...
 - unlocked if you have `Unlock Zone 5 (Sonic)`.
 - unlocked if you have 5x `Progressive Level Select (Sonic)` and at least one `Unlock Zone XYZ (Sonic)` for zones 1-4.
 - locked if you neither have `Unlock Zone 5 (Sonic)` nor 5x `Progressive Level Select (Sonic)`.
 - locked if you do not have any `Unlock Zone XYZ (Sonic)` for zones 1-5, even if you have 5x 
   `Progressive Level Select (Sonic)`.
+On a side note: If you have more than 5 `Progressive Level Select (Sonic)`, later zones can also be used to access 
+Zone 5.
 
 ## What is the goal of Sonic Rush in Archipelago?
 
