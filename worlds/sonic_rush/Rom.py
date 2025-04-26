@@ -15,7 +15,7 @@ class SonicRushPathExtension(APPatchExtension):
 class SonicRushProcedurePatch(APProcedurePatch, APTokenMixin):
     # settings for what the end file is going to look like
     game = "Sonic Rush"
-    hash = "74650ede278ba2df59906ef8ebd615a0"
+    hash = "557486b82512f1585f319fe28060ddf6"
     patch_file_ending = ".aprush"
     result_file_ending = ".nds"
     procedure = [
