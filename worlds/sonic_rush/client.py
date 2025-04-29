@@ -136,9 +136,6 @@ class SonicRushClient(BizHawkClient):
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         try:
-            if ctx.seed_name is None:
-                return
-
             read_state = await bizhawk.read(
                 ctx.bizhawk_ctx, [
                     (self.savedata_initialized_offset, 1, self.ram_mem_domain),
@@ -146,6 +143,7 @@ class SonicRushClient(BizHawkClient):
             )
 
             # Return if save data not yet initialized, else it's 0xff, and that's bad
+            # Also after booting the entire memory will be 0x00, which is also not good for receiving items
             if int.from_bytes(read_state[0]) != 0x6b:
                 return
 
@@ -292,7 +290,7 @@ class SonicRushClient(BizHawkClient):
                     locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Boss (Sonic)"])
                 if level_scores_blaze[zone][2] != 0:
                     locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Boss (Blaze)"])
-                if ctx.slot_data["include_s_rank_checks"] in ["only_acts", "all"]:
+                if ctx.slot_data["include_s_rank_checks"] in ["only_bosses", "all"]:
                     if level_scores_sonic[zone][2] >= 50000:
                         locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Boss S Rank (Sonic)"])
                     if level_scores_blaze[zone][2] >= 50000:
