@@ -35,7 +35,8 @@ class SonicRushClient(BizHawkClient):
     sol_emeralds_offset = 0x2c4765
     boss_flags_offset = 0x2c4766
     sidekick_showing_offset = 0x2c4767
-    savedata_initialized_offset = 0x2c476f
+    # savedata_initialized_offset = 0x2c476f
+    sonic_storyprog_offset = 0x2c468C
     level_scores_sonic_offset = 0x2c4690
     level_scores_blaze_offset = 0x2c46e8
     extra_lives_sonic_offset = 0x2C468E
@@ -138,13 +139,13 @@ class SonicRushClient(BizHawkClient):
         try:
             read_state = await bizhawk.read(
                 ctx.bizhawk_ctx, [
-                    (self.savedata_initialized_offset, 1, self.ram_mem_domain),
+                    (self.sonic_storyprog_offset, 1, self.ram_mem_domain),
                 ]
             )
 
             # Return if save data not yet initialized, else it's 0xff, and that's bad
             # Also after booting the entire memory will be 0x00, which is also not good for receiving items
-            if int.from_bytes(read_state[0]) != 0x6b:
+            if int.from_bytes(read_state[0]) == 0:
                 return
 
             read_state = await bizhawk.read(
