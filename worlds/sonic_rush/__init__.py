@@ -13,7 +13,7 @@ from .options import SonicRushOptions
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, LocationProgressType, MultiWorld
 from .regions import create_regions
-from .Client import SonicRushClient  # Unused, but required to register with BizHawkClient
+from .client import SonicRushClient  # Unused, but required to register with BizHawkClient
 
 
 class SonicRushWeb(WebWorld):
