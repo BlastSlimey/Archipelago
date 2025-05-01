@@ -23,23 +23,29 @@ class SonicRushClient(BizHawkClient):
     goal_complete = False
     received_items_count: int = 0
 
+    # Vanilla addresses offsets
+    selected_character_offset = 0x2c4560
+    extra_lives_buffer_offset = 0x2c45a4
+    maybe_gamestate_offset = 0x2c45b4
+    sonic_storyprog_offset = 0x2c468C
+    extra_lives_sonic_offset = 0x2C468E
+    chaos_emeralds_offset = 0x2C468F
+    level_scores_sonic_offset = 0x2c4690
+    extra_lives_blaze_offset = 0x2C46E6
+    level_scores_blaze_offset = 0x2c46e8
+
+    # AP addresses offsets
     received_offset = 0x2c475e
     zone_unlocks_sonic_offset = 0x2c4760
     zone_unlocks_blaze_offset = 0x2c4761
     progressive_level_unlocks_sonic_offset = 0x2c4762
     progressive_level_unlocks_blaze_offset = 0x2c4763
     special_stages_offset = 0x2c4764
-    chaos_emeralds_offset = 0x2C468F
     sol_emeralds_offset = 0x2c4765
     boss_flags_offset = 0x2c4766
     sidekick_showing_offset = 0x2c4767
     deathlink_flags_offset = 0x2c4768
     # savedata_initialized_offset = 0x2c476f
-    sonic_storyprog_offset = 0x2c468C
-    level_scores_sonic_offset = 0x2c4690
-    level_scores_blaze_offset = 0x2c46e8
-    extra_lives_sonic_offset = 0x2C468E
-    extra_lives_blaze_offset = 0x2C46E6
 
     def __init__(self) -> None:
         super().__init__()
@@ -108,6 +114,28 @@ class SonicRushClient(BizHawkClient):
                 address, (current_byte // 2).to_bytes(length=1, byteorder="little"), self.ram_mem_domain
             )],
         )
+
+    async def read_is_byte(self, address: int, value: int, ctx: "BizHawkClientContext") -> bool:
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address, 1, self.ram_mem_domain),
+            ]
+        )
+        return int.from_bytes(read_state[0]) == value
+
+    async def read_is_2_bytes(self, address_1: int, value_1: int, address_2: int, value_2: int,
+                                 ctx: "BizHawkClientContext") -> bool:
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address_1, 1, self.ram_mem_domain),
+                (address_2, 1, self.ram_mem_domain),
+            ]
+        )
+        read_byte_1 = int.from_bytes(read_state[0])
+        read_byte_2 = int.from_bytes(read_state[1])
+        return read_byte_1 == value_1 and read_byte_2 == value_2
 
     async def receive_set_half_word(self, address: int, ctx: "BizHawkClientContext", to_be_set: int) -> None:
         await bizhawk.write(
@@ -254,16 +282,32 @@ class SonicRushClient(BizHawkClient):
                         await self.receive_unset_flag_in_byte(self.sidekick_showing_offset, ctx, 1)
                     case "Extra Life (Sonic)":
                         if index >= received_in_sav:
-                            await self.receive_increase_byte(self.extra_lives_sonic_offset, ctx)
+                            if not self.read_is_2_bytes(self.selected_character_offset, 0,
+                                                        self.maybe_gamestate_offset, 3, ctx):
+                                await self.receive_increase_byte(self.extra_lives_sonic_offset, ctx)
+                            else:
+                                await self.receive_increase_byte(self.extra_lives_buffer_offset, ctx)
                     case "Extra Life (Blaze)":
                         if index >= received_in_sav:
-                            await self.receive_increase_byte(self.extra_lives_blaze_offset, ctx)
+                            if not self.read_is_2_bytes(self.selected_character_offset, 1,
+                                                        self.maybe_gamestate_offset, 3, ctx):
+                                await self.receive_increase_byte(self.extra_lives_blaze_offset, ctx)
+                            else:
+                                await self.receive_increase_byte(self.extra_lives_buffer_offset, ctx)
                     case "Halving Extra Lives (Sonic)":
                         if index >= received_in_sav:
-                            await self.receive_halve_byte(self.extra_lives_sonic_offset, ctx)
+                            if not self.read_is_2_bytes(self.selected_character_offset, 0,
+                                                        self.maybe_gamestate_offset, 3, ctx):
+                                await self.receive_halve_byte(self.extra_lives_sonic_offset, ctx)
+                            else:
+                                await self.receive_halve_byte(self.extra_lives_buffer_offset, ctx)
                     case "Halving Extra Lives (Blaze)":
                         if index >= received_in_sav:
-                            await self.receive_halve_byte(self.extra_lives_blaze_offset, ctx)
+                            if not self.read_is_2_bytes(self.selected_character_offset, 1,
+                                                        self.maybe_gamestate_offset, 3, ctx):
+                                await self.receive_halve_byte(self.extra_lives_blaze_offset, ctx)
+                            else:
+                                await self.receive_halve_byte(self.extra_lives_buffer_offset, ctx)
                     case _:
                         raise Exception("Bad item name received: " + name)
                 if index >= received_in_sav:
@@ -331,12 +375,22 @@ class SonicRushClient(BizHawkClient):
                     ]
                 )
                 dl_flags = int.from_bytes(read_state[0])
+                dl_flags_old = dl_flags
                 if self.received_deathlink:
                     self.received_deathlink = False
-                    dl_flags |= 1
+                    if self.read_is_byte(self.maybe_gamestate_offset, 3, ctx):
+                        dl_flags |= 1
                 if dl_flags & 2:
                     dl_flags &= ~2
                     await ctx.send_death(f"{ctx.player_names[ctx.slot]} failed to defeat Eggman")
+                if not dl_flags == dl_flags_old:
+                    await bizhawk.write(
+                        ctx.bizhawk_ctx,
+                        [(
+                            self.deathlink_flags_offset, dl_flags.to_bytes(length=1, byteorder="little"),
+                            self.ram_mem_domain
+                        )],
+                    )
 
             # Check for completing the goal and send it to the server
             if not self.goal_complete:
@@ -351,8 +405,8 @@ class SonicRushClient(BizHawkClient):
                             (level_scores_sonic[4][2] or level_scores_blaze[5][2]) and
                             (level_scores_sonic[5][2] or level_scores_blaze[4][2]) and
                             (level_scores_sonic[6][2] or level_scores_blaze[6][2])):
-                           if ctx.slot_data["screw_f_zone"] or boss_flags_checks & 1 or boss_flags_checks & 2:
-                               goaled = True
+                            if ctx.slot_data["screw_f_zone"] or boss_flags_checks & 1 or boss_flags_checks & 2:
+                                goaled = True
                     case "bosses_both":
                         goaled = True
                         for zone in range(7):
