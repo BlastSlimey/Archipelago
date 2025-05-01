@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Choice, PerGameCommonOptions, Range, NamedRange
+from Options import Toggle, Choice, PerGameCommonOptions, Range, NamedRange, DeathLink
 
 
 class Goal(Choice):
@@ -87,3 +87,4 @@ class SonicRushOptions(PerGameCommonOptions):
     include_s_rank_checks: IncludeSRankChecks
     tails_and_cream_substory: TailsAndCreamSubstory
     traps_percentage: TrapsPercentage
+    deathlink: DeathLink

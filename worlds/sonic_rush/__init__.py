@@ -191,6 +191,7 @@ class SonicRushWorld(World):
             "goal": self.options.goal.current_key,
             "screw_f_zone": bool(self.options.screw_f_zone.value),
             "include_s_rank_checks": self.options.include_s_rank_checks.current_key,
+            "deathlink": bool(self.options.deathlink.value)
         }
 
         return option_data

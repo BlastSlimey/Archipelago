@@ -1,3 +1,4 @@
+import time
 from typing import TYPE_CHECKING, Set, Dict
 
 from NetUtils import ClientStatus
@@ -20,9 +21,6 @@ class SonicRushClient(BizHawkClient):
     goal_flag: int
     ram_mem_domain = "Main RAM"
     goal_complete = False
-    outside_deathlink = 0
-    deathlink_sender = ""
-    deathlink_message: str = ""
     received_items_count: int = 0
 
     received_offset = 0x2c475e
@@ -35,6 +33,7 @@ class SonicRushClient(BizHawkClient):
     sol_emeralds_offset = 0x2c4765
     boss_flags_offset = 0x2c4766
     sidekick_showing_offset = 0x2c4767
+    deathlink_flags_offset = 0x2c4768
     # savedata_initialized_offset = 0x2c476f
     sonic_storyprog_offset = 0x2c468C
     level_scores_sonic_offset = 0x2c4690
@@ -48,6 +47,7 @@ class SonicRushClient(BizHawkClient):
         self.local_set_events = {}
         self.local_found_key_items = {}
         self.seed_verify = False
+        self.received_deathlink = False
 
     async def receive_set_flag_in_byte(self, address: int, ctx: "BizHawkClientContext", to_be_set: int):
         read_state = await bizhawk.read(
@@ -133,7 +133,7 @@ class SonicRushClient(BizHawkClient):
         if "tags" not in args:
             return
         if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
-            pass
+            self.received_deathlink = True
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         try:
@@ -313,6 +313,30 @@ class SonicRushClient(BizHawkClient):
                 self.local_checked_locations = locations_to_send
                 if locations_to_send is not None:
                     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(locations_to_send)}])
+
+            # Check for receiving and sending deathlink
+            if ctx.slot_data:
+                if "deathlink" in ctx.slot_data:
+                    if ("deathlink" not in ctx.tags) and ctx.slot_data["deathlink"]:
+                        await ctx.update_death_link(True)
+                    elif ("deathlink" in ctx.tags) and not ctx.slot_data["deathlink"]:
+                        await ctx.update_death_link(False)
+                else:
+                    return
+            if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
+                read_state = await bizhawk.read(
+                    ctx.bizhawk_ctx,
+                    [
+                        (self.deathlink_flags_offset, 1, self.ram_mem_domain),
+                    ]
+                )
+                dl_flags = int.from_bytes(read_state[0])
+                if self.received_deathlink:
+                    self.received_deathlink = False
+                    dl_flags |= 1
+                if dl_flags & 2:
+                    dl_flags &= ~2
+                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} failed to defeat Eggman")
 
             # Check for completing the goal and send it to the server
             if not self.goal_complete:
