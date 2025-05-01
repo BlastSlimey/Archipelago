@@ -30,7 +30,8 @@ To give an example: Sonic's Zone 5 will be...
 - locked if you neither have `Unlock Zone 5 (Sonic)` nor 5x `Progressive Level Select (Sonic)`.
 - locked if you do not have any `Unlock Zone XYZ (Sonic)` for zones 1-5, even if you have 5x 
   `Progressive Level Select (Sonic)`.
-On a side note: If you have more than 5 `Progressive Level Select (Sonic)`, later zones can also be used to access 
+
+On a side note: If you have more than 5x `Progressive Level Select (Sonic)`, later zones can also be used to access 
 Zone 5.
 
 ## What is the goal of Sonic Rush in Archipelago?
@@ -45,11 +46,11 @@ There is also the option to exclude F-Zone of both characters from any goal cond
 
 ## Which items can be in another player's world?
 
-- Zone unlocks for each zone for both characters
-- Progressive level selects for both characters
-- All 7 chaos and 7 sol emeralds
-- Granting an extra life for and halving the extra lives of both characters
-- Tails abd Cream unlocks and kidnapping
+- Zone unlocks for each zone for both characters (16 total)
+- Progressive level selects for both characters (14 total)
+- Each chaos and sol emerald (14 total)
+- Granting an extra life for and halving the extra lives of both characters (filler items)
+- Tails and Cream unlocks and kidnapping (optional, 4 total)
 
 ## What is considered a location check?
 
