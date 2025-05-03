@@ -8,6 +8,7 @@ import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from .locations import location_lookup_by_name
 from .items import item_lookup_by_id
+from . import data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -55,96 +56,6 @@ class SonicRushClient(BizHawkClient):
         self.seed_verify = False
         self.received_deathlink = False
 
-    async def receive_set_flag_in_byte(self, address: int, ctx: "BizHawkClientContext", to_be_set: int):
-        read_state = await bizhawk.read(
-            ctx.bizhawk_ctx,
-            [
-                (address, 1, self.ram_mem_domain),
-            ]
-        )
-        current_bits = int.from_bytes(read_state[0])
-        await bizhawk.write(
-            ctx.bizhawk_ctx,
-            [(
-                address, (current_bits | (1 << to_be_set)).to_bytes(length=1, byteorder="little"), self.ram_mem_domain
-            )],
-        )
-
-    async def receive_unset_flag_in_byte(self, address: int, ctx: "BizHawkClientContext", to_be_unset: int):
-        read_state = await bizhawk.read(
-            ctx.bizhawk_ctx,
-            [
-                (address, 1, self.ram_mem_domain),
-            ]
-        )
-        current_bits = int.from_bytes(read_state[0])
-        await bizhawk.write(
-            ctx.bizhawk_ctx,
-            [(
-                address, (current_bits & ~(1 << to_be_unset)).to_bytes(length=1, byteorder="little"), self.ram_mem_domain
-            )],
-        )
-
-    async def receive_increase_byte(self, address: int, ctx: "BizHawkClientContext"):
-        read_state = await bizhawk.read(
-            ctx.bizhawk_ctx,
-            [
-                (address, 1, self.ram_mem_domain),
-            ]
-        )
-        current_byte = int.from_bytes(read_state[0])
-        await bizhawk.write(
-            ctx.bizhawk_ctx,
-            [(
-                address, min(current_byte + 1, 255).to_bytes(length=1, byteorder="little"), self.ram_mem_domain
-            )],
-        )
-
-    async def receive_halve_byte(self, address: int, ctx: "BizHawkClientContext"):
-        read_state = await bizhawk.read(
-            ctx.bizhawk_ctx,
-            [
-                (address, 1, self.ram_mem_domain),
-            ]
-        )
-        current_byte = int.from_bytes(read_state[0])
-        await bizhawk.write(
-            ctx.bizhawk_ctx,
-            [(
-                address, (current_byte // 2).to_bytes(length=1, byteorder="little"), self.ram_mem_domain
-            )],
-        )
-
-    async def read_is_byte(self, address: int, value: int, ctx: "BizHawkClientContext") -> bool:
-        read_state = await bizhawk.read(
-            ctx.bizhawk_ctx,
-            [
-                (address, 1, self.ram_mem_domain),
-            ]
-        )
-        return int.from_bytes(read_state[0]) == value
-
-    async def read_is_2_bytes(self, address_1: int, value_1: int, address_2: int, value_2: int,
-                                 ctx: "BizHawkClientContext") -> bool:
-        read_state = await bizhawk.read(
-            ctx.bizhawk_ctx,
-            [
-                (address_1, 1, self.ram_mem_domain),
-                (address_2, 1, self.ram_mem_domain),
-            ]
-        )
-        read_byte_1 = int.from_bytes(read_state[0])
-        read_byte_2 = int.from_bytes(read_state[1])
-        return read_byte_1 == value_1 and read_byte_2 == value_2
-
-    async def receive_set_half_word(self, address: int, ctx: "BizHawkClientContext", to_be_set: int) -> None:
-        await bizhawk.write(
-            ctx.bizhawk_ctx,
-            [(
-                address, to_be_set.to_bytes(length=2, byteorder="little"),self.ram_mem_domain
-            )]
-        )
-
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         ctx.game = self.game
         ctx.items_handling = 0b111
@@ -180,16 +91,145 @@ class SonicRushClient(BizHawkClient):
                 ctx.bizhawk_ctx,
                 [
                     (self.received_offset, 2, self.ram_mem_domain),
-                    (self.special_stages_offset, 1, self.ram_mem_domain),
-                    (self.boss_flags_offset, 1, self.ram_mem_domain),
-                    (self.level_scores_sonic_offset, 84, self.ram_mem_domain),
-                    (self.level_scores_blaze_offset, 84, self.ram_mem_domain),
                 ]
             )
 
             received_in_sav = int.from_bytes(read_state[0], "little")
-            special_stages_checks = int.from_bytes(read_state[1])
-            boss_flags_checks = int.from_bytes(read_state[2])
+
+            for index in range(min(self.received_items_count, received_in_sav), len(ctx.items_received)):
+                network_item = ctx.items_received[index]
+                name = item_lookup_by_id[network_item.item]
+                match name:
+                    # Blaze's zone unlock flags are in zone order and not location order
+                    case "Leaf Storm":
+                        await self.bizhawk_2x_set_flag(ctx,
+                                                       self.zone_unlocks_sonic_offset, 0,
+                                                       self.zone_unlocks_blaze_offset, 1)
+                    case "Water Palace":
+                        await self.bizhawk_2x_set_flag(ctx,
+                                                       self.zone_unlocks_sonic_offset, 1,
+                                                       self.zone_unlocks_blaze_offset, 3)
+                    case "Mirage Road":
+                        await self.bizhawk_2x_set_flag(ctx,
+                                                       self.zone_unlocks_sonic_offset, 2,
+                                                       self.zone_unlocks_blaze_offset, 2)
+                    case "Night Carnival":
+                        await self.bizhawk_2x_set_flag(ctx,
+                                                       self.zone_unlocks_sonic_offset, 3,
+                                                       self.zone_unlocks_blaze_offset, 0)
+                    case "Huge Crisis":
+                        await self.bizhawk_2x_set_flag(ctx,
+                                                       self.zone_unlocks_sonic_offset, 4,
+                                                       self.zone_unlocks_blaze_offset, 5)
+                    case "Altitude Limit":
+                        await self.bizhawk_2x_set_flag(ctx,
+                                                       self.zone_unlocks_sonic_offset, 5,
+                                                       self.zone_unlocks_blaze_offset, 4)
+                    case "Dead Line":
+                        await self.bizhawk_2x_set_flag(ctx,
+                                                       self.zone_unlocks_sonic_offset, 6,
+                                                       self.zone_unlocks_blaze_offset, 6)
+                    case "F-Zone":
+                        await self.bizhawk_2x_set_flag(ctx,
+                                                       self.zone_unlocks_sonic_offset, 7,
+                                                       self.zone_unlocks_blaze_offset, 7)
+                    case "Progressive Level Select (Sonic)":
+                        if index >= received_in_sav:
+                            await self.bizhawk_increase_byte(ctx, self.progressive_level_unlocks_sonic_offset)
+                    case "Progressive Level Select (Blaze)":
+                        if index >= received_in_sav:
+                            await self.bizhawk_increase_byte(ctx, self.progressive_level_unlocks_blaze_offset)
+                    case "Red Chaos Emerald":
+                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 0)
+                    case "Blue Chaos Emerald":
+                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 1)
+                    case "Yellow Chaos Emerald":
+                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 2)
+                    case "Green Chaos Emerald":
+                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 3)
+                    case "White Chaos Emerald":
+                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 4)
+                    case "Turquoise Chaos Emerald":
+                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 5)
+                    case "Purple Chaos Emerald":
+                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 6)
+                    case "Red Sol Emerald":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 0)
+                    case "Blue Sol Emerald":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 1)
+                    case "Yellow Sol Emerald":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 2)
+                    case "Green Sol Emerald":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 3)
+                    case "White Sol Emerald":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 4)
+                    case "Turquoise Sol Emerald":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 5)
+                    case "Purple Sol Emerald":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 6)
+                    case "Tails":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 0)
+                    case "Cream":
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 1)
+                    case "Kidnapping Tails":
+                        await self.bizhawk_unset_flag(ctx, self.sidekick_showing_offset, 0)
+                    case "Kidnapping Cream":
+                        await self.bizhawk_unset_flag(ctx, self.sidekick_showing_offset, 1)
+                    case "Extra Life (Sonic)":
+                        if index >= received_in_sav:
+                            if not self.bizhawk_2x_is_byte_equal(ctx,
+                                                                 self.selected_character_offset, 0,
+                                                                 self.maybe_gamestate_offset, 3):
+                                await self.bizhawk_increase_byte(ctx, self.extra_lives_sonic_offset)
+                            else:
+                                await self.bizhawk_increase_byte(ctx, self.extra_lives_buffer_offset)
+                    case "Extra Life (Blaze)":
+                        if index >= received_in_sav:
+                            if not self.bizhawk_2x_is_byte_equal(ctx,
+                                                                 self.selected_character_offset, 1,
+                                                                 self.maybe_gamestate_offset, 3):
+                                await self.bizhawk_increase_byte(ctx, self.extra_lives_blaze_offset)
+                            else:
+                                await self.bizhawk_increase_byte(ctx, self.extra_lives_buffer_offset)
+                    case "Halving Extra Lives (Sonic)":
+                        if index >= received_in_sav:
+                            if not self.bizhawk_2x_is_byte_equal(ctx,
+                                                                 self.selected_character_offset, 0,
+                                                                 self.maybe_gamestate_offset, 3):
+                                await self.bizhawk_halve_byte(ctx, self.extra_lives_sonic_offset)
+                            else:
+                                await self.bizhawk_halve_byte(ctx, self.extra_lives_buffer_offset)
+                    case "Halving Extra Lives (Blaze)":
+                        if index >= received_in_sav:
+                            if not self.bizhawk_2x_is_byte_equal(ctx,
+                                                                 self.selected_character_offset, 1,
+                                                                 self.maybe_gamestate_offset, 3):
+                                await self.bizhawk_halve_byte(ctx, self.extra_lives_blaze_offset)
+                            else:
+                                await self.bizhawk_halve_byte(ctx, self.extra_lives_buffer_offset)
+                    case _:
+                        raise Exception("Bad item name received: " + name)
+                if index >= received_in_sav:
+                    await self.bizhawk_set_halfword(ctx, self.received_offset, index+1)
+                self.received_items_count = index+1
+                await asyncio.sleep(0.1)
+
+            # Check for location checks
+            locations_to_send = set()
+
+            read_state = await bizhawk.read(
+                ctx.bizhawk_ctx,
+                [
+                    (self.special_stages_offset, 1, self.ram_mem_domain),
+                    (self.boss_flags_offset, 1, self.ram_mem_domain),
+                    (self.level_scores_sonic_offset, 84, self.ram_mem_domain),
+                    (self.level_scores_blaze_offset, 84, self.ram_mem_domain),
+                    (self.deathlink_flags_offset, 1, self.ram_mem_domain),
+                ]
+            )
+
+            special_stages_checks = int.from_bytes(read_state[0])
+            boss_flags_checks = int.from_bytes(read_state[1])
             level_scores_sonic: Dict[int, Dict[int, int]] = {}
             level_scores_blaze: Dict[int, Dict[int, int]] = {}
             for zone in range(7):
@@ -197,149 +237,38 @@ class SonicRushClient(BizHawkClient):
                 level_scores_blaze[zone] = {}
                 for act in range(3):
                     offset = zone*12+act*4
-                    level_scores_sonic[zone][act] = int.from_bytes(read_state[3][offset:(offset+4)], "little")
-                    level_scores_blaze[zone][act] = int.from_bytes(read_state[4][offset:(offset+4)], "little")
+                    level_scores_sonic[zone][act] = int.from_bytes(read_state[2][offset:(offset+4)], "little")
+                    level_scores_blaze[zone][act] = int.from_bytes(read_state[3][offset:(offset+4)], "little")
+            dl_flags = int.from_bytes(read_state[4])
 
-            for index in range(min(self.received_items_count, received_in_sav), len(ctx.items_received)):
-                network_item = ctx.items_received[index]
-                name = item_lookup_by_id[network_item.item]
-                match name:
-                    # Blaze's zone unlock bits have to stay in numerical order here,
-                    # because of the rom already converting current location to zone on flag checking
-                    case "Unlock Zone 1 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 0)
-                    case "Unlock Zone 2 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 1)
-                    case "Unlock Zone 3 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 2)
-                    case "Unlock Zone 4 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 3)
-                    case "Unlock Zone 5 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 4)
-                    case "Unlock Zone 6 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 5)
-                    case "Unlock Zone 7 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 6)
-                    case "Unlock F-Zone (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 7)
-                    case "Unlock Zone 1 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 0)
-                    case "Unlock Zone 2 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 1)
-                    case "Unlock Zone 3 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 2)
-                    case "Unlock Zone 4 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 3)
-                    case "Unlock Zone 5 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 4)
-                    case "Unlock Zone 6 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 5)
-                    case "Unlock Zone 7 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 6)
-                    case "Unlock F-Zone (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 7)
-                    case "Progressive Level Select (Sonic)":
-                        if index >= received_in_sav:
-                            await self.receive_increase_byte(self.progressive_level_unlocks_sonic_offset, ctx)
-                    case "Progressive Level Select (Blaze)":
-                        if index >= received_in_sav:
-                            await self.receive_increase_byte(self.progressive_level_unlocks_blaze_offset, ctx)
-                    case "Red Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 0)
-                    case "Blue Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 1)
-                    case "Yellow Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 2)
-                    case "Green Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 3)
-                    case "White Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 4)
-                    case "Turquoise Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 5)
-                    case "Purple Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 6)
-                    case "Red Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 0)
-                    case "Blue Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 1)
-                    case "Yellow Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 2)
-                    case "Green Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 3)
-                    case "White Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 4)
-                    case "Turquoise Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 5)
-                    case "Purple Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 6)
-                    case "Tails":
-                        await self.receive_set_flag_in_byte(self.sidekick_showing_offset, ctx, 0)
-                    case "Cream":
-                        await self.receive_set_flag_in_byte(self.sidekick_showing_offset, ctx, 1)
-                    case "Kidnapping Tails":
-                        await self.receive_unset_flag_in_byte(self.sidekick_showing_offset, ctx, 0)
-                    case "Kidnapping Cream":
-                        await self.receive_unset_flag_in_byte(self.sidekick_showing_offset, ctx, 1)
-                    case "Extra Life (Sonic)":
-                        if index >= received_in_sav:
-                            if not self.read_is_2_bytes(self.selected_character_offset, 0,
-                                                        self.maybe_gamestate_offset, 3, ctx):
-                                await self.receive_increase_byte(self.extra_lives_sonic_offset, ctx)
-                            else:
-                                await self.receive_increase_byte(self.extra_lives_buffer_offset, ctx)
-                    case "Extra Life (Blaze)":
-                        if index >= received_in_sav:
-                            if not self.read_is_2_bytes(self.selected_character_offset, 1,
-                                                        self.maybe_gamestate_offset, 3, ctx):
-                                await self.receive_increase_byte(self.extra_lives_blaze_offset, ctx)
-                            else:
-                                await self.receive_increase_byte(self.extra_lives_buffer_offset, ctx)
-                    case "Halving Extra Lives (Sonic)":
-                        if index >= received_in_sav:
-                            if not self.read_is_2_bytes(self.selected_character_offset, 0,
-                                                        self.maybe_gamestate_offset, 3, ctx):
-                                await self.receive_halve_byte(self.extra_lives_sonic_offset, ctx)
-                            else:
-                                await self.receive_halve_byte(self.extra_lives_buffer_offset, ctx)
-                    case "Halving Extra Lives (Blaze)":
-                        if index >= received_in_sav:
-                            if not self.read_is_2_bytes(self.selected_character_offset, 1,
-                                                        self.maybe_gamestate_offset, 3, ctx):
-                                await self.receive_halve_byte(self.extra_lives_blaze_offset, ctx)
-                            else:
-                                await self.receive_halve_byte(self.extra_lives_buffer_offset, ctx)
-                    case _:
-                        raise Exception("Bad item name received: " + name)
-                if index >= received_in_sav:
-                    await self.receive_set_half_word(self.received_offset, ctx, index+1)
-                self.received_items_count = index+1
-                await asyncio.sleep(0.005)
-
-            # Check for location checks
-            locations_to_send = set()
-
-            for zone in range(7):
-                for act in range(2):
-                    if level_scores_sonic[zone][act] != 0:
-                        locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Act {act+1} (Sonic)"])
-                    if level_scores_blaze[zone][act] != 0:
-                        locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Act {act+1} (Blaze)"])
-                    if ctx.slot_data["include_s_rank_checks"] in ["only_acts", "all"]:
-                        if level_scores_sonic[zone][act] >= 100000:
+            # Blaze's scores are in zone order and not location order
+            # Sorry for this unreadable loop pile
+            for char_tup in [
+                ("Sonic", level_scores_sonic),
+                ("Blaze", level_scores_blaze),
+            ]:
+                for zone_tup in [
+                    (zone_index, data.zone_name_by_number[char_tup[0]][zone_index+1])
+                    for zone_index in range(7)
+                ]:
+                    for act_tup in [
+                        (0, "Act 1", 100000, ["only_acts", "all"]),
+                        (1, "Act 2", 100000, ["only_acts", "all"]),
+                        (2, "Boss", 50000, ["only_bosses", "all"]),
+                    ]:
+                        if char_tup[1][zone_tup[0]][act_tup[0]] != 0:
                             locations_to_send.add(
-                                location_lookup_by_name[f"Zone {zone+1} Act {act+1} S Rank (Sonic)"])
-                        if level_scores_blaze[zone][act] >= 100000:
-                            locations_to_send.add(
-                                location_lookup_by_name[f"Zone {zone+1} Act {act+1} S Rank (Blaze)"])
-                if level_scores_sonic[zone][2] != 0:
-                    locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Boss (Sonic)"])
-                if level_scores_blaze[zone][2] != 0:
-                    locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Boss (Blaze)"])
-                if ctx.slot_data["include_s_rank_checks"] in ["only_bosses", "all"]:
-                    if level_scores_sonic[zone][2] >= 50000:
-                        locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Boss S Rank (Sonic)"])
-                    if level_scores_blaze[zone][2] >= 50000:
-                        locations_to_send.add(location_lookup_by_name[f"Zone {zone+1} Boss S Rank (Blaze)"])
+                                location_lookup_by_name[
+                                    f"{zone_tup[1]} {act_tup[1]} ({char_tup[0]})"
+                                ]
+                            )
+                        if ctx.slot_data["include_s_rank_checks"] in act_tup[3]:
+                            if char_tup[1][zone_tup[0]][act_tup[0]] >= act_tup[2]:
+                                locations_to_send.add(
+                                    location_lookup_by_name[
+                                        f"{zone_tup[1]} {act_tup[1]} S Rank ({char_tup[0]})"
+                                    ]
+                                )
 
             if boss_flags_checks & 1:
                 locations_to_send.add(location_lookup_by_name["F-Zone (Sonic)"])
@@ -368,17 +297,10 @@ class SonicRushClient(BizHawkClient):
                 else:
                     return
             if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
-                read_state = await bizhawk.read(
-                    ctx.bizhawk_ctx,
-                    [
-                        (self.deathlink_flags_offset, 1, self.ram_mem_domain),
-                    ]
-                )
-                dl_flags = int.from_bytes(read_state[0])
                 dl_flags_old = dl_flags
                 if self.received_deathlink:
                     self.received_deathlink = False
-                    if self.read_is_byte(self.maybe_gamestate_offset, 3, ctx):
+                    if self.bizhawk_is_byte_equal(ctx, self.maybe_gamestate_offset, 3):
                         dl_flags |= 1
                 if dl_flags & 2:
                     dl_flags &= ~2
@@ -438,3 +360,114 @@ class SonicRushClient(BizHawkClient):
             pass
         except bizhawk.ConnectorError:
             pass
+
+    async def bizhawk_set_flag(self, ctx: "BizHawkClientContext", address: int, bit: int):
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address, 1, self.ram_mem_domain),
+            ]
+        )
+        current_bits = int.from_bytes(read_state[0])
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [
+                (address, (current_bits | (1 << bit)).to_bytes(length=1, byteorder="little"), self.ram_mem_domain)
+            ],
+        )
+
+    async def bizhawk_2x_set_flag(self, ctx: "BizHawkClientContext",
+                                  address_1: int, bit_1: int, address_2: int, bit_2: int):
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address_1, 1, self.ram_mem_domain),
+                (address_2, 1, self.ram_mem_domain),
+            ]
+        )
+        current_bits_1 = int.from_bytes(read_state[0])
+        current_bits_2 = int.from_bytes(read_state[1])
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [
+                (address_1, (current_bits_1 | (1 << bit_1)).to_bytes(length=1, byteorder="little"), self.ram_mem_domain),
+                (address_2, (current_bits_2 | (1 << bit_2)).to_bytes(length=1, byteorder="little"), self.ram_mem_domain),
+            ],
+        )
+
+    async def bizhawk_unset_flag(self, ctx: "BizHawkClientContext", address: int, bit: int):
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address, 1, self.ram_mem_domain),
+            ]
+        )
+        current_bits = int.from_bytes(read_state[0])
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [
+                (address, (current_bits & ~(1 << bit)).to_bytes(length=1, byteorder="little"), self.ram_mem_domain)
+            ],
+        )
+
+    async def bizhawk_increase_byte(self, ctx: "BizHawkClientContext", address: int):
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address, 1, self.ram_mem_domain),
+            ]
+        )
+        current_byte = int.from_bytes(read_state[0])
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [
+                (address, min(current_byte + 1, 255).to_bytes(length=1, byteorder="little"), self.ram_mem_domain)
+            ],
+        )
+
+    async def bizhawk_halve_byte(self, ctx: "BizHawkClientContext", address: int):
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address, 1, self.ram_mem_domain),
+            ]
+        )
+        current_byte = int.from_bytes(read_state[0])
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [
+                (address, (current_byte // 2).to_bytes(length=1, byteorder="little"), self.ram_mem_domain)
+            ],
+        )
+
+    async def bizhawk_is_byte_equal(self, ctx: "BizHawkClientContext", address: int, byte: int) -> bool:
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address, 1, self.ram_mem_domain),
+            ]
+        )
+        read_byte = int.from_bytes(read_state[0])
+        return read_byte == byte
+
+    async def bizhawk_2x_is_byte_equal(self, ctx: "BizHawkClientContext",
+                                       address_1: int, byte_1: int,
+                                       address_2: int, byte_2: int) -> bool:
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address_1, 1, self.ram_mem_domain),
+                (address_2, 1, self.ram_mem_domain),
+            ]
+        )
+        read_byte_1 = int.from_bytes(read_state[0])
+        read_byte_2 = int.from_bytes(read_state[1])
+        return read_byte_1 == byte_1 and read_byte_2 == byte_2
+
+    async def bizhawk_set_halfword(self, ctx: "BizHawkClientContext", address: int, halfword: int) -> None:
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [
+                (address, halfword.to_bytes(length=2, byteorder="little"),self.ram_mem_domain)
+            ]
+        )
