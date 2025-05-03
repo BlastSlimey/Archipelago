@@ -88,9 +88,7 @@ class SonicRushWorld(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-
         self.location_count: int = 0
-        self.included_locations: Dict[str, Tuple[str, LocationProgressType]] = {}
 
     def generate_early(self) -> None:
         pass
@@ -104,49 +102,48 @@ class SonicRushWorld(World):
     def create_regions(self) -> None:
         # Create list of all included level and upgrade locations based on player options
         # This already includes the region to be placed in and the LocationProgressType
-        self.included_locations = {
-            **add_base_acts(self.options),
-            **add_bosses(self.options),
-            **add_special_stages(self.options),
-        }
-
-        # Save the final amount of to-be-filled locations
-        self.location_count = len(self.included_locations)
-
-        # Create regions and entrances based on included locations and player options
-        self.multiworld.regions.extend(create_regions(
-            self.player, self.multiworld, self.options, self.location_name_to_id, self.included_locations
-        ))
-
-    def create_items(self) -> None:
-        # Include guaranteed items
-        always_items: List[Item] = (
-            [self.create_item(name) for name in progressive_level_selects for _ in range(7)] +
-            [self.create_item(name) for name in emeralds]
+        included_locations = (
+            add_base_acts(self.options) +
+            add_bosses(self.options) +
+            add_special_stages(self.options)
         )
 
+        # Save the final amount of to-be-filled locations
+        self.location_count = len(included_locations)
+
+        # Create regions and entrances based on included locations and player options
+        self.multiworld.regions.extend(
+            create_regions(
+                self.player, self.multiworld, self.options, included_locations
+            )
+        )
+
+    def create_items(self) -> None:
         # Multiworlds with very few slots regularly fail generation on default settings.
         # But a higher amount of starting zones tends to make goal reachable in sphere 1.
         # This raises that option to a higher minimum value if there are few worlds, so that unittests don't fail.
-        match len(self.multiworld.worlds):
-            case 1:
-                self.options.amount_of_starting_zones.value = max(10, self.options.amount_of_starting_zones.value)
-            case 2:
-                self.options.amount_of_starting_zones.value = max(6, self.options.amount_of_starting_zones.value)
-            case 3:
-                self.options.amount_of_starting_zones.value = max(4, self.options.amount_of_starting_zones.value)
-            case 4:
-                self.options.amount_of_starting_zones.value = max(2, self.options.amount_of_starting_zones.value)
+        # match len(self.multiworld.worlds):
+        #     case 1:
+        #         self.options.amount_of_starting_zones.value = max(10, self.options.amount_of_starting_zones.value)
+        #     case 2:
+        #         self.options.amount_of_starting_zones.value = max(6, self.options.amount_of_starting_zones.value)
+        #     case 3:
+        #         self.options.amount_of_starting_zones.value = max(4, self.options.amount_of_starting_zones.value)
+        #     case 4:
+        #         self.options.amount_of_starting_zones.value = max(2, self.options.amount_of_starting_zones.value)
 
         included_items: List[Item] = [self.create_item(name) for name in zone_unlocks]
         for _ in range(self.options.amount_of_starting_zones):
             self.multiworld.push_precollected(
                 included_items.pop(self.random.randint(0, len(included_items)-1))
             )
-        if len(included_items):
-            for _ in range(6):
-                self.multiworld.early_items[self.player][self.random.choice(included_items).name] = 1
-        included_items += always_items
+        # if len(included_items):
+        #     for _ in range(6):
+        #         self.multiworld.early_items[self.player][self.random.choice(included_items).name] = 1
+        included_items += (
+            [self.create_item(name) for name in progressive_level_selects for _ in range(7)] +
+            [self.create_item(name) for name in emeralds]
+        )
 
         if self.options.tails_and_cream_substory == "always_present":
             self.multiworld.push_precollected(self.create_item("Tails"))
@@ -157,7 +154,7 @@ class SonicRushWorld(World):
             self.multiworld.push_precollected(self.create_item("Tails"))
             self.multiworld.push_precollected(self.create_item("Cream"))
             included_items += [self.create_item("Kidnapping Tails"), self.create_item("Kidnapping Cream")]
-        elif self.options.tails_and_cream_substory == "appearing_later":
+        elif self.options.tails_and_cream_substory == "on_vacation":
             pass
 
         traps_probability = self.options.traps_percentage/100
