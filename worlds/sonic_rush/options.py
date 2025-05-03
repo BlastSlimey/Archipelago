@@ -21,7 +21,10 @@ class Goal(Choice):
 
 
 class ScrewFZone(Toggle):
-    """Toggle whether F-Zone (Sonic and Blaze) should be **excluded** from goal conditions and having important items."""
+    """
+    Toggle whether F-Zone (Sonic and Blaze) should be **excluded**
+    from goal conditions and having important items.
+    """
     display_name = "Screw F-Zone"
     rich_text_doc = True
     default = True
@@ -32,8 +35,8 @@ class AmountOfStartingZones(Range):
     display_name = "Amount of starting zones"
     rich_text_doc = True
     range_start = 1
-    range_end = 16
-    default = 3
+    range_end = 8
+    default = 2
 
 
 class IncludeSRankChecks(Choice):
