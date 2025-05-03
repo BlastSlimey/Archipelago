@@ -1,6 +1,7 @@
 from typing import Dict, Callable, Any, List
 
 from BaseClasses import Item, ItemClassification as IClass
+from . import data
 from .options import SonicRushOptions
 
 
@@ -21,22 +22,8 @@ def always_trap(options: SonicRushOptions) -> IClass:
 
 
 zone_unlocks: Dict[str, Callable[[SonicRushOptions], IClass]] = {
-    "Unlock Zone 1 (Sonic)": always_progression,
-    "Unlock Zone 2 (Sonic)": always_progression,
-    "Unlock Zone 3 (Sonic)": always_progression,
-    "Unlock Zone 4 (Sonic)": always_progression,
-    "Unlock Zone 5 (Sonic)": always_progression,
-    "Unlock Zone 6 (Sonic)": always_progression,
-    "Unlock Zone 7 (Sonic)": always_progression,
-    "Unlock F-Zone (Sonic)": always_progression,
-    "Unlock Zone 1 (Blaze)": always_progression,
-    "Unlock Zone 2 (Blaze)": always_progression,
-    "Unlock Zone 3 (Blaze)": always_progression,
-    "Unlock Zone 4 (Blaze)": always_progression,
-    "Unlock Zone 5 (Blaze)": always_progression,
-    "Unlock Zone 6 (Blaze)": always_progression,
-    "Unlock Zone 7 (Blaze)": always_progression,
-    "Unlock F-Zone (Blaze)": always_progression,
+    zone: always_progression
+    for zone in data.zone_names
 }
 
 progressive_level_selects: Dict[str, Callable[[SonicRushOptions], IClass]] = {
@@ -45,20 +32,9 @@ progressive_level_selects: Dict[str, Callable[[SonicRushOptions], IClass]] = {
 }
 
 emeralds: Dict[str, Callable[[SonicRushOptions], IClass]] = {
-    "Red Chaos Emerald": always_progression,
-    "Blue Chaos Emerald": always_progression,
-    "Yellow Chaos Emerald": always_progression,
-    "Green Chaos Emerald": always_progression,
-    "White Chaos Emerald": always_progression,
-    "Turquoise Chaos Emerald": always_progression,
-    "Purple Chaos Emerald": always_progression,
-    "Red Sol Emerald": always_progression,
-    "Blue Sol Emerald": always_progression,
-    "Yellow Sol Emerald": always_progression,
-    "Green Sol Emerald": always_progression,
-    "White Sol Emerald": always_progression,
-    "Turquoise Sol Emerald": always_progression,
-    "Purple Sol Emerald": always_progression,
+    f"{color} {dim} Emerald": always_progression
+    for color in data.emerald_colors
+    for dim in ["Chaos", "Sol"]
 }
 
 sidekicks: Dict[str, Callable[[SonicRushOptions], IClass]] = {
@@ -96,9 +72,8 @@ item_list: List[str] = [
     *traps,
 ]
 
-base_id = 20010707
-item_lookup_by_name: Dict[str, int] = {name: next_id for next_id, name in enumerate(item_list, base_id)}
-item_lookup_by_id: Dict[int, str] = {next_id: name for next_id, name in enumerate(item_list, base_id)}
+item_lookup_by_name: Dict[str, int] = {name: next_id for next_id, name in enumerate(item_list, data.base_id)}
+item_lookup_by_id: Dict[int, str] = {item_lookup_by_name[name]: name for name in item_lookup_by_name}
 
 
 def filler(random: float) -> str:
