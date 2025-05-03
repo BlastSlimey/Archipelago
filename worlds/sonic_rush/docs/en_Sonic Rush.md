@@ -17,22 +17,23 @@ and export a config file.
 
 ## What does randomization do to this game?
 
-Each zone of both playable characters is unlocked individually by an item and the chaos and sol emeralds have been 
-shuffled into the item pool. Both characters and the overworld are completely accessible from the start, but you cannot
-enter any zone before having it unlocked.
+Each zone is unlocked individually by an item and the chaos and sol emeralds have been shuffled into the item pool. 
+Both characters and the overworld are completely accessible from the start, but you cannot enter any zone before having 
+it unlocked.
 
 Additionally, to being individually unlocked, zones can be progressively unlocked through the level select screen, which
 can be entered by unlocking another zone and having enough progressive level selects to include both zones. 
 
 To give an example: Sonic's Zone 5 will be...
-- unlocked if you have `Unlock Zone 5 (Sonic)`.
-- unlocked if you have 5x `Progressive Level Select (Sonic)` and at least one `Unlock Zone XYZ (Sonic)` for zones 1-4.
-- locked if you neither have `Unlock Zone 5 (Sonic)` nor 5x `Progressive Level Select (Sonic)`.
-- locked if you do not have any `Unlock Zone XYZ (Sonic)` for zones 1-5, even if you have 5x 
-  `Progressive Level Select (Sonic)`.
+- unlocked if you have `Huge Crisis`.
+- unlocked if you have 5x `Progressive Level Select (Sonic)` and at least one of `Leaf Storm`, `Water Palace`, 
+  `Mirage Road`, or `Night Carnival` (zones 1-4).
+- locked if you neither have `Huge Crisis` nor 5x `Progressive Level Select (Sonic)`.
+- locked if you do not have `Leaf Storm`, `Water Palace`, `Mirage Road`, or `Night Carnival` for zones 1-5, even if you 
+  have 5x `Progressive Level Select (Sonic)`.
 
-On a side note: If you have more than 5x `Progressive Level Select (Sonic)`, later zones can also be used to access 
-Zone 5.
+On a side note: If you have more than 5x `Progressive Level Select (Sonic)`, later zones (here `Altitude Limit` and 
+`Dead Line`) can also be used to access Zone 5.
 
 ## What is the goal of Sonic Rush in Archipelago?
 
@@ -42,11 +43,11 @@ You can choose between
 - clearing extra zone, which requires having all chaos and sol emeralds, and
 - defeating all main game bosses with both characters AND clearing extra zone.
 
-There is also the option to exclude F-Zone of both characters from any goal conditions.
+There is also the option to exclude F-Zone from any goal conditions.
 
 ## Which items can be in another player's world?
 
-- Zone unlocks for each zone for both characters (16 total)
+- Zone unlocks for each zone (8 total)
 - Progressive level selects for both characters (14 total)
 - Each chaos and sol emerald (14 total)
 - Granting an extra life for and halving the extra lives of both characters (filler items)
