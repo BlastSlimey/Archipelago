@@ -1,7 +1,7 @@
 import os
 import pkgutil
 import typing
-from typing import Any, List, Dict, Tuple, Mapping
+from typing import Any, List, Dict, Mapping
 
 import settings
 from .Rom import SonicRushProcedurePatch, write_tokens
@@ -11,7 +11,7 @@ from .locations import act_locations, boss_locations, special_stage_locations, a
     add_special_stages, add_base_acts, location_lookup_by_name
 from .options import SonicRushOptions
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, Tutorial, LocationProgressType, MultiWorld
+from BaseClasses import Item, Tutorial, MultiWorld
 from .regions import create_regions
 from .client import SonicRushClient  # Unused, but required to register with BizHawkClient
 
