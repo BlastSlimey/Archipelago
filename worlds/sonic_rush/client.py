@@ -33,9 +33,12 @@ class SonicRushClient(BizHawkClient):
     special_stages_offset = 0x2c4764
     chaos_emeralds_offset = 0x2C468F
     sol_emeralds_offset = 0x2c4765
+    emeralds_buffer_offset = 0x2c4588
     boss_flags_offset = 0x2c4766
     sidekick_showing_offset = 0x2c4767
     # savedata_initialized_offset = 0x2c476f
+    selected_character_offset = 0x2c4560
+    maybe_gamestate_offset = 0x2c45b4
     sonic_storyprog_offset = 0x2c468C
     level_scores_sonic_offset = 0x2c4690
     level_scores_blaze_offset = 0x2c46e8
@@ -117,12 +120,27 @@ class SonicRushClient(BizHawkClient):
             )]
         )
 
+    async def receive_is_byte(self, address: int, ctx: "BizHawkClientContext", value: int):
+        read_state = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (address, 1, self.ram_mem_domain),
+            ]
+        )
+        read_byte = int.from_bytes(read_state[0])
+        return read_byte == value
+
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
+        from CommonClient import logger
         ctx.game = self.game
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
         ctx.watcher_timeout = 1
         self.seed_verify = False
+        if not await bizhawk.get_hash(ctx.bizhawk_ctx) == "DB9D446F8AB4A2799246FE77CC934CC649A1CE61":
+            logger.warn("The patched rom is different from what was expected. "
+                        "Please check you vanilla rom file and patch again.")
+            return False
         return True
 
     def on_package(self, ctx, cmd, args) -> None:
@@ -136,7 +154,11 @@ class SonicRushClient(BizHawkClient):
             pass
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        # from CommonClient import logger
         try:
+            if ctx.slot_data is None:
+                return
+
             read_state = await bizhawk.read(
                 ctx.bizhawk_ctx, [
                     (self.sonic_storyprog_offset, 1, self.ram_mem_domain),
@@ -172,104 +194,126 @@ class SonicRushClient(BizHawkClient):
                     level_scores_sonic[zone][act] = int.from_bytes(read_state[3][offset:(offset+4)], "little")
                     level_scores_blaze[zone][act] = int.from_bytes(read_state[4][offset:(offset+4)], "little")
 
-            for index in range(min(self.received_items_count, received_in_sav), len(ctx.items_received)):
-                network_item = ctx.items_received[index]
-                name = item_lookup_by_id[network_item.item]
-                match name:
-                    # Blaze's zone unlock bits have to stay in numerical order here,
-                    # because of the rom already converting current location to zone on flag checking
-                    case "Unlock Zone 1 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 0)
-                    case "Unlock Zone 2 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 1)
-                    case "Unlock Zone 3 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 2)
-                    case "Unlock Zone 4 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 3)
-                    case "Unlock Zone 5 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 4)
-                    case "Unlock Zone 6 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 5)
-                    case "Unlock Zone 7 (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 6)
-                    case "Unlock F-Zone (Sonic)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 7)
-                    case "Unlock Zone 1 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 0)
-                    case "Unlock Zone 2 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 1)
-                    case "Unlock Zone 3 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 2)
-                    case "Unlock Zone 4 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 3)
-                    case "Unlock Zone 5 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 4)
-                    case "Unlock Zone 6 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 5)
-                    case "Unlock Zone 7 (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 6)
-                    case "Unlock F-Zone (Blaze)":
-                        await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 7)
-                    case "Progressive Level Select (Sonic)":
-                        if index >= received_in_sav:
-                            await self.receive_increase_byte(self.progressive_level_unlocks_sonic_offset, ctx)
-                    case "Progressive Level Select (Blaze)":
-                        if index >= received_in_sav:
-                            await self.receive_increase_byte(self.progressive_level_unlocks_blaze_offset, ctx)
-                    case "Red Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 0)
-                    case "Blue Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 1)
-                    case "Yellow Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 2)
-                    case "Green Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 3)
-                    case "White Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 4)
-                    case "Turquoise Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 5)
-                    case "Purple Chaos Emerald":
-                        await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 6)
-                    case "Red Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 0)
-                    case "Blue Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 1)
-                    case "Yellow Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 2)
-                    case "Green Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 3)
-                    case "White Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 4)
-                    case "Turquoise Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 5)
-                    case "Purple Sol Emerald":
-                        await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 6)
-                    case "Tails":
-                        await self.receive_set_flag_in_byte(self.sidekick_showing_offset, ctx, 0)
-                    case "Cream":
-                        await self.receive_set_flag_in_byte(self.sidekick_showing_offset, ctx, 1)
-                    case "Kidnapping Tails":
-                        await self.receive_unset_flag_in_byte(self.sidekick_showing_offset, ctx, 0)
-                    case "Kidnapping Cream":
-                        await self.receive_unset_flag_in_byte(self.sidekick_showing_offset, ctx, 1)
-                    case "Extra Life (Sonic)":
-                        if index >= received_in_sav:
-                            await self.receive_increase_byte(self.extra_lives_sonic_offset, ctx)
-                    case "Extra Life (Blaze)":
-                        if index >= received_in_sav:
-                            await self.receive_increase_byte(self.extra_lives_blaze_offset, ctx)
-                    case "Halving Extra Lives (Sonic)":
-                        if index >= received_in_sav:
-                            await self.receive_halve_byte(self.extra_lives_sonic_offset, ctx)
-                    case "Halving Extra Lives (Blaze)":
-                        if index >= received_in_sav:
-                            await self.receive_halve_byte(self.extra_lives_blaze_offset, ctx)
-                    case _:
-                        raise Exception("Bad item name received: " + name)
-                if index >= received_in_sav:
-                    await self.receive_set_half_word(self.received_offset, ctx, index+1)
-                self.received_items_count = index+1
-                await asyncio.sleep(0.005)
+            if ctx.items_received:
+                for index in range(min(self.received_items_count, received_in_sav), len(ctx.items_received)):
+                    network_item = ctx.items_received[index]
+                    name = item_lookup_by_id[network_item.item]
+                    match name:
+                        # Blaze's zone unlock bits have to stay in numerical order here,
+                        # because of the rom already converting current location to zone on flag checking
+                        case "Unlock Zone 1 (Sonic)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 0)
+                        case "Unlock Zone 2 (Sonic)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 1)
+                        case "Unlock Zone 3 (Sonic)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 2)
+                        case "Unlock Zone 4 (Sonic)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 3)
+                        case "Unlock Zone 5 (Sonic)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 4)
+                        case "Unlock Zone 6 (Sonic)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 5)
+                        case "Unlock Zone 7 (Sonic)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 6)
+                        case "Unlock F-Zone (Sonic)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_sonic_offset, ctx, 7)
+                        case "Unlock Zone 1 (Blaze)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 0)
+                        case "Unlock Zone 2 (Blaze)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 1)
+                        case "Unlock Zone 3 (Blaze)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 2)
+                        case "Unlock Zone 4 (Blaze)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 3)
+                        case "Unlock Zone 5 (Blaze)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 4)
+                        case "Unlock Zone 6 (Blaze)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 5)
+                        case "Unlock Zone 7 (Blaze)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 6)
+                        case "Unlock F-Zone (Blaze)":
+                            await self.receive_set_flag_in_byte(self.zone_unlocks_blaze_offset, ctx, 7)
+                        case "Progressive Level Select (Sonic)":
+                            if index >= received_in_sav:
+                                await self.receive_increase_byte(self.progressive_level_unlocks_sonic_offset, ctx)
+                        case "Progressive Level Select (Blaze)":
+                            if index >= received_in_sav:
+                                await self.receive_increase_byte(self.progressive_level_unlocks_blaze_offset, ctx)
+                        case "Red Chaos Emerald":
+                            if await self.receive_is_byte(self.maybe_gamestate_offset, ctx, 3):
+                                if await self.receive_is_byte(self.selected_character_offset, ctx, 0):
+                                    await self.receive_set_flag_in_byte(self.emeralds_buffer_offset, ctx, 0)
+                            await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 0)
+                        case "Blue Chaos Emerald":
+                            if await self.receive_is_byte(self.maybe_gamestate_offset, ctx, 3):
+                                if await self.receive_is_byte(self.selected_character_offset, ctx, 0):
+                                    await self.receive_set_flag_in_byte(self.emeralds_buffer_offset, ctx, 1)
+                            await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 1)
+                        case "Yellow Chaos Emerald":
+                            if await self.receive_is_byte(self.maybe_gamestate_offset, ctx, 3):
+                                if await self.receive_is_byte(self.selected_character_offset, ctx, 0):
+                                    await self.receive_set_flag_in_byte(self.emeralds_buffer_offset, ctx, 2)
+                            await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 2)
+                        case "Green Chaos Emerald":
+                            if await self.receive_is_byte(self.maybe_gamestate_offset, ctx, 3):
+                                if await self.receive_is_byte(self.selected_character_offset, ctx, 0):
+                                    await self.receive_set_flag_in_byte(self.emeralds_buffer_offset, ctx, 3)
+                            await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 3)
+                        case "White Chaos Emerald":
+                            if await self.receive_is_byte(self.maybe_gamestate_offset, ctx, 3):
+                                if await self.receive_is_byte(self.selected_character_offset, ctx, 0):
+                                    await self.receive_set_flag_in_byte(self.emeralds_buffer_offset, ctx, 4)
+                            await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 4)
+                        case "Turquoise Chaos Emerald":
+                            if await self.receive_is_byte(self.maybe_gamestate_offset, ctx, 3):
+                                if await self.receive_is_byte(self.selected_character_offset, ctx, 0):
+                                    await self.receive_set_flag_in_byte(self.emeralds_buffer_offset, ctx, 5)
+                            await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 5)
+                        case "Purple Chaos Emerald":
+                            if await self.receive_is_byte(self.maybe_gamestate_offset, ctx, 3):
+                                if await self.receive_is_byte(self.selected_character_offset, ctx, 0):
+                                    await self.receive_set_flag_in_byte(self.emeralds_buffer_offset, ctx, 6)
+                            await self.receive_set_flag_in_byte(self.chaos_emeralds_offset, ctx, 6)
+                        case "Red Sol Emerald":
+                            await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 0)
+                        case "Blue Sol Emerald":
+                            await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 1)
+                        case "Yellow Sol Emerald":
+                            await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 2)
+                        case "Green Sol Emerald":
+                            await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 3)
+                        case "White Sol Emerald":
+                            await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 4)
+                        case "Turquoise Sol Emerald":
+                            await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 5)
+                        case "Purple Sol Emerald":
+                            await self.receive_set_flag_in_byte(self.sol_emeralds_offset, ctx, 6)
+                        case "Tails":
+                            await self.receive_set_flag_in_byte(self.sidekick_showing_offset, ctx, 0)
+                        case "Cream":
+                            await self.receive_set_flag_in_byte(self.sidekick_showing_offset, ctx, 1)
+                        case "Kidnapping Tails":
+                            await self.receive_unset_flag_in_byte(self.sidekick_showing_offset, ctx, 0)
+                        case "Kidnapping Cream":
+                            await self.receive_unset_flag_in_byte(self.sidekick_showing_offset, ctx, 1)
+                        case "Extra Life (Sonic)":
+                            if index >= received_in_sav:
+                                await self.receive_increase_byte(self.extra_lives_sonic_offset, ctx)
+                        case "Extra Life (Blaze)":
+                            if index >= received_in_sav:
+                                await self.receive_increase_byte(self.extra_lives_blaze_offset, ctx)
+                        case "Halving Extra Lives (Sonic)":
+                            if index >= received_in_sav:
+                                await self.receive_halve_byte(self.extra_lives_sonic_offset, ctx)
+                        case "Halving Extra Lives (Blaze)":
+                            if index >= received_in_sav:
+                                await self.receive_halve_byte(self.extra_lives_blaze_offset, ctx)
+                        case _:
+                            raise Exception("Bad item name received: " + name)
+                    if index >= received_in_sav:
+                        await self.receive_set_half_word(self.received_offset, ctx, index+1)
+                    self.received_items_count = index+1
+                    await asyncio.sleep(0.005)
 
             # Check for location checks
             locations_to_send = set()
