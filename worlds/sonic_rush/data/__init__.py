@@ -23,6 +23,16 @@ emerald_colors: list[str] = [
     "Purple",
 ]
 
+emerald_bits_by_name: dict[str, int] = {
+    "Red": 0,
+    "Blue": 1,
+    "Yellow": 2,
+    "Green": 3,
+    "White": 4,
+    "Turquoise": 5,
+    "Purple": 6,
+}
+
 region_names: list[str] = [
     f"{zone} ({char})"
     for zone in zone_names

@@ -26,6 +26,7 @@ class SonicRushClient(BizHawkClient):
 
     # Vanilla addresses offsets
     selected_character_offset = 0x2c4560
+    emeralds_buffer_offset = 0x2c4588
     extra_lives_buffer_offset = 0x2c45a4
     maybe_gamestate_offset = 0x2c45b4
     sonic_storyprog_offset = 0x2c468C
@@ -76,6 +77,9 @@ class SonicRushClient(BizHawkClient):
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         try:
+            if ctx.slot_data is None:
+                return
+
             read_state = await bizhawk.read(
                 ctx.bizhawk_ctx, [
                     (self.sonic_storyprog_offset, 1, self.ram_mem_domain),
@@ -101,72 +105,36 @@ class SonicRushClient(BizHawkClient):
                 name = item_lookup_by_id[network_item.item]
                 match name:
                     # Blaze's zone unlock flags are in zone order and not location order
-                    case "Leaf Storm":
-                        await self.bizhawk_2x_set_flag(ctx,
-                                                       self.zone_unlocks_sonic_offset, 0,
-                                                       self.zone_unlocks_blaze_offset, 1)
-                    case "Water Palace":
-                        await self.bizhawk_2x_set_flag(ctx,
-                                                       self.zone_unlocks_sonic_offset, 1,
-                                                       self.zone_unlocks_blaze_offset, 3)
-                    case "Mirage Road":
-                        await self.bizhawk_2x_set_flag(ctx,
-                                                       self.zone_unlocks_sonic_offset, 2,
-                                                       self.zone_unlocks_blaze_offset, 2)
-                    case "Night Carnival":
-                        await self.bizhawk_2x_set_flag(ctx,
-                                                       self.zone_unlocks_sonic_offset, 3,
-                                                       self.zone_unlocks_blaze_offset, 0)
-                    case "Huge Crisis":
-                        await self.bizhawk_2x_set_flag(ctx,
-                                                       self.zone_unlocks_sonic_offset, 4,
-                                                       self.zone_unlocks_blaze_offset, 5)
-                    case "Altitude Limit":
-                        await self.bizhawk_2x_set_flag(ctx,
-                                                       self.zone_unlocks_sonic_offset, 5,
-                                                       self.zone_unlocks_blaze_offset, 4)
-                    case "Dead Line":
-                        await self.bizhawk_2x_set_flag(ctx,
-                                                       self.zone_unlocks_sonic_offset, 6,
-                                                       self.zone_unlocks_blaze_offset, 6)
+                    case x if x in data.zone_names_without_f_zone:
+                        await self.bizhawk_2x_set_flag(
+                            ctx,
+                            self.zone_unlocks_sonic_offset, data.zone_number_by_name["Sonic"][x]-1,
+                            self.zone_unlocks_blaze_offset, data.zone_number_by_name["Blaze"][x]-1
+                        )
+
                     case "F-Zone":
-                        await self.bizhawk_2x_set_flag(ctx,
-                                                       self.zone_unlocks_sonic_offset, 7,
-                                                       self.zone_unlocks_blaze_offset, 7)
+                        await self.bizhawk_2x_set_flag(
+                            ctx,
+                            self.zone_unlocks_sonic_offset, 7,
+                            self.zone_unlocks_blaze_offset, 7
+                        )
                     case "Progressive Level Select (Sonic)":
                         if index >= received_in_sav:
                             await self.bizhawk_increase_byte(ctx, self.progressive_level_unlocks_sonic_offset)
                     case "Progressive Level Select (Blaze)":
                         if index >= received_in_sav:
                             await self.bizhawk_increase_byte(ctx, self.progressive_level_unlocks_blaze_offset)
-                    case "Red Chaos Emerald":
-                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 0)
-                    case "Blue Chaos Emerald":
-                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 1)
-                    case "Yellow Chaos Emerald":
-                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 2)
-                    case "Green Chaos Emerald":
-                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 3)
-                    case "White Chaos Emerald":
-                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 4)
-                    case "Turquoise Chaos Emerald":
-                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 5)
-                    case "Purple Chaos Emerald":
-                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, 6)
-                    case "Red Sol Emerald":
-                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 0)
-                    case "Blue Sol Emerald":
-                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 1)
-                    case "Yellow Sol Emerald":
-                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 2)
-                    case "Green Sol Emerald":
-                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 3)
-                    case "White Sol Emerald":
-                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 4)
-                    case "Turquoise Sol Emerald":
-                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 5)
-                    case "Purple Sol Emerald":
-                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 6)
+                    case x if " Chaos Emerald" in x:
+                        bit = data.emerald_bits_by_name[x[:-14]]
+                        if await self.bizhawk_2x_is_byte_equal(
+                            ctx,
+                            self.maybe_gamestate_offset, 3,
+                            self.selected_character_offset, 0
+                        ):
+                            await self.bizhawk_set_flag(ctx, self.emeralds_buffer_offset, bit)
+                        await self.bizhawk_set_flag(ctx, self.chaos_emeralds_offset, bit)
+                    case x if " Sol Emerald" in x:
+                        await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, data.emerald_bits_by_name[x[:-12]])
                     case "Tails":
                         await self.bizhawk_set_flag(ctx, self.sol_emeralds_offset, 0)
                     case "Cream":
@@ -177,36 +145,44 @@ class SonicRushClient(BizHawkClient):
                         await self.bizhawk_unset_flag(ctx, self.sidekick_showing_offset, 1)
                     case "Extra Life (Sonic)":
                         if index >= received_in_sav:
-                            if not self.bizhawk_2x_is_byte_equal(ctx,
-                                                                 self.selected_character_offset, 0,
-                                                                 self.maybe_gamestate_offset, 3):
-                                await self.bizhawk_increase_byte(ctx, self.extra_lives_sonic_offset)
-                            else:
+                            if self.bizhawk_2x_is_byte_equal(
+                                ctx,
+                                self.selected_character_offset, 0,
+                                self.maybe_gamestate_offset, 3
+                            ):
                                 await self.bizhawk_increase_byte(ctx, self.extra_lives_buffer_offset)
+                            else:
+                                await self.bizhawk_increase_byte(ctx, self.extra_lives_sonic_offset)
                     case "Extra Life (Blaze)":
                         if index >= received_in_sav:
-                            if not self.bizhawk_2x_is_byte_equal(ctx,
-                                                                 self.selected_character_offset, 1,
-                                                                 self.maybe_gamestate_offset, 3):
-                                await self.bizhawk_increase_byte(ctx, self.extra_lives_blaze_offset)
-                            else:
+                            if self.bizhawk_2x_is_byte_equal(
+                                ctx,
+                                self.selected_character_offset, 1,
+                                self.maybe_gamestate_offset, 3
+                            ):
                                 await self.bizhawk_increase_byte(ctx, self.extra_lives_buffer_offset)
+                            else:
+                                await self.bizhawk_increase_byte(ctx, self.extra_lives_blaze_offset)
                     case "Halving Extra Lives (Sonic)":
                         if index >= received_in_sav:
-                            if not self.bizhawk_2x_is_byte_equal(ctx,
-                                                                 self.selected_character_offset, 0,
-                                                                 self.maybe_gamestate_offset, 3):
-                                await self.bizhawk_halve_byte(ctx, self.extra_lives_sonic_offset)
-                            else:
+                            if self.bizhawk_2x_is_byte_equal(
+                                ctx,
+                                self.selected_character_offset, 0,
+                                self.maybe_gamestate_offset, 3
+                            ):
                                 await self.bizhawk_halve_byte(ctx, self.extra_lives_buffer_offset)
+                            else:
+                                await self.bizhawk_halve_byte(ctx, self.extra_lives_sonic_offset)
                     case "Halving Extra Lives (Blaze)":
                         if index >= received_in_sav:
-                            if not self.bizhawk_2x_is_byte_equal(ctx,
-                                                                 self.selected_character_offset, 1,
-                                                                 self.maybe_gamestate_offset, 3):
-                                await self.bizhawk_halve_byte(ctx, self.extra_lives_blaze_offset)
-                            else:
+                            if self.bizhawk_2x_is_byte_equal(
+                                ctx,
+                                self.selected_character_offset, 1,
+                                self.maybe_gamestate_offset, 3
+                            ):
                                 await self.bizhawk_halve_byte(ctx, self.extra_lives_buffer_offset)
+                            else:
+                                await self.bizhawk_halve_byte(ctx, self.extra_lives_blaze_offset)
                     case _:
                         raise Exception("Bad item name received: " + name)
                 if index >= received_in_sav:
