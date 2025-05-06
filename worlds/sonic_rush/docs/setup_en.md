@@ -22,6 +22,10 @@ If you find one, please report it to the #future-game-design thread for this gam
   [here](https://github.com/ArchipelagoMW/Archipelago/releases)
 - A .nds file for the USA version of Sonic Rush
 
+## Optional software
+
+- Universal Tracker (check UT's `#future-game-design` thread in the discord server for instructions)
+
 ## Configuring your YAML file
 
 ### What is a YAML file and why do I need one?
