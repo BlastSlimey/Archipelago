@@ -49,9 +49,11 @@ def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOption
     }
 
     for loc in included_locations:
-        regions[loc[1]].locations += SonicRushLocation(
-            player, loc[0], location_lookup_by_name[loc[0]], regions[loc[1]], loc[2]
-        )
+        regions[loc[1]].locations += [
+            SonicRushLocation(
+                player, loc[0], location_lookup_by_name[loc[0]], regions[loc[1]], loc[2]
+            )
+        ]
 
     # Create goal event
     goal_location = SonicRushLocation(player, "Goal", None, regions["Goal"], LocProg.DEFAULT)
@@ -92,7 +94,7 @@ def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOption
         )
         for zone in zone_names_without_f_zone:
             regions["Menu"].connect(
-                regions[f"Zone {zone} ({char})"], f"Access Zone {zone} ({char})",
+                regions[f"{zone} ({char})"], f"Access {zone} ({char})",
                 lambda state: can_play_zone(state, player, zone, char)
             )
 

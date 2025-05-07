@@ -51,6 +51,10 @@ special_stage_locations: List[Tuple[str, str, LocProg]] = [
     for zone in data.zone_names_without_f_zone
 ]
 
+menu_locations: List[Tuple[str, str, LocProg]] = [
+    ("Menu", "Menu", LocProg.DEFAULT)
+]
+
 all_locations: List[str] = [
     loc[0] for loc in (
         act_locations +
@@ -60,7 +64,8 @@ all_locations: List[str] = [
         f_zone_locations +
         screw_f_zone_locations +
         extra_zone_locations +
-        special_stage_locations
+        special_stage_locations +
+        menu_locations
     )
 ]
 
@@ -70,14 +75,12 @@ location_lookup_by_name: Dict[str, int] = {
 
 
 def add_base_acts(options: SonicRushOptions) -> List[Tuple[str, str, LocProg]]:
-
     return act_locations + (
         act_s_rank_locations if options.include_s_rank_checks in ["only_acts", "all"] else []
     )
 
 
 def add_bosses(options: SonicRushOptions) -> List[Tuple[str, str, LocProg]]:
-
     return boss_locations + (
         boss_s_rank_locations if options.include_s_rank_checks in ["only_bosses", "all"] else []
     ) + (
@@ -88,8 +91,11 @@ def add_bosses(options: SonicRushOptions) -> List[Tuple[str, str, LocProg]]:
 
 
 def add_special_stages(options: SonicRushOptions) -> List[Tuple[str, str, LocProg]]:
-
     return special_stage_locations
+
+
+def add_menu_locations(options: SonicRushOptions) -> List[Tuple[str, str, LocProg]]:
+    return menu_locations
 
 
 class SonicRushLocation(Location):

@@ -217,6 +217,8 @@ class SonicRushClient(BizHawkClient):
                     level_scores_blaze[zone][act] = int.from_bytes(read_state[3][offset:(offset+4)], "little")
             dl_flags = int.from_bytes(read_state[4])
 
+            locations_to_send.add(location_lookup_by_name["Menu"])
+
             # Blaze's scores are in zone order and not location order
             # Sorry for this unreadable loop pile
             for char_tup in [

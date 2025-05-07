@@ -8,11 +8,12 @@ from .Rom import SonicRushProcedurePatch, write_tokens
 from .items import item_table, SonicRushItem, filler, progressive_level_selects, emeralds, zone_unlocks, traps, trap, \
     item_lookup_by_name
 from .locations import act_locations, boss_locations, special_stage_locations, add_bosses, \
-    add_special_stages, add_base_acts, location_lookup_by_name
+    add_special_stages, add_base_acts, location_lookup_by_name, add_menu_locations
 from .options import SonicRushOptions
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld
 from .regions import create_regions
+from . import data
 from .client import SonicRushClient  # Unused, but required to register with BizHawkClient
 
 
@@ -59,30 +60,19 @@ class SonicRushWorld(World):
     location_name_to_id = location_lookup_by_name
 
     item_name_groups: typing.ClassVar[Dict[str, typing.Set[str]]] = {
-        "Zone Unlocks (Sonic)": {
-            f"Unlock Zone {zone} (Sonic)"
-            for zone in range(1, 8)
-        } | {
-            "Unlock F-Zone (Sonic)"
-        },
-        "Zone Unlocks (Blaze)": {
-            f"Unlock Zone {zone} (Blaze)"
-            for zone in range(1, 8)
-        } | {
-            "Unlock F-Zone (Blaze)"
-        },
+        "Zone Unlocks": set(data.zone_names),
         "Emeralds": {
             f"{color} {dim} Emerald"
-            for color in ["Red", "Blue", "Yellow", "Green", "White", "Turquoise", "Purple"]
+            for color in data.emerald_colors
             for dim in ["Chaos", "Sol"]
         },
         "Chaos Emeralds": {
             f"{color} Chaos Emerald"
-            for color in ["Red", "Blue", "Yellow", "Green", "White", "Turquoise", "Purple"]
+            for color in data.emerald_colors
         },
         "Sol Emeralds": {
             f"{color} Sol Emerald"
-            for color in ["Red", "Blue", "Yellow", "Green", "White", "Turquoise", "Purple"]
+            for color in data.emerald_colors
         },
     }
 
@@ -94,7 +84,12 @@ class SonicRushWorld(World):
         pass
 
     def create_item(self, name: str) -> Item:
-        return SonicRushItem(name, item_table[name](self.options), self.item_name_to_id[name], self.player)
+        return SonicRushItem(
+            name,
+            item_table[name](self.options, self.multiworld),
+            self.item_name_to_id[name],
+            self.player
+        )
 
     def get_filler_item_name(self) -> str:
         return filler(self.random.random())
@@ -105,7 +100,8 @@ class SonicRushWorld(World):
         included_locations = (
             add_base_acts(self.options) +
             add_bosses(self.options) +
-            add_special_stages(self.options)
+            add_special_stages(self.options) +
+            add_menu_locations(self.options)
         )
 
         # Save the final amount of to-be-filled locations
@@ -133,7 +129,8 @@ class SonicRushWorld(World):
         #         self.options.amount_of_starting_zones.value = max(2, self.options.amount_of_starting_zones.value)
 
         included_items: List[Item] = [self.create_item(name) for name in zone_unlocks]
-        for _ in range(self.options.amount_of_starting_zones):
+        self.multiworld.push_precollected(included_items.pop(-2))
+        for _ in range(self.options.amount_of_starting_zones-1):
             self.multiworld.push_precollected(
                 included_items.pop(self.random.randint(0, len(included_items)-1))
             )
