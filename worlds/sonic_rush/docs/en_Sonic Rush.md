@@ -21,19 +21,19 @@ Each zone is unlocked individually by an item and the chaos and sol emeralds hav
 Both characters and the overworld are completely accessible from the start, but you cannot enter any zone before having 
 it unlocked.
 
-Additionally, to being individually unlocked, zones can be progressively unlocked through the level select screen, which
-can be entered by unlocking another zone and having enough progressive level selects to include both zones. 
+Additionally to being unlocked individually, zones can progressively become accessible through the level select screen, 
+which can be entered by unlocking another zone and having enough progressive level selects to include both zones. 
 
 To give an example: Sonic's Zone 5 will be...
-- unlocked if you have `Huge Crisis`.
-- unlocked if you have 5x `Progressive Level Select (Sonic)` and at least one of `Leaf Storm`, `Water Palace`, 
+- accessible if you have `Huge Crisis`.
+- accessible if you have 5 `Progressive Level Select (Sonic)` and at least one of `Leaf Storm`, `Water Palace`, 
   `Mirage Road`, or `Night Carnival` (zones 1-4).
-- locked if you neither have `Huge Crisis` nor 5x `Progressive Level Select (Sonic)`.
-- locked if you do not have `Leaf Storm`, `Water Palace`, `Mirage Road`, or `Night Carnival` for zones 1-5, even if you 
-  have 5x `Progressive Level Select (Sonic)`.
+- not accessible if you neither have `Huge Crisis` nor 5x `Progressive Level Select (Sonic)`.
+- not accessible if you do not have `Leaf Storm`, `Water Palace`, `Mirage Road`, or `Night Carnival`, even if you 
+  have 5 `Progressive Level Select (Sonic)`.
 
-On a side note: If you have more than 5x `Progressive Level Select (Sonic)`, later zones (here `Altitude Limit` and 
-`Dead Line`) can also be used to access Zone 5.
+On a side note: If you have more than 5 `Progressive Level Select (Sonic)`, later zones (in this case `Altitude Limit` 
+and `Dead Line`) can also be used to access the level select screen (and thereby zone 5).
 
 ## What is the goal of Sonic Rush in Archipelago?
 
