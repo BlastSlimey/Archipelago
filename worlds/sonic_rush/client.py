@@ -255,9 +255,9 @@ class SonicRushClient(BizHawkClient):
             if boss_flags_checks & 4:
                 locations_to_send.add(location_lookup_by_name["Extra Zone"])
 
-            for zone in range(7):
-                if special_stages_checks & (1 << zone):
-                    locations_to_send.add(location_lookup_by_name[f"Special Stage Zone {zone+1}"])
+            for zone in data.zone_names_without_f_zone:
+                if special_stages_checks & (1 << (data.zone_number_by_name["Sonic"][zone]-1)):
+                    locations_to_send.add(location_lookup_by_name[f"{zone} Special Stage"])
 
             # Send locations if there are any to send.
             if locations_to_send != self.local_checked_locations:
