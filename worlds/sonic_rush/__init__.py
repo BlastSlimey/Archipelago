@@ -129,8 +129,8 @@ class SonicRushWorld(World):
         #         self.options.amount_of_starting_zones.value = max(2, self.options.amount_of_starting_zones.value)
 
         included_items: List[Item] = [self.create_item(name) for name in zone_unlocks]
-        self.multiworld.push_precollected(included_items.pop(-2))
-        for _ in range(self.options.amount_of_starting_zones-1):
+        # self.multiworld.push_precollected(included_items.pop(-2))
+        for _ in range(self.options.amount_of_starting_zones):
             self.multiworld.push_precollected(
                 included_items.pop(self.random.randint(0, len(included_items)-1))
             )
