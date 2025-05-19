@@ -17,11 +17,10 @@ class SonicRushClient(BizHawkClient):
     system = "NDS"
     patch_suffix = ".aprush"
     local_checked_locations: Set[int]
-    goal_flag: int
     ram_mem_domain = "Main RAM"
     goal_complete = False
     received_items_count: int = 0
-    location_name_to_id: dict[str, int]
+    location_name_to_id: dict[str, int] | None
     datapackage_requested = False
 
     # Vanilla addresses offsets
@@ -52,17 +51,15 @@ class SonicRushClient(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = set()
-        self.local_set_events = {}
-        self.local_found_key_items = {}
         self.seed_verify = False
         self.received_deathlink = False
+        self.location_name_to_id = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         ctx.game = self.game
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
         ctx.watcher_timeout = 1
-        self.seed_verify = False
         return True
 
     def on_package(self, ctx, cmd, args) -> None:
