@@ -3,7 +3,7 @@ from typing import Dict, Tuple, List, Callable
 from BaseClasses import Region, MultiWorld, LocationProgressType as LocProg, ItemClassification, CollectionState
 from worlds.generic.Rules import set_rule
 from .items import SonicRushItem, emeralds
-from .locations import SonicRushLocation, location_lookup_by_name
+from .locations import SonicRushLocation
 from .options import SonicRushOptions
 from .data import region_names, zone_number_by_name, zone_name_by_number, zone_names_without_f_zone
 
@@ -39,7 +39,7 @@ def can_play_all_main_zones(state: CollectionState, player: int, char: str, opti
     return options.screw_f_zone or can_play_f_zone(state, player)
 
 
-def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOptions,
+def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOptions, location_name_to_id: dict[str, int],
                    included_locations: List[Tuple[str, str, LocProg]]) -> List[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
 
@@ -51,7 +51,7 @@ def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOption
     for loc in included_locations:
         regions[loc[1]].locations += [
             SonicRushLocation(
-                player, loc[0], location_lookup_by_name[loc[0]], regions[loc[1]], loc[2]
+                player, loc[0], location_name_to_id[loc[0]], regions[loc[1]], loc[2]
             )
         ]
 

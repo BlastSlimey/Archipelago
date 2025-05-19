@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict, Optional
+from typing import List, Tuple, Optional
 
 from BaseClasses import Location, LocationProgressType as LocProg, Region
 from . import data
@@ -68,10 +68,6 @@ all_locations: List[str] = [
         menu_locations
     )
 ]
-
-location_lookup_by_name: Dict[str, int] = {
-    name: next_id for next_id, name in enumerate(all_locations, data.base_id)
-}
 
 
 def add_base_acts(options: SonicRushOptions) -> List[Tuple[str, str, LocProg]]:

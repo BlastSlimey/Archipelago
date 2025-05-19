@@ -6,8 +6,6 @@ import asyncio
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
-from .locations import location_lookup_by_name
-from .items import item_lookup_by_id
 from . import data
 
 if TYPE_CHECKING:
@@ -23,6 +21,8 @@ class SonicRushClient(BizHawkClient):
     ram_mem_domain = "Main RAM"
     goal_complete = False
     received_items_count: int = 0
+    location_name_to_id: dict[str, int]
+    datapackage_requested = False
 
     # Vanilla addresses offsets
     selected_character_offset = 0x2c4560
@@ -66,18 +66,25 @@ class SonicRushClient(BizHawkClient):
         return True
 
     def on_package(self, ctx, cmd, args) -> None:
+        if cmd == "DataPackage":
+            self.location_name_to_id = args["data"]["games"][self.game]["location_name_to_id"]
         if cmd == "RoomInfo":
             ctx.seed_name = args["seed_name"]
-        if cmd != "Bounced":
-            return
-        if "tags" not in args:
-            return
-        if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
-            self.received_deathlink = True
+        if cmd == "Bounced":
+            if "tags" in args:
+                if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
+                    self.received_deathlink = True
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        from CommonClient import logger
         try:
             if ctx.slot_data is None:
+                return
+            if self.location_name_to_id is None:
+                if not self.datapackage_requested:
+                    await ctx.send_msgs([{"cmd": "GetDataPackage", "games": [self.game]}])
+                    self.datapackage_requested = True
+                    logger.info("Awaiting datapackage...")
                 return
 
             read_state = await bizhawk.read(
@@ -102,7 +109,7 @@ class SonicRushClient(BizHawkClient):
 
             for index in range(min(self.received_items_count, received_in_sav), len(ctx.items_received)):
                 network_item = ctx.items_received[index]
-                name = item_lookup_by_id[network_item.item]
+                name = ctx.item_names.lookup_in_game(network_item.item)
                 match name:
                     # Blaze's zone unlock flags are in zone order and not location order
                     case x if x in data.zone_names_without_f_zone:
@@ -217,7 +224,7 @@ class SonicRushClient(BizHawkClient):
                     level_scores_blaze[zone][act] = int.from_bytes(read_state[3][offset:(offset+4)], "little")
             dl_flags = int.from_bytes(read_state[4])
 
-            locations_to_send.add(location_lookup_by_name["Menu"])
+            locations_to_send.add(self.location_name_to_id["Menu"])
 
             # Blaze's scores are in zone order and not location order
             # Sorry for this unreadable loop pile
@@ -236,28 +243,28 @@ class SonicRushClient(BizHawkClient):
                     ]:
                         if char_tup[1][zone_tup[0]][act_tup[0]] != 0:
                             locations_to_send.add(
-                                location_lookup_by_name[
+                                self.location_name_to_id[
                                     f"{zone_tup[1]} {act_tup[1]} ({char_tup[0]})"
                                 ]
                             )
                         if ctx.slot_data["include_s_rank_checks"] in act_tup[3]:
                             if char_tup[1][zone_tup[0]][act_tup[0]] >= act_tup[2]:
                                 locations_to_send.add(
-                                    location_lookup_by_name[
+                                    self.location_name_to_id[
                                         f"{zone_tup[1]} {act_tup[1]} S Rank ({char_tup[0]})"
                                     ]
                                 )
 
             if boss_flags_checks & 1:
-                locations_to_send.add(location_lookup_by_name["F-Zone (Sonic)"])
+                locations_to_send.add(self.location_name_to_id["F-Zone (Sonic)"])
             if boss_flags_checks & 2:
-                locations_to_send.add(location_lookup_by_name["F-Zone (Blaze)"])
+                locations_to_send.add(self.location_name_to_id["F-Zone (Blaze)"])
             if boss_flags_checks & 4:
-                locations_to_send.add(location_lookup_by_name["Extra Zone"])
+                locations_to_send.add(self.location_name_to_id["Extra Zone"])
 
             for zone in data.zone_names_without_f_zone:
                 if special_stages_checks & (1 << (data.zone_number_by_name["Sonic"][zone]-1)):
-                    locations_to_send.add(location_lookup_by_name[f"{zone} Special Stage"])
+                    locations_to_send.add(self.location_name_to_id[f"{zone} Special Stage"])
 
             # Send locations if there are any to send.
             if locations_to_send != self.local_checked_locations:

@@ -6,9 +6,9 @@ from typing import Any, List, Dict, Mapping
 import settings
 from .Rom import SonicRushProcedurePatch, write_tokens
 from .items import item_table, SonicRushItem, filler, progressive_level_selects, emeralds, zone_unlocks, traps, trap, \
-    item_lookup_by_name
+    item_list
 from .locations import act_locations, boss_locations, special_stage_locations, add_bosses, \
-    add_special_stages, add_base_acts, location_lookup_by_name, add_menu_locations
+    add_special_stages, add_base_acts, add_menu_locations, all_locations
 from .options import SonicRushOptions
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld
@@ -56,8 +56,8 @@ class SonicRushWorld(World):
     options: SonicRushOptions
     web = SonicRushWeb()
     settings: typing.ClassVar[SonicRushSettings]
-    item_name_to_id = item_lookup_by_name
-    location_name_to_id = location_lookup_by_name
+    item_name_to_id = {name: next_id for next_id, name in enumerate(item_list, data.base_id)}
+    location_name_to_id = {name: next_id for next_id, name in enumerate(all_locations, data.base_id)}
 
     item_name_groups: typing.ClassVar[Dict[str, typing.Set[str]]] = {
         "Zone Unlocks": set(data.zone_names),
@@ -110,7 +110,7 @@ class SonicRushWorld(World):
         # Create regions and entrances based on included locations and player options
         self.multiworld.regions.extend(
             create_regions(
-                self.player, self.multiworld, self.options, included_locations
+                self.player, self.multiworld, self.options, self.location_name_to_id, included_locations
             )
         )
 

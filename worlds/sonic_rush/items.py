@@ -80,9 +80,6 @@ item_list: List[str] = [
     *traps,
 ]
 
-item_lookup_by_name: Dict[str, int] = {name: next_id for next_id, name in enumerate(item_list, data.base_id)}
-item_lookup_by_id: Dict[int, str] = {item_lookup_by_name[name]: name for name in item_lookup_by_name}
-
 
 def filler(random: float) -> str:
     """Returns a random filler item."""
