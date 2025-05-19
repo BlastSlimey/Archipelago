@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple, List, Callable
 
 from BaseClasses import Region, MultiWorld, LocationProgressType as LocProg, ItemClassification, CollectionState
 from worlds.generic.Rules import set_rule
@@ -81,6 +81,10 @@ def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOption
     regions["Goal"].locations.append(goal_location)
     multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 
+    def get_zone_rule(z: str, c: str) -> Callable[[CollectionState], bool]:
+        """Helper function because lambdas don't like to be in for loops"""
+        return lambda state: can_play_zone(state, player, z, c)
+
     # Connect Menu to rest of regions
     regions["Menu"].connect(regions["Goal"], "Defeat Eggman")
     regions["Menu"].connect(
@@ -95,7 +99,7 @@ def create_regions(player: int, multiworld: MultiWorld, options: SonicRushOption
         for zone in zone_names_without_f_zone:
             regions["Menu"].connect(
                 regions[f"{zone} ({char})"], f"Access {zone} ({char})",
-                lambda state: can_play_zone(state, player, zone, char)
+                get_zone_rule(zone, char)
             )
 
     return list(regions.values())
