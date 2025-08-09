@@ -3,8 +3,8 @@
 ## Quick Links
 
 - Game Info Page
-    * [English](/games/shapez/info/en)
-- [Player Options Page](/games/shapez/player-options)
+    * [English](/games/Sonic%20Rush/info/en)
+- [Player Options Page](/games/Sonic%20Rush/player-options)
 
 ## Important
 
@@ -16,6 +16,8 @@ If you find one, please report it to the #future-game-design thread for this gam
 
 - BizHawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
   - Version 2.9.1 is recommended; 2.10 is currently unable to connect.
+  - **Important**: Upon opening the emulator fo the first time, go to `Config > Customize... > Advanced` 
+    and **disable** `AutoSaveRam`. Else, save data might not be properly saved.
   - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prerequisite installer first, which can also be found at the above link.
 - The built-in BizHawk client within the Archipelago software, which can be installed 
