@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from typing import TYPE_CHECKING
 
@@ -18,10 +19,16 @@ class VoltorbFlipClient(BizHawkClient):
     game = "Voltorb Flip"
     system = "NDS"
 
-    ram_read_write_domain = "Main RAM"
     header_address = 0x3FFE00
     global_pointer_address = 0xBA8
-    voltorb_flip_level_offset = 0x69D8A
+
+    total_coins_offset = 0x94  # 16 bit
+    map_id_offset = 0x1244  # 16 bit
+    points_gained_offset = 0x69D80  # 16 bit
+    points_possible_offset = 0x69D82  # 16 bit
+    level_offset = 0x69D8A  # 8 bit
+    board_counter_offset = 0x69D8B  # 8 bit
+
     french_offset = 0x58
     italy_offset = -0xb8
     spain_offset = -0x178
@@ -29,16 +36,15 @@ class VoltorbFlipClient(BizHawkClient):
 
     def __init__(self):
         super().__init__()
-        self.global_pointer = 0
-        self.version_pointer = 0
-        self.voltorb_flip_level_address = 0
         self.logger = logging.getLogger("Client")
         self.language_offset = 0
+        self.total_gained = 0
+        self.vf_data_address = 0
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         header = await bizhawk.read(
             ctx.bizhawk_ctx, (
-                (self.header_address, 0xc0, self.ram_read_write_domain),
+                (self.header_address, 0xc0, "Main RAM"),
             )
         )
         if header[0][:10] not in (b'POKEMON SS', b'POKEMON HG'):
@@ -54,7 +60,7 @@ class VoltorbFlipClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
-        ctx.watcher_timeout = 1
+        ctx.watcher_timeout = 0.2
         return True
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
@@ -66,37 +72,74 @@ class VoltorbFlipClient(BizHawkClient):
             if (
                 not ctx.server or
                 not ctx.server.socket.open or
-                ctx.server.socket.closed
+                ctx.server.socket.closed or
+                ctx.slot_data is None
             ):
                 return
-            if self.global_pointer == 0:
-                read = await bizhawk.read(
-                    ctx.bizhawk_ctx, (
-                        (self.global_pointer_address, 3, self.ram_read_write_domain),
-                    )
-                )
-                self.global_pointer = int.from_bytes(read[0], "little")
-                if self.global_pointer == 0:
-                    return  # not initialized yet? idk
-                read = await bizhawk.read(
-                    ctx.bizhawk_ctx, (
-                        (self.global_pointer + 0x20, 3, self.ram_read_write_domain),
-                    )
-                )
-                self.version_pointer = int.from_bytes(read[0], "little")
-                self.voltorb_flip_level_address = (self.version_pointer +
-                                                   self.voltorb_flip_level_offset +
-                                                   self.language_offset)
-                self.logger.info(f"Voltorb Flip level address: {self.voltorb_flip_level_address}")
+
             read = await bizhawk.read(
                 ctx.bizhawk_ctx, (
-                    (self.voltorb_flip_level_address, 1, self.ram_read_write_domain),
+                    (self.global_pointer_address, 3, "Main RAM"),
                 )
             )
-            if read[0][0] in range(1, 7):
-                await ctx.check_locations([8-read[0][0]])
-            if read[0][0] == 1:
-                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            global_pointer = int.from_bytes(read[0], "little")
+            if global_pointer == 0:
+                return  # Just to make sure we don't hit a very bad moment
+            read = await bizhawk.read(
+                ctx.bizhawk_ctx, (
+                    (global_pointer + 0x20, 4, "Main RAM"),
+                )
+            )
+            if read[0][3] != 0x02:
+                return  # Not yet initialized
+            version_pointer = int.from_bytes(read[0][:3], "little")
+            read = await bizhawk.read(
+                ctx.bizhawk_ctx, (
+                    (version_pointer + self.map_id_offset, 2, "Main RAM"),
+                )
+            )
+            if read[0] != b'\x18\x02':
+                return  # Wrong map, might have other data in upcoming addresses
+            vf_data_address = version_pointer + 0x69D80 + self.language_offset
+            if self.vf_data_address != vf_data_address:
+                self.vf_data_address = vf_data_address
+                self.logger.info(f"Global pointer {hex(global_pointer)}, "
+                                 f"version pointer {hex(version_pointer)}, "
+                                 f"vf data address {hex(vf_data_address)}")
+
+            read = await bizhawk.read(
+                ctx.bizhawk_ctx, (
+                    (vf_data_address, 0x10, "Main RAM"),
+                )
+            )
+            if read[0][2:4] == b'\0\0':
+                return  # not ingame
+            if read[0][0:2] != read[0][2:4]:
+                return  # level not finished yet
+
+            coins_won = int.from_bytes(read[0][0:2], "little")
+            new_total = self.total_gained + coins_won
+            coin_steps = ctx.slot_data["coin_locations_adjustments"]["Steps"]
+            new_coin_checks = [i for i in range(self.total_gained+1, new_total+1) if i % coin_steps == 0]
+            await ctx.check_locations([8 - read[0][0xA]] + new_coin_checks)
+            self.total_gained = new_total
+
+            match ctx.slot_data["goal"]:
+                case "levels":
+                    if 8 - read[0][0xA] >= ctx.slot_data["level_locations_adjustments"]["Maximum"]:
+                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                case "coins":
+                    if new_total >= ctx.slot_data["coin_locations_adjustments"]["Maximum"]:
+                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+
+            while read[0][0:2] == read[0][2:4]:
+                await asyncio.sleep(ctx.watcher_timeout)
+                read = await bizhawk.read(
+                    ctx.bizhawk_ctx, (
+                        (vf_data_address, 0x10, "Main RAM"),
+                    )
+                )
+
         except bizhawk.RequestFailedError:
             pass
         except bizhawk.ConnectorError:
