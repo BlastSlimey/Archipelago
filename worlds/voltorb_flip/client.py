@@ -2,6 +2,7 @@ import asyncio
 import logging
 from typing import TYPE_CHECKING
 
+import Utils
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 import worlds._bizhawk as bizhawk
@@ -66,6 +67,22 @@ class VoltorbFlipClient(BizHawkClient):
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if cmd == "RoomInfo":
             ctx.seed_name = args["seed_name"]
+        elif cmd == "Connected":
+            Utils.async_start(ctx.send_msgs([
+                {
+                    "cmd": "Set",
+                    "key": f"voltorb_flip_coins_{ctx.team}_{ctx.slot}",
+                    "default": 0,
+                    "want_reply": True,
+                    "operations": [{"operation": "default", "value": None}]  # value is ignored
+                }, {
+                    "cmd": "SetNotify",
+                    "keys": [f"voltorb_flip_coins_{ctx.team}_{ctx.slot}"]
+                }
+            ]))
+        elif cmd == "SetReply":
+            if args.get("key", "") == f"voltorb_flip_coins_{ctx.team}_{ctx.slot}":
+                self.total_gained = args["value"]  # Intentionally crash if no value argument to keep track of bugs
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         try:
@@ -98,7 +115,7 @@ class VoltorbFlipClient(BizHawkClient):
                     (version_pointer + self.map_id_offset, 2, "Main RAM"),
                 )
             )
-            if read[0] != b'\x18\x02':
+            if read[0] not in (b'\x18\x02', b'\x19\x02'):
                 return  # Wrong map, might have other data in upcoming addresses
             vf_data_address = version_pointer + 0x69D80 + self.language_offset
             if self.vf_data_address != vf_data_address:
@@ -120,9 +137,15 @@ class VoltorbFlipClient(BizHawkClient):
             coins_won = int.from_bytes(read[0][0:2], "little")
             new_total = self.total_gained + coins_won
             coin_steps = ctx.slot_data["coin_locations_adjustments"]["Steps"]
-            new_coin_checks = [i for i in range(self.total_gained+1, new_total+1) if i % coin_steps == 0]
+            new_coin_checks = [i for i in range(0, new_total+1, coin_steps)]
             await ctx.check_locations([8 - read[0][0xA]] + new_coin_checks)
             self.total_gained = new_total
+            await ctx.send_msgs([{
+                "cmd": "Set",
+                "key": f"voltorb_flip_coins_{ctx.team}_{ctx.slot}",
+                "default": 0,
+                "operations": [{"operation": "add", "value": coins_won}]
+            }])
 
             match ctx.slot_data["goal"]:
                 case "levels":

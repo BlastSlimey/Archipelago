@@ -1,7 +1,7 @@
 import dataclasses
 
 from BaseClasses import PlandoOptions
-from Options import PerGameCommonOptions, Choice, Range, OptionCounter, OptionError
+from Options import PerGameCommonOptions, Choice, OptionCounter, OptionError
 from worlds.AutoWorld import World
 
 
@@ -10,7 +10,7 @@ class Goal(Choice):
     Select your goal.
 
     - **Levels** - Win all levels you have checks for.
-    - **Coins** - Collect enough coins in one session to check all coin locations.
+    - **Coins** - Collect enough coins to check all coin locations.
     """
     display_name = "Goal"
     option_levels = 0
@@ -79,8 +79,24 @@ class CoinLocationsAdjustments(OptionCounter):
             raise OptionError("\n".join(errors))
 
 
+class ArtificialLogic(Choice):
+    """
+    If enabled, progression is logically blocked by having to receive certain amounts of the "Luck" item
+    (without actually requiring them).
+
+    If set to **experimental**, random progression items from the multiworld pool will be used for this game's logic instead
+    (without actually requiring them as well). However, be aware of frequent generation failures
+    """
+    display_name = "Artificial Logic"
+    option_off = 0
+    option_on = 1
+    option_experimental = 2
+    default = True
+
+
 @dataclasses.dataclass
 class VoltorbFlipOptions(PerGameCommonOptions):
     goal: Goal
     level_locations_adjustments: LevelLocationsAdjustments
     coin_locations_adjustments: CoinLocationsAdjustments
+    artificial_logic: ArtificialLogic
