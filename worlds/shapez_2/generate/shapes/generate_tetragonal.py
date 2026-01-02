@@ -89,12 +89,6 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
             stored_complexity = 1
     complexity -= stored_complexity
 
-    def _bulk_possible(v: tuple[int, ...], *vc: tuple[int, int]):
-        for vv in v:
-            variants[vv] = True
-        for vv, cc in vc:
-            variants[vv] = True if complexity >= cc else False
-
     while True:
         # Calculate what's possible with available processors
         # IMPORTANT: do not make anything false before this
@@ -102,51 +96,53 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
         variants[Variant.full] = True
         if Processor.PIN_PUSHER in available:
             variants[Variant.pins] = True
-            variants[Variant.full_crystal] = True if Processor.CRYSTALLIZER in available and complexity else False
+            if Processor.CRYSTALLIZER in available:
+                _bulk_possible(variants, complexity, (), (Variant.full_crystal, 1))
         if Processor.CRYSTALLIZER in available:
             if Processor.CUTTER in available:
-                variants[Variant.right_half_crystal_half_shape] = True if complexity >= 2 else False
+                _bulk_possible(variants, complexity, (), (Variant.right_half_crystal_half_shape, 2))
                 if Processor.ROTATOR in available and complexity >= 3:
                     _bulk_possible(
+                        variants, complexity,
                         (Variant.left_half_crystal_half_shape, Variant.rotated_half_crystal_half_shape),
                         (Variant._3_crystals_1_shape, 4), (Variant.half_crystal, 5), (Variant.full_crystal, 6),
                         (Variant.rotated_half_crystal, 6), (Variant.vertical_half_half_crystal, 6),
+                        (Variant.horizontal_half_half_crystal, 7), (Variant._3_1_crystals, 8),
                     )
-                    if complexity >= 7:
-                        variants[Variant.horizontal_half_half_crystal] = True
-                        variants[Variant._3_shapes_1_crystal] = True if Processor.STACKER in available else False
-                        variants[Variant._3_1_crystals] = True if complexity >= 8 else False
-                        if Processor.SWAPPER in available:
-                            _bulk_possible(
-                                (Variant._3_shapes_1_crystal, ), (Variant.cut_out_crystal, 8),
-                                (Variant.checkered_crystal, 11), (Variant.cornered_crystal, 13),
-                            )
+                    if Processor.STACKER in available:
+                        variants[Variant._3_shapes_1_crystal] = True
+                    if Processor.SWAPPER in available:
+                        _bulk_possible(
+                            variants, complexity, (), (Variant._3_shapes_1_crystal, 7), (Variant.cut_out_crystal, 8),
+                            (Variant.checkered_crystal, 11), (Variant.cornered_crystal, 13),
+                        )
         if Processor.CUTTER in available and complexity:
             variants[Variant.half] = True
             if Processor.ROTATOR in available and complexity >= 2:
-                variants[Variant.rotated_half] = True
-                variants[Variant.single] = True if complexity >= 3 else False
+                _bulk_possible(variants, complexity, (Variant.rotated_half, ), (Variant.single, 3))
                 if Processor.STACKER in available and complexity >= 5:
                     _bulk_possible(
+                        variants, complexity,
                         (Variant.vertical_half_half, Variant.horizontal_half_half, Variant.cut_out),
                         (Variant._2_singles, 6), (Variant.cornered, 8), (Variant.checkered, 9),
                         (Variant._3_singles, 11), (Variant._3_1, 11), (Variant.random_shapes_1_color, 17),
                         (Variant._4_singles, 17),
                     )
-                    variants[Variant.random_colors_1_shape] = (
-                        True if Processor.PAINTER in available and complexity >= 18 else False
-                    )
+                    if Processor.PAINTER in available and complexity >= 18:
+                        variants[Variant.random_colors_1_shape] = True
         if Processor.SWAPPER in available and complexity:
             variants[Variant.vertical_half_half] = True
             if Processor.ROTATOR in available and complexity >= 2:
                 _bulk_possible(
-                    (Variant.horizontal_half_half, ), (Variant._3_1, 3), (Variant.checkered, 4),
+                    variants, complexity, (Variant.horizontal_half_half, ), (Variant._3_1, 3), (Variant.checkered, 4),
                     (Variant.random_shapes_1_color, 5), (Variant._4_singles, 5),
                 )
-                variants[Variant.random_colors_1_shape] = True if Processor.PAINTER in available and complexity >= 6 else False
+                if Processor.PAINTER in available and complexity >= 6:
+                    variants[Variant.random_colors_1_shape] = True
                 if Processor.CUTTER in available:
                     _bulk_possible(
-                        (Variant.cut_out, ), (Variant.cornered, 5), (Variant._2_singles, 5), (Variant._3_singles, 5),
+                        variants, complexity, (Variant.cut_out, ), (Variant.cornered, 5), (Variant._2_singles, 5),
+                        (Variant._3_singles, 5),
                     )
 
         def _bulk_remove(*v: int):
@@ -156,18 +152,17 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
         # Remove everything that doesn't have the important buildings
         if important:
             if any(tasked):
-                variants[Variant.full] = False
                 if tasked[Processor.CUTTER]:
                     _bulk_remove(
                         Variant.vertical_half_half, Variant.horizontal_half_half, Variant._3_1,
                         Variant.random_shapes_1_color, Variant.checkered, Variant.random_colors_1_shape, Variant.pins,
-                        Variant.full_crystal, Variant.left_half_crystal_half_shape, Variant._4_singles,
+                        Variant.full_crystal, Variant.left_half_crystal_half_shape, Variant._4_singles, Variant.full
                     )
                 if tasked[Processor.ROTATOR]:
                     # Still leave rotated half as available in case of low complexity
                     _bulk_remove(
                         Variant.half, Variant.pins, Variant.full_crystal, Variant.half_crystal,
-                        Variant.right_half_crystal_half_shape,
+                        Variant.right_half_crystal_half_shape, Variant.full
                     )
                     if not has_vertical_split:
                         _bulk_remove(Variant.horizontal_half_half, Variant.rotated_half_crystal_half_shape)
@@ -175,20 +170,21 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
                         _bulk_remove(Variant.vertical_half_half, Variant.left_half_crystal_half_shape)
                 if tasked[Processor.STACKER]:
                     # Should only happen in single layers
+                    _bulk_remove(Variant.half, Variant.rotated_half, Variant.pins, Variant.single, Variant.full)
                     if sum(tasked) == 1:
                         variants[Variant.full] = True
-                    _bulk_remove(Variant.half, Variant.rotated_half, Variant.pins, Variant.single)
                     for x in range(Variant.begin_crystals + 1, Variant.end_crystals):
                         if x != Variant._3_shapes_1_crystal:
                             variants[x] = False
                 if tasked[Processor.PAINTER]:
                     # Painters don't have anything to do with crystallizers,
                     # so make sure you can paint something if needed
+                    # Also this is a case where full layer is useful
                     _bulk_remove(
                         Variant.full_crystal, Variant.half_crystal, Variant.rotated_half_crystal,
                         Variant.vertical_half_half_crystal, Variant.horizontal_half_half_crystal,
                         Variant.cut_out_crystal, Variant._3_1_crystals, Variant.cornered_crystal,
-                        Variant.checkered_crystal,
+                        Variant.checkered_crystal, Variant.pins,
                     )
                 if tasked[Processor.PIN_PUSHER]:
                     for x in range(0, Variant.end):
@@ -205,7 +201,7 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
                         Variant.rotated_half_crystal, Variant.vertical_half_half_crystal,
                         Variant.horizontal_half_half_crystal, Variant.right_half_crystal_half_shape,
                         Variant.left_half_crystal_half_shape, Variant.rotated_half_crystal_half_shape,
-                        Variant._3_1_crystals, Variant._3_crystals_1_shape, Variant.single,
+                        Variant._3_1_crystals, Variant._3_crystals_1_shape, Variant.single, Variant.full
                     )
 
         # Remove some things that are impossible due to shape context
@@ -225,11 +221,11 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
         # Remove some low complexity variants if high complexity given
         if not important and complexity >= 12:
             _bulk_remove(
-                Variant.full, Variant.horizontal_half_half, Variant.cut_out, Variant.left_half_crystal_half_shape,
+                Variant.horizontal_half_half, Variant.cut_out, Variant.left_half_crystal_half_shape,
                 Variant.rotated_half_crystal_half_shape, Variant._3_crystals_1_shape
             )
             if Processor.CUTTER in available and Processor.ROTATOR in available:
-                _bulk_remove(Variant.half, Variant.rotated_half, Variant.single)
+                _bulk_remove(Variant.half, Variant.rotated_half)
                 if Processor.STACKER in available or Processor.SWAPPER in available:
                     _bulk_remove(Variant.vertical_half_half, Variant.horizontal_half_half, Variant.cut_out)
                 if Processor.SWAPPER in available:
@@ -237,6 +233,8 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
                 if Processor.CRYSTALLIZER in available:
                     _bulk_remove(Variant.right_half_crystal_half_shape, Variant.left_half_crystal_half_shape,
                                  Variant.rotated_half_crystal_half_shape, Variant._3_crystals_1_shape)
+            if sum(variants) > 1:
+                variants[Variant.full] = False
 
         # If none available anymore, try to save it in some way
         if not any(variants):
@@ -300,7 +298,7 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
             part = generate_shape(world) + generate_color(
                 world, complexity, shape, False, available, tasked, important
             )
-            stack(world, shape, "----" * 2, tasked, True, 0, already_has_crystals)
+            stack(world, shape, "----" + part * 2, tasked, True, 0, already_has_crystals)
         case Variant.rotated_half:
             complexity -= 2
             tasked[Processor.CUTTER] = False
@@ -506,13 +504,13 @@ def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
                 complexity -= 7
                 tasked[Processor.CRYSTALLIZER] = False
                 part = "c" + generate_color(world, complexity, shape, True, available, tasked, important)
-                a = (True, 0)
+                a = (False, 1)
             else:
                 complexity -= 3
                 part = generate_shape(world) + generate_color(
                     world, complexity, shape, False, available, tasked, important
                 )
-                a = (False, 1)
+                a = (True, 0)
             ordered_parts = [part, "--", "--", "--"]
             world.random.shuffle(ordered_parts)
             stack(world, shape, "".join(ordered_parts), tasked, *a, already_has_crystals)
@@ -552,74 +550,49 @@ def generate_2_shapes(world: "Shapez2World", complexity: int, shape: list[str],
     subvariants = [False] * 6
     if Processor.CRYSTALLIZER in available and complexity >= 4 and not already_has_crystals:
         subvariants[4] = True
-        subvariants[5] = True if Processor.STACKER in available and complexity >= 12 else subvariants[5]
-        if Processor.SWAPPER in available and complexity >= 9:
+        if Processor.STACKER in available and complexity >= 12:
             subvariants[5] = True
-            subvariants[3] = True if complexity >= 16 else subvariants[3]
-            subvariants[2] = True if complexity >= 17 else subvariants[2]
+        if Processor.SWAPPER in available and complexity >= 9:
+            _bulk_possible(subvariants, complexity, (5, ), (3, 16), (2, 17))
     if Processor.SWAPPER in available and complexity >= 3:
-        subvariants[0] = True
-        subvariants[1] = True if complexity >= 5 else subvariants[1]
+        _bulk_possible(subvariants, complexity, (0, ), (1, 5))
     if Processor.STACKER in available and complexity >= 5:
-        subvariants[0] = True
-        subvariants[1] = True if complexity >= 9 else subvariants[1]
+        _bulk_possible(subvariants, complexity, (0, ), (1, 9))
     if tasked[Processor.PAINTER]:
         subvariants[2:4] = [False] * 2
 
     # Restore complexity for painting and mixing
     complexity += stored_complexity
 
-    def _subvariant(swapper_stacker: bool, a: int, b: int, c1: bool, c2: bool,
-                    cornered: bool, has_non_crys: bool, crys_col: int):
-        nonlocal complexity
-        if swapper_stacker:
-            if Processor.SWAPPER in available:
-                complexity -= a
-                if Processor.STACKER not in available:
-                    tasked[Processor.SWAPPER] = False
-            else:
-                complexity -= b
-                tasked[Processor.STACKER] = False
-        complexity_color = world.random.triangular(0, complexity).__int__()
-        complexity -= complexity_color
-        p1 = generate_shape(world) + generate_color(
-            world, complexity_color, shape, False, available, tasked, important
-        ) if not c1 else "c" + generate_color(world, complexity_color, shape, True, available, tasked, important)
-        p2 = generate_shape(world) + generate_color(
-            world, complexity, shape, False, available, tasked, important
-        ) if not c2 else "c" + generate_color(world, complexity, shape, True, available, tasked, important)
-        if p1 == p2:
-            p2 = generate_shape(world, p2[0]) + p2[1] if not c2 else "c" + generate_color(
-                world, complexity, shape, True, available, tasked, important, p2[1]
-            )
-        possible = [
-            p1 + p2 + "----", "----" + p1 + p2, p1 + "----" + p2, "--" + p1 + p2 + "--"
-        ] if not cornered else [p1 + "--" + p2 + "--", "--" + p1 + "--" + p2]
-        stack(world, shape, world.random.choice(possible), tasked, has_non_crys, crys_col, already_has_crystals)
-
     subvariant_pool = list(x for x in range(6) if subvariants[x])
     match subvariant_pool:
         case 0:
-            _subvariant(True, 3, 5, False, False, False, True, 0)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 3, 5, False, False, None, None, 2, True, 0)
         case 1:
-            _subvariant(True, 5, 9, False, False, True, True, 0)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 5, 9, False, False, None, None, 3, True, 0)
         case 2:
             complexity -= 16
             tasked[Processor.SWAPPER] = False
             tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(False, 0, 0, True, True, False, False, 2)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        False, 0, 0, True, True, None, None, 2, False, 2)
         case 3:
             complexity -= 17
             tasked[Processor.SWAPPER] = False
             tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(False, 0, 0, True, True, True, False, 2)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        False, 0, 0, True, True, None, None, 3, False, 2)
         case 4:
             complexity -= 4
             tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(False, 0, 0, False, True, False, True, 1)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        False, 0, 0, False, True, None, None, 2, True, 1)
         case 5:
             tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(True, 9, 12, False, True, True, True, 1)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 9, 12, False, True, None, None, 3, True, 1)
 
 
 def generate_3_shapes(world: "Shapez2World", complexity: int, shape: list[str],
@@ -643,15 +616,9 @@ def generate_3_shapes(world: "Shapez2World", complexity: int, shape: list[str],
     subvariants = [False] * 6
     if Processor.CRYSTALLIZER in available and complexity >= 7 and not already_has_crystals:
         if Processor.SWAPPER in available:
-            subvariants[1] = True
-            subvariants[2] = True
-            subvariants[3] = True if complexity >= 10 else subvariants[3]
-            subvariants[4] = True if complexity >= 9 else subvariants[4]
-            subvariants[5] = True if complexity >= 13 else subvariants[5]
+            _bulk_possible(subvariants, complexity, (1, 2, ), (4, 9), (3, 10), (5, 13))
         if Processor.STACKER in available and complexity >= 9:
-            subvariants[2] = True
-            subvariants[1] = True if complexity >= 10 else subvariants[1]
-            subvariants[3] = True if complexity >= 13 else subvariants[3]
+            _bulk_possible(subvariants, complexity, (2, ), (1, 10), (3, 13))
     if Processor.SWAPPER in available and complexity >= 8:
         subvariants[0] = True
     if Processor.STACKER in available and complexity >= 12:
@@ -662,69 +629,35 @@ def generate_3_shapes(world: "Shapez2World", complexity: int, shape: list[str],
     # Restore complexity for painting and mixing
     complexity += stored_complexity
 
-    def _subvariant(swapper_stacker: bool, a: int, b: int, c1: bool, c2: bool, c3: bool,
-                    kind: int, has_non_crys: bool, crys_col: int):
-        nonlocal complexity
-        if swapper_stacker:
-            if Processor.SWAPPER in available:
-                complexity -= a
-                if Processor.STACKER not in available:
-                    tasked[Processor.SWAPPER] = False
-            else:
-                complexity -= b
-                tasked[Processor.STACKER] = False
-        complexity_1 = world.random.triangular(0, complexity).__int__()
-        complexity_2 = world.random.triangular(0, complexity - complexity_1).__int__()
-        complexity -= complexity_1 - complexity_2
-        p1 = generate_shape(world) + generate_color(
-            world, complexity_1, shape, False, available, tasked, important
-        ) if not c1 else "c" + generate_color(world, complexity_1, shape, True, available, tasked, important)
-        p2 = generate_shape(world) + generate_color(
-            world, complexity, shape, False, available, tasked, important
-        ) if not c2 else "c" + generate_color(world, complexity, shape, True, available, tasked, important)
-        p3 = generate_shape(world) + generate_color(
-            world, complexity_2, shape, False, available, tasked, important
-        ) if not c3 else "c" + generate_color(world, complexity_2, shape, True, available, tasked, important)
-        if kind == 0:
-            ordered = [p1, p2, p3, "--"]
-            world.random.shuffle(ordered)
-            stack(world, shape, "".join(ordered), tasked, has_non_crys, crys_col, already_has_crystals)
-        elif kind == 1:
-            # p1 and p2 same type
-            ordered = [p1 + p2, p3, "--"]
-            world.random.shuffle(ordered)
-            stack(world, shape, "".join(ordered), tasked, has_non_crys, crys_col, already_has_crystals)
-        else:
-            # p1 and p3 same type
-            possible = [
-                p1 + p2 + p3 + "--", p1 + "--" + p3 + p2, p2 + p1 + "--" + p3, "--" + p1 + p2 + p3
-            ]
-            stack(world, shape, world.random.choice(possible), tasked, has_non_crys, crys_col, already_has_crystals)
-
-
     subvariant_pool = list(x for x in range(6) if subvariants[x])
     match subvariant_pool:
         case 0:
-            _subvariant(True, 8, 12, False, False, False, 0, True, 0)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 8, 12, False, False, False, None, 1, True, 0)
         case 1:
             tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(True, 7, 10, False, False, True, 1, True, 1)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 7, 10, False, False, True, None, 2, True, 1)
         case 2:
             tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(True, 7, 9, False, True, False, 2, True, 1)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 7, 9, False, False, True, None, 3, True, 1)
         case 3:
             tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(True, 10, 13, True, True, False, 1, True, 2)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 10, 13, True, True, False, None, 2, True, 2)
         case 4:
             complexity -= 9
             tasked[Processor.CRYSTALLIZER] = False
             tasked[Processor.SWAPPER] = False
-            _subvariant(False, 0, 0, True, False, True, 2, True, 2)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        False, 0, 0, True, True, False, None, 3, True, 2)
         case 5:
             complexity -= 13
             tasked[Processor.CRYSTALLIZER] = False
             tasked[Processor.SWAPPER] = False
-            _subvariant(False, 0, 0, True, True, True, 0, False, 3)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        False, 0, 0, True, True, True, None, 1, False, 3)
 
 
 def generate_4_shapes(world: "Shapez2World", complexity: int, shape: list[str],
@@ -747,19 +680,16 @@ def generate_4_shapes(world: "Shapez2World", complexity: int, shape: list[str],
     subvariants = [False] * 6
     if (
         Processor.CRYSTALLIZER in available and Processor.CUTTER in available and
-        complexity >= 6 and not already_has_crystals
+        complexity >= 6
     ):
         if Processor.SWAPPER in available:
             subvariants[1] = True
-            subvariants[2] = True if complexity >= 7 else False
-            subvariants[3] = True if complexity >= 10 else False
-            subvariants[4] = True if complexity >= 10 else False
-            subvariants[5] = True if complexity >= 13 else False
+            if not already_has_crystals:
+                _bulk_possible(subvariants, complexity, (), (2, 7), (3, 10), (4, 10), (5, 13))
         if Processor.STACKER in available and complexity >= 10:
-            subvariants[3] = True
-            subvariants[1] = True if complexity >= 13 else False
-            subvariants[2] = True if complexity >= 16 else False
-            subvariants[4] = True if complexity >= 13 else False
+            _bulk_possible(subvariants, complexity, (), (1, 13))
+            if not already_has_crystals:
+                _bulk_possible(subvariants, complexity, (3, ), (4, 13), (2, 16))
     if Processor.SWAPPER in available and complexity >= 5:
         subvariants[0] = True
     if Processor.STACKER in available and Processor.CUTTER in available and complexity >= 15:
@@ -770,52 +700,9 @@ def generate_4_shapes(world: "Shapez2World", complexity: int, shape: list[str],
     # Restore complexity for painting and mixing
     complexity += stored_complexity
 
-    def _subvariant(swapper_stacker: bool, a: int, b: int, c1: bool, c2: bool, c3: bool, c4: bool,
-                    kind: int, has_non_crys: bool, crys_col: int):
-        nonlocal complexity
-        if swapper_stacker:
-            if Processor.SWAPPER in available:
-                complexity -= a
-                if Processor.STACKER not in available:
-                    tasked[Processor.SWAPPER] = False
-            else:
-                complexity -= b
-                tasked[Processor.STACKER] = False
-        complexity_1 = world.random.triangular(0, complexity).__int__()
-        complexity_2 = world.random.triangular(0, complexity - complexity_1).__int__()
-        complexity_3 = world.random.triangular(0, complexity - complexity_1 - complexity_2).__int__()
-        complexity -= complexity_1 - complexity_2 - complexity_3
-        p1 = generate_shape(world) + generate_color(
-            world, complexity_1, shape, False, available, tasked, important
-        ) if not c1 else "c" + generate_color(world, complexity_1, shape, True, available, tasked, important)
-        p2 = generate_shape(world) + generate_color(
-            world, complexity, shape, False, available, tasked, important
-        ) if not c2 else "c" + generate_color(world, complexity, shape, True, available, tasked, important)
-        p3 = generate_shape(world) + generate_color(
-            world, complexity_2, shape, False, available, tasked, important
-        ) if not c3 else "c" + generate_color(world, complexity_2, shape, True, available, tasked, important)
-        p4 = generate_shape(world) + generate_color(
-            world, complexity_3, shape, False, available, tasked, important
-        ) if not c4 else "c" + generate_color(world, complexity_3, shape, True, available, tasked, important)
-        if kind == 0:
-            stack(world, shape, p1 + p2 + p3 + p4, tasked, has_non_crys, crys_col, already_has_crystals)
-        elif kind == 1:
-            ordered = [p1, p2, p3, p4]
-            world.random.shuffle(ordered)
-            stack(world, shape, "".join(ordered), tasked, has_non_crys, crys_col, already_has_crystals)
-        elif kind == 2:
-            # p1-p2 and p3-p4 same types
-            possible = [p1 + p2 + p3 + p4, p3 + p4 + p1 + p2, p1 + p3 + p4 + p2, p3 + p1 + p2 + p4]
-            stack(world, shape, world.random.choice(possible), tasked, has_non_crys, crys_col, already_has_crystals)
-        else:
-            # p1-p3 and p2-p4 same type
-            possible = [p1 + p2 + p3 + p4, p4 + p1 + p2 + p3]
-            stack(world, shape, world.random.choice(possible), tasked, has_non_crys, crys_col, already_has_crystals)
-
     subvariant_pool = list(x for x in range(6) if subvariants[x])
     match subvariant_pool:
         case 0:
-            # tasked[Processor.CUTTER] = False
             if Processor.SWAPPER in available:
                 complexity -= 5
                 if Processor.STACKER not in available:
@@ -824,29 +711,35 @@ def generate_4_shapes(world: "Shapez2World", complexity: int, shape: list[str],
                 complexity -= 15
                 tasked[Processor.STACKER] = False
                 tasked[Processor.CUTTER] = False
-            _subvariant(False, 0, 0, False, False, False, False, 0, True, 0)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        False, 0, 0, False, False, False, False, 0, True, 0)
         case 1:
             tasked[Processor.CRYSTALLIZER] = False
             tasked[Processor.CUTTER] = False
-            _subvariant(True, 6, 13, False, False, False, True, 1, True, 1)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 6, 13, False, False, False, True, 1, True, 1)
         case 2:
             tasked[Processor.CRYSTALLIZER] = False
             tasked[Processor.CUTTER] = False
-            _subvariant(True, 7, 16, False, False, True, True, 2, True, 2)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 7, 16, False, False, True, True, 2, True, 2)
         case 3:
             tasked[Processor.CRYSTALLIZER] = False
             tasked[Processor.CUTTER] = False
-            _subvariant(True, 7, 10, True, False, True, False, 3, True, 2)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 7, 10, False, False, True, True, 3, True, 2)
         case 4:
             tasked[Processor.CRYSTALLIZER] = False
             tasked[Processor.CUTTER] = False
-            _subvariant(True, 10, 13, False, True, True, True, 1, True, 3)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        True, 10, 13, False, True, True, True, 1, True, 3)
         case 5:
             complexity -= 13
             tasked[Processor.CRYSTALLIZER] = False
             tasked[Processor.CUTTER] = False
             tasked[Processor.SWAPPER] = False
-            _subvariant(False, 0, 0, True, True, True, True, 0, False, 4)
+            _subvariant(world, shape, available, tasked, important, already_has_crystals, complexity,
+                        False, 0, 0, True, True, True, True, 0, False, 4)
 
 
 def generate_shape(world: "Shapez2World", exclude: str | None = None) -> str:
@@ -1044,3 +937,69 @@ def fill_crystal(shape: list[str], color: str) -> None:
         for i in range(1, 8, 2):
             if shape[j][i] == "-":
                 shape[j] = shape[j][:i-1] + "c" + color + shape[j][i+1:]
+
+
+def _bulk_possible(variants: list[bool], complexity: int, v: tuple[int, ...], *vc: tuple[int, int]):
+    # IMPORTANT: Always sort by complexity in bulks
+    for vv in v:
+        variants[vv] = True
+    for vv, cc in vc:
+        if complexity >= cc:
+            variants[vv] = True
+        else:
+            break
+
+
+def _subvariant(world: "Shapez2World", shape: list[str], available: list[Processor], tasked: list[bool],
+                important: bool, already_has_crystals, complexity: int, swapper_stacker: bool, a: int, b: int,
+                c1: bool, c2: bool, c3: bool | None, c4: bool | None, kind: int, has_non_crys: bool, crys_col: int):
+    if swapper_stacker:
+        if Processor.SWAPPER in available:
+            complexity -= a
+            if Processor.STACKER not in available:
+                tasked[Processor.SWAPPER] = False
+        else:
+            complexity -= b
+            tasked[Processor.STACKER] = False
+    complexity_1 = world.random.triangular(0, complexity).__int__()
+    complexity_2 = 0 if c3 is None else world.random.triangular(0, complexity - complexity_1).__int__()
+    complexity_3 = 0 if c4 is None else world.random.triangular(0, complexity - complexity_1 - complexity_2).__int__()
+    complexity -= complexity_1 + complexity_2 + complexity_3
+    p1 = generate_shape(world) + generate_color(
+        world, complexity_1, shape, False, available, tasked, important
+    ) if not c1 else "c" + generate_color(world, complexity_1, shape, True, available, tasked, important)
+    p2 = generate_shape(world) + generate_color(
+        world, complexity, shape, False, available, tasked, important
+    ) if not c2 else "c" + generate_color(world, complexity, shape, True, available, tasked, important)
+    p3 = "--" if c3 is None else (
+        generate_shape(world) + generate_color(
+            world, complexity_2, shape, False, available, tasked, important
+        ) if not c3 else "c" + generate_color(world, complexity_2, shape, True, available, tasked, important)
+    )
+    p4 = "--" if c4 is None else (
+        generate_shape(world) + generate_color(
+            world, complexity_3, shape, False, available, tasked, important
+        ) if not c4 else "c" + generate_color(world, complexity_3, shape, True, available, tasked, important)
+    )
+    if kind == 0:  # All same type
+        stack(world, shape, p1 + p2 + p3 + p4, tasked, has_non_crys, crys_col, already_has_crystals)
+    elif kind == 1:  # 3 to 1 types
+        ordered = [p1, p2, p3, p4]
+        world.random.shuffle(ordered)
+        stack(world, shape, "".join(ordered), tasked, has_non_crys, crys_col, already_has_crystals)
+    elif kind == 2:  # half-half types
+        # p1-p2 and p3-p4 same types
+        possible = [
+            p1 + p2 + p3 + p4, p2 + p1 + p3 + p4, p1 + p2 + p4 + p3, p2 + p1 + p4 + p3,
+            p3 + p1 + p2 + p4, p3 + p2 + p1 + p4, p4 + p1 + p2 + p3, p4 + p2 + p1 + p3,
+            p3 + p4 + p1 + p2, p3 + p4 + p2 + p1, p4 + p3 + p1 + p2, p4 + p3 + p2 + p1,
+            p2 + p3 + p4 + p1, p1 + p3 + p4 + p2, p2 + p4 + p3 + p1, p1 + p4 + p3 + p2,
+        ]
+        stack(world, shape, world.random.choice(possible), tasked, has_non_crys, crys_col, already_has_crystals)
+    elif kind == 3:  # cornered/checkered types
+        # p1-p2 and p3-p4 same type
+        possible = [
+            p1 + p3 + p2 + p4, p2 + p3 + p1 + p4, p1 + p4 + p2 + p3, p2 + p4 + p1 + p3,
+            p3 + p1 + p4 + p2, p3 + p2 + p4 + p1, p4 + p1 + p3 + p2, p4 + p2 + p3 + p1,
+        ]
+        stack(world, shape, world.random.choice(possible), tasked, has_non_crys, crys_col, already_has_crystals)
