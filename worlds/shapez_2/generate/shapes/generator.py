@@ -3,7 +3,7 @@ from enum import Enum, IntEnum
 from random import Random
 from typing import TYPE_CHECKING, Iterable
 
-from . import Processor, generate_hexagonal, generate_tetragonal
+from . import Processor, generate_hexagonal, generate_tetragonal, ShapeBuilder
 
 if TYPE_CHECKING:
     from ... import Shapez2World
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 def generate_shape(world: "Shapez2World",
                    processors: list[Processor],
                    complexity: int,
-                   exclude: list[str] | None = None) -> str:
+                   exclude: list[str] | None = None) -> ShapeBuilder:
 
     if exclude is None:
         exclude = []
@@ -26,15 +26,15 @@ def generate_shape(world: "Shapez2World",
         raise Exception(f"Too low complexity ({complexity}) "
                         f"for processors {', '.join(proc.name for proc in processors)}")
 
-    shape = []
+    builder: ShapeBuilder | None = None
 
     # Use "exclude" as a blacklist
-    while not shape or shape in exclude:
+    while builder is None or builder.shape in exclude:
 
-        shape = []
         required_proc = [False] * 8
         for proc in processors:
             required_proc[proc] = True
+        builder = ShapeBuilder(processors, required_proc)
 
         # Hard limit of layer count from player options
         max_layer_count = world.options.shape_generation_adjustments["Maximum layers"]
@@ -91,20 +91,18 @@ def generate_shape(world: "Shapez2World",
                 if layer_index == 1:
                     temp_req_proc = required_proc.copy()
                     temp_req_proc[Processor.PIN_PUSHER] = False
-                    generate_layer(world, complexity_part, shape, processors, temp_req_proc, True)
+                    builder.tasked = temp_req_proc
+                    generate_layer(world, complexity_part, builder, True)
+                    builder.tasked = required_proc
                     for i in range(8):
                         if required_proc[i] and not temp_req_proc[i]:
                             required_proc[i] = False
                 else:
                     temp_processors = processors.copy()
                     temp_processors.remove(Processor.PIN_PUSHER)
-                    generate_layer(world, complexity_part, shape, temp_processors, required_proc, False)
+                    generate_layer(world, complexity_part, builder, False)
             else:
-                generate_layer(world, complexity_part, shape, processors, required_proc, False)
-        generate_layer(world, complexity, shape, processors, required_proc, True)
+                generate_layer(world, complexity_part, builder, False)
+        generate_layer(world, complexity, builder, True)
 
-    return ":".join(shape)
-
-
-def downgrade_shape(world: "Shapez2World", shape: str, missing_processor: Processor) -> str:
-    pass  # TODO
+    return builder

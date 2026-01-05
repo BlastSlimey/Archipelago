@@ -1,6 +1,6 @@
 import enum
 from random import Random
-from typing import Self
+from typing import Self, Any
 
 
 class Processor(enum.IntEnum):
@@ -49,6 +49,32 @@ class Processor(enum.IntEnum):
                     active.insert(0, random.choice(reqs))
                 return True
         return False
+
+
+class ShapeBuilder:
+
+    def __init__(self, processors: list[Processor], tasked: list[bool]):
+        self.shape: list[str] = []
+        self.processors = processors
+        self.tasked = tasked
+        self.has_crystals = False
+        self.blueprint: list[tuple[int, bool, dict[str, Any]]] | None = None
+
+    def build(self) -> str:
+        return ":".join(self.shape)
+
+    def debug_string(self) -> str:
+        return (f"[shape = {self.shape}, processors = {self.processors}, tasked = {self.tasked}, "
+                f"blueprint = {self.blueprint}]")
+
+    def __contains__(self, item):
+        return item in self.processors
+
+    def has_all(self, *items: Processor) -> bool:
+        return all(item in self.processors for item in items)
+
+    def has_any(self, *items: Processor) -> bool:
+        return any(item in self.processors for item in items)
 
 
 event_by_processor: dict[Processor, str] = {
