@@ -77,6 +77,8 @@ class Variant:
 
     end = next_id()
 
+    __remove = next_id()  # For removing pin layers entirely
+
 
 def generate_layer(world: "Shapez2World", complexity: int, shape: list[str],
                    available: list[Processor], tasked: list[bool], important: bool) -> None:
@@ -1172,13 +1174,13 @@ def generate_shape(world: "Shapez2World", exclude: str | None = None) -> str:
 
 
 adjacent_colors = {
-    "r": ("y", "p"),
-    "b": ("p", "c"),
+    "r": ("y", "m"),
+    "b": ("m", "c"),
     "g": ("y", "c"),
     "y": ("r", "g"),
     "c": ("g", "b"),
-    "p": ("b", "r"),
-    "w": ("p", "c", "y"),
+    "m": ("b", "r"),
+    "w": ("m", "c", "y"),
 }
 
 
@@ -1225,7 +1227,7 @@ def generate_color(world: "Shapez2World", complexity: int, shape: list[str], is_
     if color_types["p"]:
         colors.extend(("r", "b", "g"))
     if color_types["s"]:
-        colors.extend(("y", "c", "p"))
+        colors.extend(("y", "c", "m"))
 
     # Try to make color scheme a bit nicer
     if shape:
@@ -1261,7 +1263,7 @@ def generate_color(world: "Shapez2World", complexity: int, shape: list[str], is_
                         f"available = {available}, tasked = {tasked}, important = {important}")
 
     final = world.random.choice(colors)
-    if final in "ypcw":
+    if final in "ymcw":
         tasked[Processor.MIXER] = False
     if final != "u" and not is_crystal:
         tasked[Processor.PAINTER] = False

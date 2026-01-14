@@ -1,6 +1,6 @@
 import enum
 from random import Random
-from typing import Self, Any
+from typing import Self, Sequence
 
 
 class Processor(enum.IntEnum):
@@ -32,6 +32,14 @@ class Processor(enum.IntEnum):
         for rest, reqs in cls.restrictions().items():
             if rest in poss and reqs[0] not in active and reqs[1] not in active:
                 poss.remove(rest)
+        if cls.ROTATOR not in active and cls.STACKER not in active:
+            # cutter and swapper without rotator or stacker is a bad combination
+            if cls.SWAPPER in poss and cls.CUTTER in active:
+                poss.remove(cls.SWAPPER)
+            if cls.CUTTER in poss and cls.SWAPPER in active:
+                poss.remove(cls.CUTTER)
+        # if cls.STACKER in poss:
+        #     poss.extend([cls.STACKER] * (len(poss) // 4))
         active.append(random.choice(poss))
 
     @classmethod
@@ -58,7 +66,16 @@ class ShapeBuilder:
         self.processors = processors
         self.tasked = tasked
         self.has_crystals = False
-        self.blueprint: list[tuple[int, bool, dict[str, Any]]] | None = None
+        self.blueprint: list[tuple[int, bool, dict[str, str | Sequence[str] | int]]] = []
+        # TODO add rotation-less direction (i.e. e.g. looking from east is now considered unrotated), needs to be None first so that a layer can then permanently set it
+        # blueprint data naming conventions:
+        #   part = "Cu"
+        #   shape = "C"
+        #   color = "u"
+        #   parts = ("Cu", "Rr", ...)
+        #   ordered = ["Cu", "Cu", "Cu", "Cu"] | ["C", "C", "C", "C"] | ["u", "u", "u", "u"]
+        #   layer = "CuCuCuCu"
+        #   subvariant = 1
 
     def build(self) -> str:
         return ":".join(self.shape)
@@ -75,6 +92,23 @@ class ShapeBuilder:
 
     def has_any(self, *items: Processor) -> bool:
         return any(item in self.processors for item in items)
+
+    def calc_required_complexity(self) -> int:
+        if self.tasked[Processor.PIN_PUSHER]:
+            return 1
+        required_complexity = sum(self.tasked)
+        if self.tasked[Processor.STACKER] and not (self.tasked[Processor.CUTTER] and self.tasked[Processor.ROTATOR]):
+            required_complexity -= 1
+        if self.tasked[Processor.ROTATOR] and not (self.tasked[Processor.CUTTER] or self.tasked[Processor.SWAPPER]):
+            required_complexity += 1
+        if (
+            self.tasked[Processor.CRYSTALLIZER] and Processor.PIN_PUSHER not in self and
+            not self.tasked[Processor.CUTTER]
+        ):
+            required_complexity += 1
+        if self.tasked[Processor.MIXER] and not (self.tasked[Processor.PAINTER] or self.tasked[Processor.CRYSTALLIZER]):
+            required_complexity += 1
+        return required_complexity
 
 
 event_by_processor: dict[Processor, str] = {

@@ -186,7 +186,7 @@ class ShapeConfiguration(Choice):
     """
     display_name = "Shape Configuration"
     option_tetragonal = 0
-    option_hexagonal = 1
+    # option_hexagonal = 1
     default = 0
 
 
