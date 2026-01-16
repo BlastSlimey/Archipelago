@@ -1,12 +1,26 @@
+from io import StringIO
 from random import Random
 
+
+class ConsoleWriter(StringIO):
+
+    def write(self, __s):
+        # print(__s)
+        pass
+
+
 if __name__ == "__main__":
-    with open("temp/output.txt", "wt") as file:
+    # writer = ConsoleWriter()
+    writer = open("temp/output.txt", "wt")
+    with writer as file:
         from generate.shapes import generator, downgrade_tetragonal, Processor
         from generate.shapes.generate_tetragonal import Variant
+        import datetime
         layers = 4
         hexagonal = False
-        count = 30
+        count = 100000
+        enable_downgrades = True
+        start_time = datetime.datetime.utcnow()
         file.write(
             "This file contains randomly generated shapes, with expected requirements and downgrades.\n"
             "You can view them either ingame (clicking any shape in the gui opens the shape viewer) or at "
@@ -33,8 +47,10 @@ if __name__ == "__main__":
             f"Maximum layer count: {layers}\n"
             f"Is hexagonal?: {hexagonal}\n"
             f"Generated shapes count: {count}\n"
+            f"Enable downgrades: {enable_downgrades}\n"
             f"Begin crystals variant number: {Variant.begin_crystals}\n"
-            f"End crystals variant number: {Variant.end_crystals}\n\n"
+            f"End crystals variant number: {Variant.end_crystals}\n"
+            f"Generation date and time: {start_time}\n\n"
             "----------------------------------------------------------------------------------------\n\n"
         )
         rand = Random()
@@ -42,10 +58,6 @@ if __name__ == "__main__":
             proc: list[Processor] = []
             for _ in range(rand.randint(1, min(8, i // 2 + 1))):
                 Processor.add_random_next(rand, proc, None)
-            # TODO -----------------------
-            if Processor.STACKER not in proc:
-                proc.append(Processor.STACKER)
-            # TODO -----------------------
             complexity = rand.randint(len(proc) + 2, 10 + i * 2)
             builder = generator.generate_new(rand, proc, complexity, hexagonal, layers)
             file.write(f"Shape #{i+1}:   {builder.build()}\n"
@@ -53,7 +65,7 @@ if __name__ == "__main__":
                        f"            Required processors: [{', '.join(p.name for p in proc)}]\n"
                        f"Layer data ({len(builder.blueprint)}): "
                        f"[{', '.join(str(l) for l in builder.blueprint)}]\n")
-            downgrades = rand.randint(1, min(len(proc), i // 2 + 1))
+            downgrades = rand.randint(1, min(len(proc), i // 2 + 1)) if enable_downgrades else 0
             for _ in range(downgrades):
                 missing = proc.pop()
                 builder = downgrade_tetragonal.downgrade_4(rand, builder, proc, missing, complexity)
@@ -62,4 +74,10 @@ if __name__ == "__main__":
                            f"    Layer data ({len(builder.blueprint)}): "
                            f"[{', '.join(str(l) for l in builder.blueprint)}]\n")
             file.write("\n\n")
+        end_time = datetime.datetime.utcnow()
+        end_message = (f"Generation start: {start_time}\n"
+                       f"Generation end: {end_time}\n"
+                       f"Duration: {end_time - start_time}\n")
+        file.write(f"-------------------------------------------------------------\n\n" + end_message)
+        print(end_message)
 

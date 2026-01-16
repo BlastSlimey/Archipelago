@@ -47,7 +47,7 @@ class Variant:
     single = next_id()  # cutter & rotator & 3 (+ crystal & 6)
     _2_singles = next_id()  # cutter & rotator & ((stacker & 6) | (swapper & 5))
                             # (+ crystal & 4 & not already has crystals)
-    _3_singles = next_id()  # cutter & rotator & ((stacker & 11) | (swapper & 5))
+    _3_singles = next_id()  # cutter & rotator & ((stacker & 12) | (swapper & 5))
                             # (+ crystal & ((7 & swapper) | (9 & stacker)) & not already has crystals)
     _4_singles = next_id()  # rotator & ((cutter & stacker & 15) | (swapper & 5))
                             # (+ crystal & cutter & ((6 & swapper) | (13 & stacker)))
@@ -57,14 +57,13 @@ class Variant:
     _remove = next_id()  # For removing pin layers entirely
 
 
-def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, important: bool,
-                   regen_pools: tuple[list[str], ...] | None = None) -> None:
+def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder,
+                   regen_pools: tuple[list[str], ...] | None = None, force_non_pins: bool = False) -> None:
 
-    if important:
-        required_complexity = builder.calc_required_complexity()
-        if complexity < required_complexity:
-            raise Exception(f"Too low complexity (got {complexity}, needs {required_complexity}) "
-                            f"for important processors {', '.join(str(i) for i in range(8) if builder.tasked[i])}")
+    required_complexity = builder.calc_required_complexity()
+    if complexity < required_complexity:
+        raise Exception(f"Too low complexity (got {complexity}, needs {required_complexity}) "
+                        f"for important processors {', '.join(str(i) for i in range(8) if builder.tasked[i])}")
 
     if complexity < 0:
         raise Exception(f"Negative complexity: {complexity}\nbuilder = {builder.debug_string()}")
@@ -76,14 +75,13 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
 
     # Decide on the layer variant, but consider that mixer and/or painter might be important
     stored_complexity = 0
-    if important:
-        if builder.tasked[Processor.MIXER]:
-            if Processor.CRYSTALLIZER in builder:
-                stored_complexity = 1
-            else:
-                stored_complexity = 2
-        elif builder.tasked[Processor.PAINTER]:
+    if builder.tasked[Processor.MIXER]:
+        if Processor.CRYSTALLIZER in builder:
             stored_complexity = 1
+        else:
+            stored_complexity = 2
+    elif builder.tasked[Processor.PAINTER]:
+        stored_complexity = 1
     complexity -= stored_complexity
 
     while True:
@@ -118,7 +116,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
                 if Processor.STACKER in builder and complexity >= 5:
                     _bulk_possible(variants, complexity, (Variant.half_half, Variant.cut_out, ),
                                    (Variant._2_singles, 6), (Variant.cornered, 8), (Variant.checkered, 9),
-                                   (Variant._3_singles, 11), (Variant._3_1, 11), (Variant._4_singles, 15),
+                                   (Variant._3_1, 11), (Variant._3_singles, 12), (Variant._4_singles, 15),
                                    (Variant.random_shapes_1_color, 17))
                     if Processor.PAINTER in builder and complexity >= 18:
                         variants[Variant.random_colors_1_shape] = True
@@ -143,7 +141,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
                     break
 
         # Remove everything that doesn't have the important buildings
-        if important and any(builder.tasked):
+        if any(builder.tasked):
             if builder.tasked[Processor.CUTTER]:
                 _bulk_remove((Variant.full, Variant.pins, ))
                 if Processor.SWAPPER in builder:
@@ -151,6 +149,8 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
                                   Variant.random_colors_1_shape, Variant.random_shapes_1_color, ))
                 if Processor.PIN_PUSHER in builder:
                     variants[Variant.full_crystal] = False
+                if builder.tasked[Processor.ROTATOR] and not has_horizontal_split and not has_vertical_split:
+                    variants[Variant.half] = False
             if builder.tasked[Processor.ROTATOR]:
                 _bulk_remove((Variant.full, Variant.pins), (Variant.half, 2), (Variant.half_crystal_half_shape, 3))
                 if Processor.SWAPPER in builder:
@@ -219,9 +219,11 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
         if Processor.STACKER not in builder and len(builder.shape):
             variants[:] = [False] * len(variants)
             variants[Variant.pins] = True
+        if force_non_pins:
+            variants[Variant.pins] = False
 
         # Remove some low complexity variants if high complexity given
-        if not important and complexity >= 16:
+        if not any(builder.tasked) and complexity >= 16:
             _bulk_remove((Variant.cut_out, Variant._3_crystals_1_shape, Variant.checkered))
             if Processor.CUTTER in builder and Processor.ROTATOR in builder:
                 variants[Variant.half] = False
@@ -284,14 +286,14 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
                     _part = rand.choice(temp_pool)
                     regen_pools[0].remove(_part)
                 else:
-                    _part = _part[0] + generate_color(rand, _comp, False, builder, important)
+                    _part = _part[0] + generate_color(rand, _comp, False, builder)
             return _part
-        return generate_shape(rand) + generate_color(rand, _comp, False, builder, important)
+        return generate_shape(rand) + generate_color(rand, _comp, False, builder)
 
     def _new_crystal(_comp: int) -> str:
         if regen_pools and regen_pools[1]:
             return "c" + regen_pools[1].pop(rand.randint(0, len(regen_pools[1]) - 1))
-        return "c" + generate_color(rand, _comp, True, builder, important)
+        return "c" + generate_color(rand, _comp, True, builder)
 
     def _2_parts(c1: bool, c2: bool, no_same: bool) -> tuple[str, str]:
         nonlocal complexity
@@ -302,7 +304,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
         if no_same and p1 == p2:
             # Do not use regen parts in order to guarantee uniqueness
             p2 = generate_shape(rand, p2[0]) + p2[1] if not c2 else "c" + generate_color(
-                rand, complexity, True, builder, important, p2[1]
+                rand, complexity, True, builder, p2[1]
             )
         return p1, p2
 
@@ -369,9 +371,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
             builder.blueprint.append((Variant.cornered, stack_top, {"parts": parts}))
         case Variant.random_shapes_1_color:
             _tasked_sw_st(5, 17, False)
-            color = generate_color(
-                rand, complexity, False, builder, important
-            )
+            color = generate_color(rand, complexity, False, builder)
             ordered_parts = [generate_shape(rand)]
             ordered_parts.append(generate_shape(rand, ordered_parts[-1]))
             ordered_parts.append(generate_shape(rand, ordered_parts[-1]))
@@ -394,10 +394,10 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
             comp_2 = rand.triangular(0, complexity - comp_1).__int__()
             comp_3 = rand.triangular(0, complexity - comp_1 - comp_2).__int__()
             complexity -= comp_1 + comp_2 + comp_3
-            ordered_colors = [generate_color(rand, complexity, False, builder, important)]
-            ordered_colors.append(generate_color(rand, comp_1, False, builder, important, ordered_colors[-1]))
-            ordered_colors.append(generate_color(rand, comp_2, False, builder, important, ordered_colors[-1]))
-            ordered_colors.append(generate_color(rand, comp_3, False, builder, important, ordered_colors[-1]))
+            ordered_colors = [generate_color(rand, complexity, False, builder)]
+            ordered_colors.append(generate_color(rand, comp_1, False, builder, ordered_colors[-1]))
+            ordered_colors.append(generate_color(rand, comp_2, False, builder, ordered_colors[-1]))
+            ordered_colors.append(generate_color(rand, comp_3, False, builder, ordered_colors[-1]))
             rand.shuffle(ordered_colors)
             stack_top = stack(rand, builder, "".join(shape_part + c for c in ordered_colors), True, 0)
             builder.blueprint.append((Variant.random_colors_1_shape, stack_top,
@@ -419,7 +419,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
             else:
                 _bulk_tasked(6, Processor.CUTTER, Processor.ROTATOR)
             builder.tasked[Processor.CRYSTALLIZER] = False
-            part = "c" + generate_color(rand, complexity, True, builder, important)
+            part = _new_crystal(complexity)
             if builder.has_crystals or Processor.ROTATOR not in builder or Processor.CUTTER not in builder:
                 fill_crystal(builder, part[1])
             builder.shape.insert(0, part * 4)
@@ -430,7 +430,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
             _bulk_tasked(5, Processor.CUTTER, Processor.ROTATOR, Processor.CRYSTALLIZER)
             complexity_color = rand.randint(0, complexity)
             complexity -= complexity_color
-            part = "c" + generate_color(rand, complexity_color, True, builder, important)
+            part = _new_crystal(complexity_color)
             possible_positions = [part * 2 + "----"]
             if complexity:
                 possible_positions.extend([part + "----" + part, "--" + part * 2 + "--"])
@@ -464,7 +464,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
         case Variant.cut_out_crystal:
             # Assumes this doesn't happen when already_has_crystals
             _bulk_tasked(8, Processor.CUTTER, Processor.ROTATOR, Processor.CRYSTALLIZER, Processor.SWAPPER)
-            part = "c" + generate_color(rand, complexity, True, builder, important)
+            part = _new_crystal(complexity)
             ordered_parts = [part, part, part, "--"]
             rand.shuffle(ordered_parts)
             stack_top = stack(rand, builder, "".join(ordered_parts), False, 1)
@@ -499,7 +499,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
         case Variant.cornered_crystal:
             # Assumes this doesn't happen when already_has_crystals
             _bulk_tasked(13, Processor.CUTTER, Processor.ROTATOR, Processor.CRYSTALLIZER, Processor.SWAPPER)
-            part = "c" + generate_color(rand, complexity, True, builder, important)
+            part = _new_crystal(complexity)
             if rand.random() < 0.5:
                 stack_top = stack(rand, builder, (part + "--") * 2, False, 1)
                 builder.blueprint.append((Variant.cornered_crystal, stack_top, {"parts": (part, "--")}))
@@ -526,7 +526,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
             if Processor.CRYSTALLIZER in builder and complexity >= 7 and not builder.has_crystals:
                 complexity -= 7
                 builder.tasked[Processor.CRYSTALLIZER] = False
-                part = "c" + generate_color(rand, complexity, True, builder, important)
+                part = _new_crystal(complexity)
                 a = (False, 1)
             else:
                 complexity -= 3
@@ -537,35 +537,34 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder, importa
             stack_top = stack(rand, builder, "".join(ordered_parts), *a)
             builder.blueprint.append((Variant.single, stack_top, {"ordered": ordered_parts}))
         case Variant._2_singles:
-            generate_2_shapes(rand, complexity, builder, important, (_new_shape, _new_crystal))
+            generate_2_shapes(rand, complexity, builder, (_new_shape, _new_crystal))
         case Variant._3_singles:
-            generate_3_shapes(rand, complexity, builder, important, (_new_shape, _new_crystal))
+            generate_3_shapes(rand, complexity, builder, (_new_shape, _new_crystal))
         case Variant._4_singles:
-            generate_4_shapes(rand, complexity, builder, important, (_new_shape, _new_crystal))
+            generate_4_shapes(rand, complexity, builder, (_new_shape, _new_crystal))
         case e:
             raise Exception(f"Unknown layer variant {e}:\n"
-                            f"complexity = {complexity}, important = {important},\n"
+                            f"complexity = {complexity},\n"
                             f"builder = {builder.debug_string()}\n"
                             f"has vertical split = {has_vertical_split}, "
                             f"has horizontal split = {has_horizontal_split},\n"
                             f"variant pool = {variant_pool}")
 
 
-def generate_2_shapes(rand: Random, complexity: int, builder: ShapeBuilder, important: bool,
+def generate_2_shapes(rand: Random, complexity: int, builder: ShapeBuilder,
                       _new_gens: tuple[Callable[[int], str], ...]) -> None:
     builder.tasked[Processor.CUTTER] = False
     builder.tasked[Processor.ROTATOR] = False
 
     # Decide on the layer variant, but consider that mixer and/or painter might be important
     stored_complexity = 0
-    if important:
-        if builder.tasked[Processor.MIXER]:
-            if Processor.CRYSTALLIZER in builder:
-                stored_complexity = 1
-            else:
-                stored_complexity = 2
-        elif builder.tasked[Processor.PAINTER]:
+    if builder.tasked[Processor.MIXER]:
+        if Processor.CRYSTALLIZER in builder:
             stored_complexity = 1
+        else:
+            stored_complexity = 2
+    elif builder.tasked[Processor.PAINTER]:
+        stored_complexity = 1
     complexity -= stored_complexity
 
     subvariants = [False] * 6
@@ -579,11 +578,10 @@ def generate_2_shapes(rand: Random, complexity: int, builder: ShapeBuilder, impo
         _bulk_possible(subvariants, complexity, (0, ), (1, 5))
     if Processor.STACKER in builder and complexity >= 5:
         _bulk_possible(subvariants, complexity, (0, ), (1, 9))
-    if important:
-        if builder.tasked[Processor.PAINTER]:
-            subvariants[2:4] = [False] * 2
-        if builder.tasked[Processor.CRYSTALLIZER]:
-            subvariants[:2] = [False] * 2
+    if builder.tasked[Processor.PAINTER]:
+        subvariants[2:4] = [False] * 2
+    if builder.tasked[Processor.CRYSTALLIZER]:
+        subvariants[:2] = [False] * 2
 
     # Restore complexity for painting and mixing
     complexity += stored_complexity
@@ -591,53 +589,52 @@ def generate_2_shapes(rand: Random, complexity: int, builder: ShapeBuilder, impo
     subvariant_pool = list(x for x in range(6) if subvariants[x])
     if not subvariant_pool:
         raise Exception(f"No subvariants to choose from:\n"
-                        f"complexity = {complexity}, important = {important},\n"
+                        f"complexity = {complexity},\n"
                         f"builder = {builder.debug_string()}")
     match rand.choice(subvariant_pool):
         case 0:
-            _subvariant(rand, builder, Variant._2_singles, 0, important, complexity,
+            _subvariant(rand, builder, Variant._2_singles, 0, complexity,
                         True, 3, 5, False, False, None, None, 2, True, 0, _new_gens)
         case 1:
-            _subvariant(rand, builder, Variant._2_singles, 1, important, complexity,
+            _subvariant(rand, builder, Variant._2_singles, 1, complexity,
                         True, 5, 9, False, False, None, None, 3, True, 0, _new_gens)
         case 2:
             complexity -= 16
             builder.tasked[Processor.SWAPPER] = False
             builder.tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(rand, builder, Variant._2_singles, 2, important, complexity,
+            _subvariant(rand, builder, Variant._2_singles, 2, complexity,
                         False, 0, 0, True, True, None, None, 2, False, 2, _new_gens)
         case 3:
             complexity -= 17
             builder.tasked[Processor.SWAPPER] = False
             builder.tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(rand, builder, Variant._2_singles, 3, important, complexity,
+            _subvariant(rand, builder, Variant._2_singles, 3, complexity,
                         False, 0, 0, True, True, None, None, 3, False, 2, _new_gens)
         case 4:
             complexity -= 4
             builder.tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(rand, builder, Variant._2_singles, 4, important, complexity,
+            _subvariant(rand, builder, Variant._2_singles, 4, complexity,
                         False, 0, 0, False, True, None, None, 2, True, 1, _new_gens)
         case 5:
             builder.tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(rand, builder, Variant._2_singles, 5, important, complexity,
+            _subvariant(rand, builder, Variant._2_singles, 5, complexity,
                         True, 9, 12, False, True, None, None, 3, True, 1, _new_gens)
 
 
-def generate_3_shapes(rand: Random, complexity: int, builder: ShapeBuilder, important: bool,
+def generate_3_shapes(rand: Random, complexity: int, builder: ShapeBuilder,
                       _new_gens: tuple[Callable[[int], str], ...]) -> None:
     builder.tasked[Processor.CUTTER] = False
     builder.tasked[Processor.ROTATOR] = False
 
     # Decide on the layer variant, but consider that mixer and/or painter might be important
     stored_complexity = 0
-    if important:
-        if builder.tasked[Processor.MIXER]:
-            if Processor.CRYSTALLIZER in builder:
-                stored_complexity = 1
-            else:
-                stored_complexity = 2
-        elif builder.tasked[Processor.PAINTER]:
+    if builder.tasked[Processor.MIXER]:
+        if Processor.CRYSTALLIZER in builder:
             stored_complexity = 1
+        else:
+            stored_complexity = 2
+    elif builder.tasked[Processor.PAINTER]:
+        stored_complexity = 1
     complexity -= stored_complexity
 
     subvariants = [False] * 6
@@ -650,11 +647,10 @@ def generate_3_shapes(rand: Random, complexity: int, builder: ShapeBuilder, impo
         subvariants[0] = True
     if Processor.STACKER in builder and complexity >= 12:
         subvariants[0] = True
-    if important:
-        if builder.tasked[Processor.PAINTER]:
-            subvariants[5] = False
-        if builder.tasked[Processor.CRYSTALLIZER]:
-            subvariants[0] = False
+    if builder.tasked[Processor.PAINTER]:
+        subvariants[5] = False
+    if builder.tasked[Processor.CRYSTALLIZER]:
+        subvariants[0] = False
 
     # Restore complexity for painting and mixing
     complexity += stored_complexity
@@ -662,52 +658,51 @@ def generate_3_shapes(rand: Random, complexity: int, builder: ShapeBuilder, impo
     subvariant_pool = list(x for x in range(6) if subvariants[x])
     if not subvariant_pool:
         raise Exception(f"No subvariants to choose from:\n"
-                        f"complexity = {complexity}, important = {important},\n"
+                        f"complexity = {complexity},\n"
                         f"builder = {builder.debug_string()}")
     match rand.choice(subvariant_pool):
         case 0:
-            _subvariant(rand, builder, Variant._3_singles, 0, important, complexity,
+            _subvariant(rand, builder, Variant._3_singles, 0, complexity,
                         True, 8, 12, False, False, False, None, 1, True, 0, _new_gens)
         case 1:
             builder.tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(rand, builder, Variant._3_singles, 1, important, complexity,
+            _subvariant(rand, builder, Variant._3_singles, 1, complexity,
                         True, 7, 10, False, False, True, None, 2, True, 1, _new_gens)
         case 2:
             builder.tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(rand, builder, Variant._3_singles, 2, important, complexity,
+            _subvariant(rand, builder, Variant._3_singles, 2, complexity,
                         True, 7, 9, False, False, True, None, 3, True, 1, _new_gens)
         case 3:
             builder.tasked[Processor.CRYSTALLIZER] = False
-            _subvariant(rand, builder, Variant._3_singles, 3, important, complexity,
+            _subvariant(rand, builder, Variant._3_singles, 3, complexity,
                         True, 10, 13, True, True, False, None, 2, True, 2, _new_gens)
         case 4:
             complexity -= 9
             builder.tasked[Processor.CRYSTALLIZER] = False
             builder.tasked[Processor.SWAPPER] = False
-            _subvariant(rand, builder, Variant._3_singles, 4, important, complexity,
+            _subvariant(rand, builder, Variant._3_singles, 4, complexity,
                         False, 0, 0, True, True, False, None, 3, True, 2, _new_gens)
         case 5:
             complexity -= 13
             builder.tasked[Processor.CRYSTALLIZER] = False
             builder.tasked[Processor.SWAPPER] = False
-            _subvariant(rand, builder, Variant._3_singles, 5, important, complexity,
+            _subvariant(rand, builder, Variant._3_singles, 5, complexity,
                         False, 0, 0, True, True, True, None, 1, False, 3, _new_gens)
 
 
-def generate_4_shapes(rand: Random, complexity: int, builder: ShapeBuilder, important: bool,
+def generate_4_shapes(rand: Random, complexity: int, builder: ShapeBuilder,
                       _new_gens: tuple[Callable[[int], str], ...]) -> None:
     builder.tasked[Processor.ROTATOR] = False
 
     # Decide on the layer variant, but consider that mixer and/or painter might be important
     stored_complexity = 0
-    if important:
-        if builder.tasked[Processor.MIXER]:
-            if Processor.CRYSTALLIZER in builder:
-                stored_complexity = 1
-            else:
-                stored_complexity = 2
-        elif builder.tasked[Processor.PAINTER]:
+    if builder.tasked[Processor.MIXER]:
+        if Processor.CRYSTALLIZER in builder:
             stored_complexity = 1
+        else:
+            stored_complexity = 2
+    elif builder.tasked[Processor.PAINTER]:
+        stored_complexity = 1
     complexity -= stored_complexity
 
     subvariants = [False] * 6
@@ -727,11 +722,10 @@ def generate_4_shapes(rand: Random, complexity: int, builder: ShapeBuilder, impo
         subvariants[0] = True
     if Processor.STACKER in builder and Processor.CUTTER in builder and complexity >= 15:
         subvariants[0] = True
-    if important:
-        if builder.tasked[Processor.PAINTER]:
-            subvariants[5] = False
-        if builder.tasked[Processor.CRYSTALLIZER]:
-            subvariants[0] = False
+    if builder.tasked[Processor.PAINTER]:
+        subvariants[5] = False
+    if builder.tasked[Processor.CRYSTALLIZER]:
+        subvariants[0] = False
 
     # Restore complexity for painting and mixing
     complexity += stored_complexity
@@ -739,7 +733,7 @@ def generate_4_shapes(rand: Random, complexity: int, builder: ShapeBuilder, impo
     subvariant_pool = list(x for x in range(6) if subvariants[x])
     if not subvariant_pool:
         raise Exception(f"No subvariants to choose from:\n"
-                        f"complexity = {complexity}, important = {important},\n"
+                        f"complexity = {complexity},\n"
                         f"builder = {builder.debug_string()}")
     match rand.choice(subvariant_pool):
         case 0:
@@ -751,40 +745,42 @@ def generate_4_shapes(rand: Random, complexity: int, builder: ShapeBuilder, impo
                 complexity -= 15
                 builder.tasked[Processor.STACKER] = False
                 builder.tasked[Processor.CUTTER] = False
-            _subvariant(rand, builder, Variant._4_singles, 0, important, complexity,
+            _subvariant(rand, builder, Variant._4_singles, 0, complexity,
                         False, 0, 0, False, False, False, False, 0, True, 0, _new_gens)
         case 1:
             builder.tasked[Processor.CRYSTALLIZER] = False
             builder.tasked[Processor.CUTTER] = False
-            _subvariant(rand, builder, Variant._4_singles, 1, important, complexity,
+            _subvariant(rand, builder, Variant._4_singles, 1, complexity,
                         True, 6, 13, False, False, False, True, 1, True, 1, _new_gens)
         case 2:
             builder.tasked[Processor.CRYSTALLIZER] = False
             builder.tasked[Processor.CUTTER] = False
-            _subvariant(rand, builder, Variant._4_singles, 2, important, complexity,
+            _subvariant(rand, builder, Variant._4_singles, 2, complexity,
                         True, 7, 16, False, False, True, True, 2, True, 2, _new_gens)
         case 3:
             builder.tasked[Processor.CRYSTALLIZER] = False
             builder.tasked[Processor.CUTTER] = False
-            _subvariant(rand, builder, Variant._4_singles, 3, important, complexity,
+            _subvariant(rand, builder, Variant._4_singles, 3, complexity,
                         True, 7, 10, False, False, True, True, 3, True, 2, _new_gens)
         case 4:
             builder.tasked[Processor.CRYSTALLIZER] = False
             builder.tasked[Processor.CUTTER] = False
-            _subvariant(rand, builder, Variant._4_singles, 4, important, complexity,
+            _subvariant(rand, builder, Variant._4_singles, 4, complexity,
                         True, 10, 13, False, True, True, True, 1, True, 3, _new_gens)
         case 5:
             complexity -= 13
             builder.tasked[Processor.CRYSTALLIZER] = False
             builder.tasked[Processor.CUTTER] = False
             builder.tasked[Processor.SWAPPER] = False
-            _subvariant(rand, builder, Variant._4_singles, 5, important, complexity,
+            _subvariant(rand, builder, Variant._4_singles, 5, complexity,
                         False, 0, 0, True, True, True, True, 0, False, 4, _new_gens)
 
 
 def generate_shape(rand: Random, exclude: str | None = None) -> str:
     shapes = ["C", "R", "S", "W"]
     if exclude is not None:
+        if exclude not in shapes:
+            raise Exception("Bad to-be-excluded shape: " + exclude)
         shapes.remove(exclude)
     return rand.choice(shapes)
 
@@ -801,7 +797,7 @@ adjacent_colors = {
 
 
 def generate_color(rand: Random, complexity: int, is_crystal: bool,
-                   builder: ShapeBuilder, important: bool, exclude: str | None = None) -> str:
+                   builder: ShapeBuilder, exclude: str | None = None) -> str:
 
     white_comp = 2 if is_crystal else 3
     mixing_comp = 1 if is_crystal else 2
@@ -818,15 +814,15 @@ def generate_color(rand: Random, complexity: int, is_crystal: bool,
         color_types["u"] = False
     if complexity < white_comp:
         color_types["w"] = False
-    if important and builder.tasked[Processor.MIXER]:
+    if builder.tasked[Processor.MIXER]:
         color_types["p"] = False
         if Processor.PAINTER in builder:
             color_types["u"] = False
     elif complexity < mixing_comp:
         color_types["s"] = False
-        if complexity < base_comp and not (important and builder.tasked[Processor.PAINTER]) and not is_crystal:
+        if complexity < base_comp and not builder.tasked[Processor.PAINTER] and not is_crystal:
             color_types["p"] = False
-    if important and builder.tasked[Processor.PAINTER]:
+    if builder.tasked[Processor.PAINTER]:
         color_types["u"] = False
     if Processor.PAINTER not in builder and not is_crystal:
         color_types["p"] = False
@@ -874,7 +870,7 @@ def generate_color(rand: Random, complexity: int, is_crystal: bool,
     # Error handling for when there is none left for some reason:
     if not colors:
         raise Exception(f"No color left to pick:\nbuilder = {builder.debug_string()},\n"
-                        f"complexity = {complexity}, is crystal = {is_crystal}, important = {important}")
+                        f"complexity = {complexity}, is crystal = {is_crystal}")
 
     final = rand.choice(colors)
     if final in "ymcw":
@@ -920,8 +916,12 @@ def stack(rand: Random, builder: ShapeBuilder, layer: str, has_non_crystal: bool
                 builder.tasked[Processor.ROTATOR] = False
                 for _ in range(3):
                     layer = layer[6:8] + layer[0:6]
-                    if layer[0] not in "Pc-" and builder.shape[-1][0] != "-":
-                        break
+                    for i in range(0, 8, 2):
+                        if layer[i] not in "Pc-" and builder.shape[-1][i] != "-":
+                            break
+                    else:
+                        continue
+                    break
                 else:
                     raise Exception(f"New layer supposed to be placed on top, but not possible:\n"
                                     f"builder = {builder.debug_string()}, new layer = {layer}")
@@ -1001,7 +1001,7 @@ def _bulk_possible(variants: list[bool], complexity: int, v: tuple[int, ...], *v
 
 
 def _subvariant(rand: Random, builder: ShapeBuilder, variant: int, subvariant: int,
-                important: bool, complexity: int, swapper_stacker: bool, a: int, b: int,
+                complexity: int, swapper_stacker: bool, a: int, b: int,
                 c1: bool, c2: bool, c3: bool | None, c4: bool | None, kind: int, has_non_crys: bool, crys_col: int,
                 _new_gens: tuple[Callable[[int], str], ...]):
     if swapper_stacker:

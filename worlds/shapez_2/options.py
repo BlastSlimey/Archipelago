@@ -229,9 +229,11 @@ class ShapeGenerationAdjustments(ExtendedOptionCounter):
     ]
     default = {
         "Maximum layers": 4,
+        "Maximum processors per milestone": 3,
     }
     individual_min_max = {
         "Maximum layers": (2, 10),
+        "Maximum processors per milestone": (2, 8),
     }
 
 

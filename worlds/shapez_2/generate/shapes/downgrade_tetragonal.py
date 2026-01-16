@@ -23,7 +23,6 @@ def downgrade_4(rand: Random, builder: ShapeBuilder, remaining_processors: list[
                         crystal_pool.append(layer[i+1])
                     elif layer[i] in "CRSW" and layer[i:i+2] not in shape_pool:
                         shape_pool.append(layer[i:i+2])
-            print(f"Regenerate {builder.shape} with {shape_pool} and {crystal_pool}")
             from .generator import generate_new
             return generate_new(rand, remaining_processors, original_complexity, False, len(builder.blueprint),
                                 regen_pools=(shape_pool, crystal_pool))
@@ -384,6 +383,8 @@ def downgrade_4(rand: Random, builder: ShapeBuilder, remaining_processors: list[
                     if Processor.SWAPPER in remaining_processors:
                         position = rand.randint(0, 1)
                         shape_parts = (data["ordered"][position], data["ordered"][position+2])
+                        if shape_parts[0] == shape_parts[1]:
+                            shape_parts = (shape_parts[0], data["ordered"][position+1])
                         _half_half(shape_parts[0] + data["color"], shape_parts[1] + data["color"], False)
                     else:
                         position = rand.randint(0, 1)
@@ -718,7 +719,7 @@ def downgrade_4(rand: Random, builder: ShapeBuilder, remaining_processors: list[
             case Variant.cornered_crystal:
                 leave_as_is = False
                 if missing_processor == Processor.CRYSTALLIZER:
-                    direction = data["parts"].index("--")
+                    direction = (data["parts"].index("--") + 1) % 2
                     part = _decrystallize(long=(data["parts"][direction]))
                     _cornered(part, direction)
                 elif missing_processor == Processor.MIXER:
@@ -834,7 +835,7 @@ def downgrade_4(rand: Random, builder: ShapeBuilder, remaining_processors: list[
                         _full_crystal(part, True)
                     else:
                         part_1 = _decrystallize(long=part)
-                        part_2 = _new_part_from_shape(part)
+                        part_2 = _new_part_from_shape(part_1)
                         _3_1(part_2, part_1, data["ordered"].index(part))
                 elif missing_processor == Processor.ROTATOR:
                     if part[0] == "c":
@@ -949,7 +950,7 @@ def downgrade_4(rand: Random, builder: ShapeBuilder, remaining_processors: list[
                 elif missing_processor == Processor.ROTATOR:
                     if data["subvariant"]:
                         parts_c = tuple(p for p in parts if p[0] == "c")
-                        part_s = _decrystallize(parts=parts_c[-1]) if len(parts_c) == 3 \
+                        part_s = _decrystallize(long=parts_c[-1]) if len(parts_c) == 3 \
                             else tuple(p for p in parts if p[0] != "c")[0]
                         _half_crystal_half_shape(parts_c[0], part_s, 0)
                     elif Processor.SWAPPER in remaining_processors:

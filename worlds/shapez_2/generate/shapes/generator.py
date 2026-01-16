@@ -1,4 +1,4 @@
-import math
+
 from random import Random
 from typing import TYPE_CHECKING
 
@@ -36,80 +36,113 @@ def generate_new(rand: Random, processors: list[Processor], complexity: int, is_
     # Use "exclude" as a blacklist
     while builder is None or builder.shape in exclude:
 
+        current_comp = complexity
 
-
-
-
-        # TODO rework pin layers to being decided here instead of inside generate_layer
-        # TODO generally rework this in a way that different layers get different tasked lists (such that the important bool isn't needed anymore)
-
-        required_proc = [False] * 8
-        for proc in processors:
-            required_proc[proc] = True
-        builder = ShapeBuilder(processors, required_proc)
-
-        # Make less layers more likely
-        layer_weights_multiple = {
-            x: max_layer_count - x + 1 for x in range(2, max_layer_count + 1)
-        }
-        # Make single layer much more likely
-        layer_weights = layer_weights_multiple | {1: len(layer_weights_multiple) // 3}
-        if required_proc[Processor.PIN_PUSHER]:  # Pin pusher always needs at least 2 layers
-            layer_count = rand.choices(tuple(layer_weights_multiple), tuple(layer_weights_multiple.values()))[0]
-        elif not required_proc[Processor.STACKER]:  # No stacker and no pin pusher means no multiple layers
-            layer_count = 1
-        else:  # No pin pusher, but stacker, so every layer count possible
-            layer_count = rand.choices(tuple(layer_weights), tuple(layer_weights.values()))[0]
-        # Too low complexity makes too many layers impossible
-        current_max_layers = complexity + 1 - sum(
-            1 for proc in processors if proc not in (Processor.STACKER, Processor.PIN_PUSHER)
-        )
-        # Having stacker makes at least 2 layers needed, except with certain cutter-rotator-complexity combination
-        if Processor.STACKER in processors:
-            if Processor.ROTATOR in processors and Processor.CUTTER in processors and complexity >= len(processors) + 2:
-                current_min_layers = 1
+        # Get layer count
+        min_non_pin_count = 2 if Processor.STACKER in processors and not (Processor.CUTTER in processors and
+                                                                          Processor.ROTATOR in processors and
+                                                                          Processor.SWAPPER not in processors) else 1
+        min_pin_count = 0 if Processor.PIN_PUSHER not in processors else 1
+        if Processor.STACKER in processors or Processor.PIN_PUSHER in processors:
+            max_count = min(max_layer_count, current_comp - 1 -
+                            len(processors) + (Processor.STACKER in processors) + (Processor.PIN_PUSHER in processors))
+            if min_non_pin_count + min_pin_count <= max_count:
+                layer_count = rand.randint(min_non_pin_count + min_pin_count, max_count)
             else:
-                current_min_layers = 2
+                layer_count = 2  # Only happens when max layer count == 2 with stacker and pins
         else:
-            current_min_layers = 1
-        # Pin pusher always adds another layer
-        if Processor.PIN_PUSHER in processors:
-            current_min_layers += 1
-        # Max out layers in cases where fewer layers would definitely lead to complexity waste
-        if (
-            (Processor.STACKER in processors or Processor.PIN_PUSHER in processors) and
-            len(processors) <= 2 and complexity >= 15
-        ):
-            layer_count = current_max_layers
-        layer_count = min(max(layer_count, current_min_layers), current_max_layers, max_layer_count)
+            layer_count = 1
 
-        # Remove complexity needed for stacking/pin pushing every layer after the first one
-        complexity -= layer_count - 1
+        builder = ShapeBuilder(processors, [])
+        layer_data: list[LayerData] = [LayerData(i == 0) for i in range(layer_count)]
+        generate_layer = generate_hexagonal.generate_layer if is_hexagonal else generate_tetragonal.generate_layer
 
-        generate_layer = (generate_hexagonal.generate_layer if is_hexagonal else generate_tetragonal.generate_layer)
-        for layer_index in range(1, layer_count):
-            # Get random complexity part for each layer, BUT leave enough to make last layer have enough
-            # in order to complete all required processors that weren't completed before the last layer
-            part_range_end = builder.calc_required_complexity()
-            max_complexity_part = complexity - part_range_end
-            complexity_part = math.floor(rand.triangular(0, max_complexity_part, max_complexity_part / 3))
-            complexity -= complexity_part
-            if (
-                layer_index == layer_count - 1 and
-                (required_proc[Processor.STACKER] or required_proc[Processor.PIN_PUSHER]) and
-                Processor.PIN_PUSHER in processors
-            ):
-                required_proc[Processor.PIN_PUSHER] = False
-                complexity_part += complexity - 1
-                complexity = 1
-                generate_layer(rand, complexity_part, builder, True, regen_pools=regen_pools)
-                required_proc[Processor.PIN_PUSHER] = True
+        # Mark forced pin/non-pin layers
+        possible_pin_layers = list(range(1, layer_count))
+        forced_pin_layer = -1
+        if min_pin_count:
+            forced_pin_layer = possible_pin_layers.pop(rand.randint(0, len(possible_pin_layers) - 1))
+            layer_data[forced_pin_layer].processors.append(Processor.PIN_PUSHER)
+        if min_non_pin_count > 1 and min_non_pin_count + min_pin_count <= max_count:
+            forced_non_pin_layer = possible_pin_layers.pop(rand.randint(0, len(possible_pin_layers) - 1))
+            layer_data[forced_non_pin_layer].force_non_pins = True
+        if min_non_pin_count == 1 and Processor.STACKER in processors:
+            layer_data[0].processors.append(Processor.STACKER)
+
+        for proc in processors:
+            if proc in (Processor.PIN_PUSHER, Processor.STACKER):
+                continue
+            to_task = rand.randint(0, layer_count - 1)
+            temp_to_task = to_task
+            if proc == Processor.CRYSTALLIZER and Processor.CUTTER not in processors:
+                to_task = forced_pin_layer
             else:
-                generate_layer(rand, complexity_part, builder, False, regen_pools=regen_pools)
-        generate_layer(rand, complexity, builder, True, regen_pools=regen_pools)
+                if proc == Processor.SWAPPER:
+                    while any(_proc in layer_data[to_task].processors
+                              for _proc in (Processor.CUTTER, Processor.STACKER, Processor.PIN_PUSHER)):
+                        to_task = (to_task + 1) % layer_count
+                        if temp_to_task == to_task:
+                            break
+                elif proc == Processor.CUTTER:
+                    while any(_proc in layer_data[to_task].processors
+                              for _proc in (Processor.SWAPPER, Processor.PIN_PUSHER)):
+                        to_task = (to_task + 1) % layer_count
+                        if temp_to_task == to_task:
+                            break
+                # Following is not in else clause in order to avoid endless loops and being put on a forced pins layer
+                while Processor.PIN_PUSHER in layer_data[to_task].processors:
+                    to_task = (to_task + 1) % layer_count
+            layer_data[to_task].processors.append(proc)
+
+        current_comp -= layer_count - 1
+        for data in layer_data:
+            builder.tasked = [False] * 8
+            for proc in data.processors:
+                builder.tasked[proc] = True
+            temp_comp = builder.calc_required_complexity()
+            data.complexity += temp_comp
+            current_comp -= temp_comp
+            data.tasked = builder.tasked
+
+        # Maybe just let one or two complexity slip through
+        check_negative_comp = True
+        if check_negative_comp:
+            sep = '\n    '
+            if current_comp < 0:
+                raise Exception(f"Negative complexity:\n"
+                                f"complexity = {complexity}\n"
+                                f"current complexity = {current_comp}\n"
+                                f"layer data ({len(layer_data)}) = {sep.join(str(ld) for ld in layer_data)}")
+
+        if current_comp > 0:
+            comp_packs = current_comp // 20 + 1
+            for _ in range(current_comp // comp_packs):
+                rand.choice(layer_data).complexity += comp_packs
+            rand.choice(layer_data).complexity += current_comp % comp_packs
+
+        for data in layer_data:
+            builder.tasked = data.tasked
+            generate_layer(rand, data.complexity, builder, regen_pools=regen_pools, force_non_pins=data.force_non_pins)
 
     if any(not isinstance(layer, str) for layer in builder.shape):
         raise Exception(f"Non-string layer found:\n"
                         f"complexity = {complexity}, builder = {builder.debug_string()}")
 
     return builder
+
+
+class LayerData:
+    force_non_pins: bool
+    processors: list[Processor]
+    tasked: list[bool]
+    complexity: int
+
+    def __init__(self, force_non_pins: bool):
+        self.force_non_pins = force_non_pins
+        self.processors = []
+        self.tasked = []
+        self.complexity = 0
+
+    def __str__(self):
+        return (f"[force_non_pins: {self.force_non_pins}, processors: {self.processors}, tasked: {self.tasked}, "
+                f"complexity: {self.complexity}]")
