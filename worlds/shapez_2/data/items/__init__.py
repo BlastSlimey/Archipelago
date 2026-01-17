@@ -1,4 +1,4 @@
-from typing import ChainMap, TYPE_CHECKING
+from typing import ChainMap
 from .. import ItemData, PointsItemData
 from . import buildings, island_buildings, mechanics, misc
 

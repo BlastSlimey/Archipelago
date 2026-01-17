@@ -11,7 +11,7 @@ class ConsoleWriter(StringIO):
 
 if __name__ == "__main__":
     writer = ConsoleWriter()
-    # writer = open("temp/output.txt", "wt")
+    # writer = open("_temp/output.txt", "wt")
     with writer as file:
         from generate.shapes import generator, downgrade_tetragonal, Processor
         from generate.shapes.generate_tetragonal import Variant

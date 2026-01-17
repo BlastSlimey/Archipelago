@@ -1,5 +1,5 @@
-from typing import ChainMap, TYPE_CHECKING
-from .. import ItemData, PointsItemData, LocationData
+from typing import ChainMap
+from .. import LocationData
 from . import milestones, tasks, operator_levels
 
 # ID domains:

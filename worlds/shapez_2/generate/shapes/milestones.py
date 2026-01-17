@@ -29,7 +29,8 @@ def get_shapes_list(
     world: "Shapez2World",
     milestone_processors: list[list[Processor]]
 ) -> list[tuple[list[str], list[str]]]:
-    from .generator import generate_shape, downgrade_shape
+    from .generator import generate_shape
+    from .downgrader import downgrade_shape
 
     milestone_shapes: list[tuple[list[str], list[str]]] = []
 
@@ -38,20 +39,24 @@ def get_shapes_list(
         i += 3
         # Assumes all milestones have at least 1 processor
         if len(milestone) == 1:
-            final1 = generate_shape(world, milestone, i)
-            final2 = generate_shape(world, milestone, i)
-            milestone_shapes.append((
-                [downgrade_shape(world, final1, milestone[0]), final1],
-                [downgrade_shape(world, final2, milestone[0]), final2],
-            ))
+            builder1 = generate_shape(world, milestone, i)
+            builder2 = generate_shape(world, milestone, i)
+            shapes1 = [builder1.build()]
+            shapes2 = [builder2.build()]
+            shapes1.insert(0, downgrade_shape(world, builder1, [], milestone[0], i).build())
+            shapes2.insert(0, downgrade_shape(world, builder2, [], milestone[0], i).build())
+            milestone_shapes.append((shapes1, shapes2))
         else:
-            final1 = generate_shape(world, milestone, i)
-            final2 = generate_shape(world, milestone, i)
-            mid1 = downgrade_shape(world, final1, milestone[1])
-            mid2 = downgrade_shape(world, final2, milestone[1])
-            milestone_shapes.append((
-                [downgrade_shape(world, mid1, milestone[0]), mid1, final1],
-                [downgrade_shape(world, mid2, milestone[0]), mid2, final2],
-            ))
+            builder1 = generate_shape(world, milestone, i)
+            builder2 = generate_shape(world, milestone, i)
+            shapes1 = [builder1.build()]
+            shapes2 = [builder2.build()]
+            builder1 = downgrade_shape(world, builder1, milestone[:-1], milestone[-1], i)
+            builder2 = downgrade_shape(world, builder2, milestone[:-1], milestone[-1], i)
+            shapes1.insert(0, builder1.build())
+            shapes2.insert(0, builder2.build())
+            shapes1.insert(0, downgrade_shape(world, builder1, milestone[:-2], milestone[-2], i).build())
+            shapes2.insert(0, downgrade_shape(world, builder2, milestone[:-2], milestone[-2], i).build())
+            milestone_shapes.append((shapes1, shapes2))
 
     return milestone_shapes

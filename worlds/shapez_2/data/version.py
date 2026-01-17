@@ -49,6 +49,8 @@ if __name__ == "__main__":
         for root, dirs, files in os.walk("../"):
             if "__pycache__" in root:
                 continue
+            if "_temp" in root:
+                continue
             for file in files:
                 zipf2.write(os.path.join(root, file),
                             os.path.relpath(os.path.join(root, file),

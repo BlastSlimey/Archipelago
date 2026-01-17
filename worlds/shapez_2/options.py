@@ -3,7 +3,7 @@ import typing
 from dataclasses import dataclass
 
 from BaseClasses import PlandoOptions
-from Options import Choice, PerGameCommonOptions, OptionSet, OptionError, OptionCounter, StartInventoryPool, Option, T
+from Options import Choice, PerGameCommonOptions, OptionSet, OptionError, OptionCounter, StartInventoryPool
 
 if typing.TYPE_CHECKING:
     from worlds.AutoWorld import World

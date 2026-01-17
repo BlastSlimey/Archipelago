@@ -1,8 +1,8 @@
 import logging
-from typing import List, Mapping, Any, TYPE_CHECKING
+from typing import Mapping, Any, TYPE_CHECKING
 
-from BaseClasses import MultiWorld, Item, Region, Tutorial
-from Options import Option, OptionError
+from BaseClasses import MultiWorld, Tutorial
+from Options import Option
 from worlds.AutoWorld import WebWorld, World
 from . import items, locations, options, output
 
@@ -157,5 +157,3 @@ class Shapez2World(World):
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         """Helper function for Universal Tracker"""
         return slot_data
-
-    # TODO at the end: Remove unused imports

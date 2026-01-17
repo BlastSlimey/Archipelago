@@ -3,13 +3,11 @@ from BaseClasses import Region, LocationProgressType, ItemClassification
 
 if TYPE_CHECKING:
     from ... import Shapez2World
-    from ...data import ExtendedRule, AccessRule
 
 
 def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
     from ...locations import Shapez2Location
     from ...items import Shapez2Item
-    from ...data.rules import always_progression
     from ..rules import extended_has_any, extended_has, extended_has_all
 
     reg = regions["Events"]

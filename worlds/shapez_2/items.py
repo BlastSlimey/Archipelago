@@ -1,7 +1,7 @@
 from random import Random
 from typing import TYPE_CHECKING, Any
 
-from BaseClasses import Item, ItemClassification as IClass
+from BaseClasses import Item
 from .data.items import buildings, island_buildings, mechanics, misc
 
 if TYPE_CHECKING:

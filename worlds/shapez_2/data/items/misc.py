@@ -1,4 +1,3 @@
-import itertools
 
 from .. import ItemData, PointsItemData
 from ..classification import *

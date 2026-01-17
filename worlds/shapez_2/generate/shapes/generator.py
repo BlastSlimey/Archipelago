@@ -2,7 +2,7 @@
 from random import Random
 from typing import TYPE_CHECKING
 
-from . import Processor, generate_hexagonal, generate_tetragonal, ShapeBuilder
+from . import Processor, generate_tetragonal, ShapeBuilder
 
 if TYPE_CHECKING:
     from ... import Shapez2World
@@ -51,11 +51,13 @@ def generate_new(rand: Random, processors: list[Processor], complexity: int, is_
             else:
                 layer_count = 2  # Only happens when max layer count == 2 with stacker and pins
         else:
+            max_count = 1
             layer_count = 1
 
         builder = ShapeBuilder(processors, [])
         layer_data: list[LayerData] = [LayerData(i == 0) for i in range(layer_count)]
-        generate_layer = generate_hexagonal.generate_layer if is_hexagonal else generate_tetragonal.generate_layer
+        # generate_layer = generate_hexagonal.generate_layer if is_hexagonal else generate_tetragonal.generate_layer
+        generate_layer = generate_tetragonal.generate_layer
 
         # Mark forced pin/non-pin layers
         possible_pin_layers = list(range(1, layer_count))

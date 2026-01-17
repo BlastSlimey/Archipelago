@@ -1,9 +1,8 @@
-import enum
-import math
-from random import Random
-from typing import Dict, Tuple, Optional, TYPE_CHECKING, Callable, Self
 
-from BaseClasses import LocationProgressType as ProgType, Location, Region, LocationProgressType, CollectionState
+import math
+from typing import Optional, TYPE_CHECKING
+
+from BaseClasses import Location, Region, LocationProgressType
 from .data.locations import milestones, tasks, operator_levels
 
 if TYPE_CHECKING:

@@ -1,7 +1,6 @@
-import itertools
 
 from . import RegionConnectionData, ExtendedRule
-from ..generate.rules import extended_has_all, extended_has, extended_has_any, extended_has_from_list_unique
+from ..generate.rules import extended_has, extended_has_from_list_unique
 
 
 def get_milestone_rule(x: int) -> ExtendedRule:

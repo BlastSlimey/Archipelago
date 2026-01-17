@@ -26,18 +26,23 @@ def get_shapes_list(
     world: "Shapez2World",
     task_processors: list[list[Processor]]
 ) -> list[list[str]]:
-    from .generator import generate_shape, downgrade_shape
+    from .generator import generate_shape
+    from .downgrader import downgrade_shape
 
     task_shapes: list[list[str]] = []
     i = -1
     for task in task_processors:
         i += 1
-        shapes = [generate_shape(world, task, world.random.randint(len(task) + 2 + (i // 3), len(task) + 3 + i))]
-        for j in range(len(task)):
-            shapes.insert(0, downgrade_shape(world, shapes[0], task[-j]))
+        complexity = world.random.randint(len(task) + 2 + (i // 3), len(task) + 3 + i)
+        builder = generate_shape(world, task, complexity)
+        shapes = [builder.build()]
+        for j in range(1, len(task)):
+            builder = downgrade_shape(world, builder, task[:-j], task[-j], complexity)
+            shapes.insert(0, builder.build())
         if i < 3 or (len(task) < 5 and world.random.choice((True, False, False))):
             # Assumes the first three lines always have less than 5 processors
-            shapes.insert(0, downgrade_shape(world, shapes[0], task[0]))
+            builder = downgrade_shape(world, builder, [], task[0], complexity)
+            shapes.insert(0, builder.build())
         task_shapes.append(shapes)
 
     return task_shapes

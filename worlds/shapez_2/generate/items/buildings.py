@@ -28,7 +28,7 @@ def generate_default(world: "Shapez2World") -> Iterator[Shapez2Item]:
 
 
 def generate_starting(world: "Shapez2World") -> Iterator[str]:
-    from ...data.items.buildings import starting, simple_processors
+    from ...data.items.buildings import starting
 
     yield from starting.keys()
 

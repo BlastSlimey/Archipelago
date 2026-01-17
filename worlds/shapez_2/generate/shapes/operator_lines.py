@@ -50,7 +50,8 @@ def get_shapes_list(
         if use_milestones and line_index + 2 < milestone_count:
             operator_shapes.append(line_index + 2)
         else:
-            operator_shapes.append(generate_shape(world, operator_processors[line_index], world.random.randint(15, 30)))
+            operator_shapes.append(generate_shape(world, operator_processors[line_index],
+                                                  world.random.randint(15, 30)).build())
     operator_shapes.extend([None] * random_lines_count)
 
     return operator_shapes
