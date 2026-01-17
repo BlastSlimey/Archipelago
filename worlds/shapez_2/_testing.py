@@ -10,15 +10,15 @@ class ConsoleWriter(StringIO):
 
 
 if __name__ == "__main__":
-    # writer = ConsoleWriter()
-    writer = open("temp/output.txt", "wt")
+    writer = ConsoleWriter()
+    # writer = open("temp/output.txt", "wt")
     with writer as file:
         from generate.shapes import generator, downgrade_tetragonal, Processor
         from generate.shapes.generate_tetragonal import Variant
         import datetime
-        layers = 4
+        layers = 10
         hexagonal = False
-        count = 100000
+        count = 34000
         enable_downgrades = True
         start_time = datetime.datetime.utcnow()
         file.write(

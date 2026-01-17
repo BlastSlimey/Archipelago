@@ -4,6 +4,7 @@ from random import Random
 from typing import Dict, Tuple, Optional, TYPE_CHECKING, Callable, Self
 
 from BaseClasses import LocationProgressType as ProgType, Location, Region, LocationProgressType, CollectionState
+from .data.locations import milestones, tasks, operator_levels
 
 if TYPE_CHECKING:
     from . import Shapez2World
@@ -20,8 +21,15 @@ class Shapez2Location(Location):
         self.access_rule = rule
 
 
+def lookup_table() -> dict[str, int]:
+    return {
+        name: data.location_id
+        for table in (milestones.locations, tasks.locations, operator_levels.locations)
+        for name, data in table.items()
+    }
+
+
 def get_regions(world: "Shapez2World") -> dict[str, Region]:
-    from .data import regions
 
     adjust = world.options.location_adjustments
 

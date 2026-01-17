@@ -95,7 +95,7 @@ class ShapeBuilder:
 
     def calc_required_complexity(self) -> int:
         if self.tasked[Processor.PIN_PUSHER]:
-            return 1
+            return 0
         required_complexity = sum(self.tasked)
         if self.tasked[Processor.STACKER] and not (self.tasked[Processor.CUTTER] and self.tasked[Processor.ROTATOR]):
             required_complexity -= 1

@@ -13,7 +13,7 @@ def get_task_line_rule(x: int) -> ExtendedRule:
 
 
 def get_operator_section_rule(x: int) -> ExtendedRule:
-    rule = lambda state, world: extended_has_from_list_unique(
+    rule: ExtendedRule = lambda state, world: extended_has_from_list_unique(
         world, state, x,
         *(f"[ACCESS] Operator line {y}" for y in range(1, world.options.location_adjustments["Operator lines"] + 1))
     )

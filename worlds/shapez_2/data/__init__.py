@@ -1,16 +1,18 @@
 from typing import NamedTuple, TYPE_CHECKING, Any, Callable
 
-from BaseClasses import ItemClassification, CollectionState
+from BaseClasses import ItemClassification, CollectionState, LocationProgressType
 
 if not TYPE_CHECKING:
     AccessRule: type = Any
     ExtendedRule: type = Any
     ClassificationMethod: type = Any
+    ProgressTypeMethod: type = Any
 else:
     from .. import Shapez2World
     AccessRule: type = Callable[[CollectionState], bool]
     ExtendedRule: type = Callable[[CollectionState, Shapez2World], bool]
     ClassificationMethod: type = Callable[[Shapez2World], ItemClassification]
+    ProgressTypeMethod: type = Callable[[Shapez2World], LocationProgressType]
 
 
 class ItemData(NamedTuple):
@@ -32,3 +34,8 @@ class RegionConnectionData(NamedTuple):
     exiting_region: str
     entering_region: str
     rule: ExtendedRule | None
+
+
+class LocationData(NamedTuple):
+    location_id: int
+    progress_type: ProgressTypeMethod

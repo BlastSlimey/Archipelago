@@ -132,7 +132,6 @@ class LocationAdjustments(ExtendedOptionCounter):
     - **Operator level checks** - 0-200
     - **Required shapes multiplier** - 1-1000
     """
-    # TODO split into multiple options
     display_name = "Location Adjustments"
     valid_keys = [
         "Milestones",
@@ -190,28 +189,16 @@ class ShapeConfiguration(Choice):
     default = 0
 
 
-class PlandoShapes(Option[dict[str, typing.Any]]):
-    """
-    Plando option for generating shapes in various places.
-    Refer to this game's plando guides for more information.
-    """
-    # TODO
-
-    @classmethod
-    def from_any(cls, data: typing.Any) -> Option[T]:
-        pass
-
-
 class ShapeGenerationModifiers(CasefoldOptionSet):
     """
     Modifies what shapes are generated as requirements for milestones, tasks, and operator levels.
     You can add as many modifiers as you want.
 
-    - **Non milestone operator lines** - Only generates entirely random shapes for operator lines instead of taking the final shape of (some) milestones.
+    - **Milestone operator lines** - Takes the final shapes of (some) milestones and reuses them as operator lines.
     """
     display_name = "Shape Generation Modifiers"
     valid_keys = [
-        "Non milestone operator lines",
+        "Milestone operator lines",
     ]
     default = []
 
@@ -226,6 +213,7 @@ class ShapeGenerationAdjustments(ExtendedOptionCounter):
     display_name = "Shape Generation Adjustments"
     valid_keys = [
         "Maximum layers",
+        "Maximum processors per milestone",
     ]
     default = {
         "Maximum layers": 4,

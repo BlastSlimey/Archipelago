@@ -2,6 +2,7 @@ from random import Random
 from typing import TYPE_CHECKING, Any
 
 from BaseClasses import Item, ItemClassification as IClass
+from .data.items import buildings, island_buildings, mechanics, misc
 
 if TYPE_CHECKING:
     from . import Shapez2World
@@ -9,6 +10,16 @@ if TYPE_CHECKING:
 
 class Shapez2Item(Item):
     game = "shapez 2"
+
+
+def lookup_table() -> dict[str, int]:
+    return {
+        name: data.item_id
+        for table in (buildings.always, buildings.starting, buildings.simple_processors, buildings.sandbox,
+                      island_buildings.always, island_buildings.starting, mechanics.always, mechanics.starting,
+                      misc.task_lines, misc.operator_lines, misc.research_points, misc.platforms, misc.blueprint_points)
+        for name, data in table.items()
+    }
 
 
 def generate_item(name: str, world: "Shapez2World") -> Shapez2Item:

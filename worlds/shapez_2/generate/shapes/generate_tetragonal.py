@@ -63,7 +63,8 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder,
     required_complexity = builder.calc_required_complexity()
     if complexity < required_complexity:
         raise Exception(f"Too low complexity (got {complexity}, needs {required_complexity}) "
-                        f"for important processors {', '.join(str(i) for i in range(8) if builder.tasked[i])}")
+                        f"for important processors {', '.join(str(i) for i in range(8) if builder.tasked[i])}\n"
+                        f"builder = {builder.debug_string()}")
 
     if complexity < 0:
         raise Exception(f"Negative complexity: {complexity}\nbuilder = {builder.debug_string()}")

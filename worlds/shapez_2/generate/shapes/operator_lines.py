@@ -10,7 +10,7 @@ def get_processors_list(world: "Shapez2World", milestone_processors: list[list[P
     operator_processors: list[list[Processor]] = []
     line_count = world.options.location_adjustments["Operator lines"]
     random_lines_count = world.options.location_adjustments["Random operator lines"]
-    use_milestones = "Non milestone operator lines" not in world.options.shape_generation_modifiers
+    use_milestones = "Milestone operator lines" in world.options.shape_generation_modifiers
     for line_index in range(line_count-random_lines_count):
         if use_milestones and line_index + 2 < len(milestone_processors):
             operator_processors.append(milestone_processors[line_index + 2].copy())
@@ -44,7 +44,7 @@ def get_shapes_list(
     line_count = world.options.location_adjustments["Operator lines"]
     random_lines_count = world.options.location_adjustments["Random operator lines"]
     milestone_count = world.options.location_adjustments["Milestones"]
-    use_milestones = "Non milestone operator lines" not in world.options.shape_generation_modifiers
+    use_milestones = "Milestone operator lines" in world.options.shape_generation_modifiers
 
     for line_index in range(line_count-random_lines_count):
         if use_milestones and line_index + 2 < milestone_count:
