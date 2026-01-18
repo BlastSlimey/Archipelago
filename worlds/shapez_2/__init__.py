@@ -131,7 +131,7 @@ class Shapez2World(World):
         self.multiworld.itempool.extend(item_pool)
 
     def generate_output(self, output_directory: str) -> None:
-        output.write_scenario(self, output_directory)
+        output.Shapez2ScenarioContainer(self, output_directory).write()
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         from .data import version
