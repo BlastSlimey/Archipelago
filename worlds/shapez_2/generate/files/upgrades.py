@@ -1,10 +1,34 @@
 from typing import Any
 
 from ...output import Shapez2ScenarioContainer
+from ...data import ItemData
 
 
 def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
-    ...
+    from ...data.items import buildings, island_buildings, mechanics, misc
+    out = []
+    tabs: tuple[tuple[str, tuple[dict[str, ItemData], ...]], ...] = (
+        ("BuildingReward", (buildings.always, buildings.starting, buildings.simple_processors, buildings.sandbox)),
+        ("IslandGroupReward", (island_buildings.always, island_buildings.starting)),
+        ("MechanicReward", (mechanics.always, mechanics.starting, misc.task_lines, misc.operator_lines))
+    )
+    for reward_type, tables in tabs:
+        for table in tables:
+            for name, data in table.items():
+                out.append({
+                    "Id": data.remote_id,
+                    "PreviewImageId": "",
+                    "Title": name,
+                    "Description": "",
+                    "Hidden": True,
+                    "Category": "Other",
+                    "RequiredUpgradeIds": [],
+                    "RequiredMechanicIds": [],
+                    "Rewards": [{"$type": reward_type, "BuildingDefinitionGroupId": reward}
+                                for reward in data.reward_ids],
+                    "Costs": [{"$type": "ResearchPointsCost", "Amount": 1}]
+                })
+    return out
 
 
 linear_upgrades: list[dict[str, Any]] = [

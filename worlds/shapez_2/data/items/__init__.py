@@ -27,3 +27,22 @@ all_items = ChainMap[str, ItemData | PointsItemData](
     misc.platforms,
     misc.blueprint_points,
 )
+
+all_standard_items = ChainMap[str, ItemData](
+    buildings.always,
+    buildings.starting,
+    buildings.simple_processors,
+    buildings.sandbox,
+    island_buildings.always,
+    island_buildings.starting,
+    mechanics.always,
+    mechanics.starting,
+    misc.task_lines,
+    misc.operator_lines,
+)
+
+all_points_items = ChainMap[str, PointsItemData](
+    misc.research_points,
+    misc.platforms,
+    misc.blueprint_points,
+)
