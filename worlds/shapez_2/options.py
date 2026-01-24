@@ -184,9 +184,9 @@ class ShapeConfiguration(Choice):
     - **Hexagonal** - 6 corners.
     """
     display_name = "Shape Configuration"
-    option_tetragonal = 0
-    # option_hexagonal = 1
-    default = 0
+    option_tetragonal = 4
+    # option_hexagonal = 6
+    default = 4
 
 
 class ShapeGenerationModifiers(CasefoldOptionSet):

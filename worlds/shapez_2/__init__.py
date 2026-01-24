@@ -63,6 +63,7 @@ class Shapez2World(World):
         self.milestone_processors: list[list["Processor"]] = []
         self.task_processors: list[list[Processor]] = []
         self.operator_processors: list[list[Processor]] = []
+        self.milestone_checks_counts: list[int] = []
 
         self.ut_active: bool = False
         self.location_id_to_alias: dict[int, str] = {}

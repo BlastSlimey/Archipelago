@@ -1,3 +1,4 @@
+from enum import IntEnum
 from typing import ChainMap
 from .. import ItemData, PointsItemData
 from . import buildings, island_buildings, mechanics, misc
@@ -10,6 +11,15 @@ from . import buildings, island_buildings, mechanics, misc
 # operator lines 4xxx
 # research points 5xxx
 # platforms 6xxx
+
+
+class RewardType:
+    building = 0
+    island_building = 1
+    mechanic = 2
+    platforms = 3
+    blueprint_points = 4
+    research_points = 5
 
 
 all_items = ChainMap[str, ItemData | PointsItemData](

@@ -17,6 +17,7 @@ def create_locations(world: "Shapez2World", regions: dict[str, Region]) -> None:
     for milestone in range(adjust["Milestones"]):
         checks_count = world.random.randint(adjust["Minimum checks per milestone"],
                                             adjust["Maximum checks per milestone"])
+        world.milestone_checks_counts.append(checks_count)
         for check in range(checks_count):
             region = regions[f"Milestone {milestone + 1}"]
             name = f"Milestone {milestone + 1} reward #{check + 1}"

@@ -22,12 +22,14 @@ class ItemData(NamedTuple):
     # and thereby might be confusing without context
     remote_id: str
     reward_ids: tuple[str, ...]
+    reward_type: int
 
 
 class PointsItemData(NamedTuple):
     item_id: int
     classification: ClassificationMethod
     amount: int
+    reward_type: int
 
 
 class RegionConnectionData(NamedTuple):

@@ -6,13 +6,13 @@ from ...output import Shapez2ScenarioContainer
 def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict[str, str]]:
     return [
         *({
-            "Id": f"RUTaskLine{x+1}",
+            "Id": f"TaskLine{x+1}",
             "Title": f"Task line #{x+1}",
             "Description": "Unlocks a certain task line.",
             "IconId": "PlayerLevel"
         } for x in range(len(container.world.task_shapes))),
         *({
-            "Id": f"RUOperatorLine{x+1}",
+            "Id": f"OperatorLine{x+1}",
             "Title": f"Operator line #{x+1}",
             "Description": "Unlocks a certain operator line.",
             "IconId": "PlayerLevel"
