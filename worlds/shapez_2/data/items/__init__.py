@@ -1,7 +1,7 @@
-from enum import IntEnum
+
 from typing import ChainMap
-from .. import ItemData, PointsItemData
 from . import buildings, island_buildings, mechanics, misc
+from .. import ItemData, PointsItemData
 
 # ID domains:
 # buildings < 1000
