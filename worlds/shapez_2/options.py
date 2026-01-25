@@ -177,7 +177,7 @@ class LocationAdjustments(ExtendedOptionCounter):
 
     def count_min_locations(self) -> int:
         return (self["Milestones"] * self["Minimum checks per milestone"] +
-                self["Task lines"] * self["Minimum checks per task line"] + self["Operator level checks "])
+                self["Task lines"] * self["Minimum checks per task line"] + self["Operator level checks"])
 
 
 class ShapeConfiguration(Choice):

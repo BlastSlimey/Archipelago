@@ -8,13 +8,13 @@ if TYPE_CHECKING:
 
 def get_events(world: "Shapez2World",
                regions: dict[str, Region],
-               processor_rules_dict: dict[list[str], "AccessRule"]) -> None:
+               processor_rules_dict: dict[tuple[str, ...], "AccessRule"]) -> None:
     from ..shapes import event_by_processor
     from ...items import Shapez2Item
     from ...locations import Shapez2Location
     from ..rules import extended_has_all
 
-    def get_rule(proc_: list[str]) -> "AccessRule":
+    def get_rule(proc_: tuple[str, ...]) -> "AccessRule":
         if proc_ not in processor_rules_dict:
             processor_rules_dict[proc_] = lambda state: extended_has_all(world, state, *proc_)
         return processor_rules_dict[proc_]
@@ -23,7 +23,7 @@ def get_events(world: "Shapez2World",
     lines = world.operator_processors
 
     for x in range(len(lines)):
-        proc = [event_by_processor[p] for p in lines[x]]
+        proc = tuple(event_by_processor[p] for p in lines[x])
         if all(p in world.starting_items for p in proc):
             world.starting_items.append(f"[ACCESS] Operator line {x+1}")
         else:

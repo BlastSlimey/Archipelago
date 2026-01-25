@@ -2,7 +2,7 @@
 import math
 from typing import Optional, TYPE_CHECKING
 
-from BaseClasses import Location, Region, LocationProgressType, ItemClassification
+from BaseClasses import Location, Region, LocationProgressType
 from .data.locations import milestones, tasks, operator_levels
 
 if TYPE_CHECKING:
@@ -84,9 +84,8 @@ def pre_generate_logic(world: "Shapez2World") -> None:
 
 def create_events(world: "Shapez2World",
                   regions: dict[str, Region],
-                  processor_rules_dict: dict[list[str], "AccessRule"]) -> None:
+                  processor_rules_dict: dict[tuple[str, ...], "AccessRule"]) -> None:
     from .generate.events import milestones, operator_lines, processors
-    from .items import Shapez2Item
 
     processors.get_events(world, regions)  # ALWAYS run this first!!!
     milestones.get_events(world, regions, processor_rules_dict)
@@ -104,7 +103,7 @@ def create_events(world: "Shapez2World",
 
 def create_and_place_locations(world: "Shapez2World",
                                regions: dict[str, Region],
-                               processor_rules_dict: dict[list[str], "AccessRule"]) -> None:
+                               processor_rules_dict: dict[tuple[str, ...], "AccessRule"]) -> None:
     from .generate.locations import milestones, tasks, operator_levels
 
     milestones.create_locations(world, regions)

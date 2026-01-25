@@ -12,7 +12,7 @@ def generate_shape(world: "Shapez2World",
                    processors: list[Processor],
                    complexity: int,
                    exclude: list[str] | None = None) -> ShapeBuilder:
-    return generate_new(world.random, processors, complexity, world.options.shape_configuration == "hexagonal",
+    return generate_new(world.random, processors, complexity, world.options.shape_configuration != "tetragonal",
                         world.options.shape_generation_adjustments["Maximum layers"], exclude)
 
 

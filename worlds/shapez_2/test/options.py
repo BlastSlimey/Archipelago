@@ -6,11 +6,11 @@ class Shapez2TestBase(WorldTestBase):
 
 
 class TestDefault(Shapez2TestBase):
-    options = {}
+    options = {"goal": "milestones"}
 
 
 class TestGoalOperatorLevels(Shapez2TestBase):
-    options = {"goal": "operator_levels"}
+    options = {"goal": "operator_levels", "location_adjustments": {"Operator level checks": 10}}
 
 
 class Test3Milestones(Shapez2TestBase):
@@ -45,7 +45,7 @@ class TestBlueprintRandomized(Shapez2TestBase):
 
 
 class TestBlueprintPlando(Shapez2TestBase):
-    options = {"blueprint_shapes": [["CuCuCuCu", "crcrcrcr:SbSbSbSb"], ["CuCuCuCu", "crcrcrcr:SbSbSbSb", "WuWu----"]]}
+    options = {"blueprint_shapes": ["CuCuCuCu", "crcrcrcr:SbSbSbSb", "WuWu----"]}
 
 
 class TestArbitraryPointsItems(Shapez2TestBase):

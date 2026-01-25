@@ -479,12 +479,8 @@ def downgrade_4(rand: Random, builder: ShapeBuilder, remaining_processors: list[
                     data["part"] = "c" + mixer_replacements[data["part"][1]]
                     leave_as_is = True
                 elif missing_processor == Processor.PIN_PUSHER:
-                    # TODO do not leave as is if builder.has_crystals ??? need to see bad shape again
-                    if Processor.ROTATOR in remaining_processors:
-                        leave_as_is = True
-                    else:
-                        part = _decrystallize(long=data["part"])
-                        _half_crystal_half_shape(data["part"], part, 0)
+                    part = _decrystallize(long=data["part"])
+                    _half_crystal_half_shape(data["part"], part, 0)
                 elif missing_processor == Processor.ROTATOR:
                     if Processor.PIN_PUSHER in remaining_processors:
                         leave_as_is = True

@@ -80,15 +80,6 @@ class Shapez2World(World):
         self.ut_active: bool = False
         self.location_id_to_alias: dict[int, str] = {}
 
-        adjust = self.options.location_adjustments
-
-        if self.options.goal == "operator_levels" and adjust["Operator level checks"] == 0:
-            raise OptionError(f"{self.player_name}: Goal operator_levels requires at least 1 operator level check.")
-        if adjust.count_min_locations() < 80 + adjust["Task lines"] + adjust["Operator lines"]:
-            # TODO add setting for disabling this
-            raise OptionError(f"{self.player_name}: Not enough guaranteed locations ({adjust.count_min_locations()}"
-                              f"for required items ({80 + adjust['Task lines'] + adjust['Operator lines']}).")
-
     def generate_early(self) -> None:
 
         # Load values from UT if this is a regenerated world
@@ -118,6 +109,15 @@ class Shapez2World(World):
 
         self.random.seed(self.seed)
 
+        adjust = self.options.location_adjustments
+
+        if self.options.goal == "operator_levels" and adjust["Operator level checks"] == 0:
+            raise OptionError(f"{self.player_name}: Goal operator_levels requires at least 1 operator level check.")
+        if adjust.count_min_locations() < 70 + adjust["Task lines"] + adjust["Operator lines"]:
+            # TODO add setting for disabling this
+            raise OptionError(f"{self.player_name}: Not enough guaranteed locations ({adjust.count_min_locations()}) "
+                              f"for required items ({80 + adjust['Task lines'] + adjust['Operator lines']}).")
+
         locations.pre_generate_logic(self)
         self.options.blueprint_shapes.verify_plando(self)
 
@@ -130,7 +130,7 @@ class Shapez2World(World):
     def create_regions(self) -> None:
         regions = locations.get_regions(self)
         locations.connect_regions(self, regions)
-        processor_rules_dict: dict[list[str], "AccessRule"] = {}
+        processor_rules_dict: dict[tuple[str, ...], "AccessRule"] = {}
         locations.create_events(self, regions, processor_rules_dict)
         locations.create_and_place_locations(self, regions, processor_rules_dict)
         self.to_be_filled_locations = sum(

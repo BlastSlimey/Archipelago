@@ -28,7 +28,8 @@ class Processor(enum.IntEnum):
             cls.CUTTER, cls.ROTATOR, cls.STACKER, cls.PAINTER, cls.MIXER, cls.PIN_PUSHER, cls.CRYSTALLIZER, cls.SWAPPER
         ]
         for a in active:
-            poss.remove(a)
+            if a in poss:
+                poss.remove(a)
         for rest, reqs in cls.restrictions().items():
             if rest in poss and reqs[0] not in active and reqs[1] not in active:
                 poss.remove(rest)

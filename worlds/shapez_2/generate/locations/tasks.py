@@ -10,13 +10,13 @@ if TYPE_CHECKING:
 
 def create_locations(world: "Shapez2World",
                      regions: dict[str, Region],
-                     processor_rules_dict: dict[list[str], "AccessRule"]) -> None:
+                     processor_rules_dict: dict[tuple[str, ...], "AccessRule"]) -> None:
     from ..rules import extended_has_all
     from ..shapes import event_by_processor
     from ...locations import Shapez2Location
     from ...data.locations import all_locations
 
-    def get_rule(proc_: list[str]) -> "AccessRule":
+    def get_rule(proc_: tuple[str, ...]) -> "AccessRule":
         if proc_ not in processor_rules_dict:
             processor_rules_dict[proc_] = lambda state: extended_has_all(world, state, *proc_)
         return processor_rules_dict[proc_]
@@ -26,7 +26,7 @@ def create_locations(world: "Shapez2World",
 
     for task_line in range(len(task_shapes)):
         region = regions[f"Task line {task_line + 1}"]
-        proc_names = [event_by_processor[p] for p in task_processors[task_line]]
+        proc_names = tuple(event_by_processor[p] for p in task_processors[task_line])
         for task_num in range(len(task_shapes[task_line])):
             name = f"Task #{task_line + 1}-{5 - task_num}"
             rule = get_rule(proc_names[:len(proc_names)-task_num])

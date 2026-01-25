@@ -23,10 +23,10 @@ def get_shapes_list(world: "Shapez2World") -> list[str]:
             builder = downgrade_shape(world, builder, proc[:-i], proc[-i], 25)
             shapes.insert(0, builder.build())
         return shapes
-    elif world.options.shape_configuration == "hexagonal":
-        return blueprint_shapes.shapes["hexagonal"]
-    else:
+    elif world.options.shape_configuration == "tetragonal":
         return blueprint_shapes.shapes[world.options.blueprint_shapes.current_key]
+    else:
+        return blueprint_shapes.shapes["hexagonal"]
 
 
 def get_points(world: "Shapez2World", blueprint_shapes: list[str]) -> list[int]:
