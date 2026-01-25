@@ -147,7 +147,7 @@ class LocationAdjustments(ExtendedOptionCounter):
     ]
     default = {
         "Milestones": 8,
-        "Minimum checks per milestone": 5,
+        "Minimum checks per milestone": 8,
         "Maximum checks per milestone": 12,
         "Task lines": 20,
         "Minimum checks per task line": 3,
@@ -175,13 +175,17 @@ class LocationAdjustments(ExtendedOptionCounter):
         ("Random operator lines", "Operator lines"),
     ]
 
+    def count_min_locations(self) -> int:
+        return (self["Milestones"] * self["Minimum checks per milestone"] +
+                self["Task lines"] * self["Minimum checks per task line"] + self["Operator level checks "])
+
 
 class ShapeConfiguration(Choice):
     """
     Choose how many corners all shapes have.
 
     - **Tetragonal** - 4 corners (standard).
-    - **Hexagonal** - 6 corners.
+    - **Hexagonal** (not implemented) - 6 corners.
     """
     display_name = "Shape Configuration"
     option_tetragonal = 4
@@ -200,15 +204,16 @@ class ShapeGenerationModifiers(CasefoldOptionSet):
     valid_keys = [
         "Milestone operator lines",
     ]
-    default = []
+    default = ["Milestone operator lines"]
 
 
 class ShapeGenerationAdjustments(ExtendedOptionCounter):
     """
     Adjust various parameters about how shape requirements for milestones, tasks, and operator levels are generated.
-    Any minimum parameter cannot be higher than its corresponding maximum parameter.
+    Weighting for each parameter individually, "random", and "random-range-x-y" are supported.
 
-    - ""Maximum layers** - The maximum number of layers any shape can have.
+    - **Maximum layers** - The maximum number of layers any shape can have.
+    - **Maximum processors per milestone** - The maximum number of certain buildings that are required to produce the final shapes of milestones.
     """
     display_name = "Shape Generation Adjustments"
     valid_keys = [
@@ -233,7 +238,7 @@ class BlueprintShapes(Choice):
     If hexagonal shapes are chosen, all of those three options use the hexagonal scenario's set.
     **Randomized** generates a random set of 3 to 5 different blueprint shapes.
 
-
+    You can also put in a list of custom blueprint shapes. See this game's option guides for more information.
     """
     display_name = "Blueprint Shapes"
     option_regular = 0
@@ -266,7 +271,7 @@ class BlueprintShapes(Choice):
             for val in self.plando:
                 if not isinstance(val, str):
                     reasons.append(f"Shapes list must only contain strings, but found {type(val)}")
-                # Verify shape codes in world.generate_early()
+                # TODO Verify shape codes in world.generate_early()
             if not (0 < len(self.plando) <= 5):
                 reasons.append(f"Number of blueprint shapes must be in range 1-5, but found {len(self.plando)}")
             if reasons:
@@ -290,7 +295,7 @@ class BlueprintShapes(Choice):
 
 class ItemPoolModifiers(CasefoldOptionSet):
     """
-    Modifies what items your world puts into the item pool. You can add as many modifiers as you want
+    Modifies what items your world puts into the item pool. You can add as many modifiers as you want.
 
     - **Random starting processor** - Adds a random processor building that doesn't require other buildings to the starting milestone.
     - **Arbitrary research points** - Allows research points items to give any amount in range of 1-100 instead of snapping them to nice numbers.
@@ -306,7 +311,7 @@ class ItemPoolModifiers(CasefoldOptionSet):
         "Arbitrary platform items",
         "Arbitrary blueprint points",
     ]
-    default = []
+    default = ["Random starting processor"]
 
 
 @dataclass

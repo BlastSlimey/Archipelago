@@ -1,0 +1,56 @@
+from test.bases import WorldTestBase
+
+
+class Shapez2TestBase(WorldTestBase):
+    game = "shapez 2"
+
+
+class TestDefault(Shapez2TestBase):
+    options = {}
+
+
+class TestGoalOperatorLevels(Shapez2TestBase):
+    options = {"goal": "operator_levels"}
+
+
+class Test3Milestones(Shapez2TestBase):
+    options = {"location_adjustments": {
+        "Milestones": 3,
+        "Task lines": 40,
+    }}
+
+
+class TestMinimumTasksWithOperatorChecks(Shapez2TestBase):
+    options = {"location_adjustments": {
+        "Minimum checks per task line": 1,
+        "Maximum checks per task line": 1,
+        "Operator level checks": 50,
+    }}
+
+
+class TestNoMilestoneOperatorLines(Shapez2TestBase):
+    options = {"shape_generation_modifiers": []}
+
+
+class Test2Layers(Shapez2TestBase):
+    options = {"shape_generation_adjustments": {"Maximum layers": 2}}
+
+
+class Test10LayersWithMaximumProcessorMilestones(Shapez2TestBase):
+    options = {"shape_generation_adjustments": {"Maximum layers": 10, "Maximum processors per milestone": 8}}
+
+
+class TestBlueprintRandomized(Shapez2TestBase):
+    options = {"blueprint_shapes": "randomized"}
+
+
+class TestBlueprintPlando(Shapez2TestBase):
+    options = {"blueprint_shapes": [["CuCuCuCu", "crcrcrcr:SbSbSbSb"], ["CuCuCuCu", "crcrcrcr:SbSbSbSb", "WuWu----"]]}
+
+
+class TestArbitraryPointsItems(Shapez2TestBase):
+    options = {"item_pool_modifiers": [
+        "Arbitrary research points",
+        "Arbitrary platform items",
+        "Arbitrary blueprint points",
+    ]}
