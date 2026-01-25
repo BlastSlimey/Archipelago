@@ -1,14 +1,25 @@
 import logging
+from multiprocessing import Process
 from typing import Mapping, Any, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, Tutorial
-from Options import Option
+from Options import Option, OptionError
 from worlds.AutoWorld import WebWorld, World
 from . import items, locations, options, output
+from worlds.LauncherComponents import components, Component
 
 if TYPE_CHECKING:
     from .generate.shapes import Processor
     from .data import AccessRule
+
+
+def run_client():
+    from .client import main
+    p = Process(target=main)
+    p.start()
+
+
+components.append(Component("shapez 2 Client", func=run_client))
 
 
 class Shapez2Web(WebWorld):
@@ -23,6 +34,7 @@ class Shapez2Web(WebWorld):
         "setup/en",
         ["BlastSlimey"]
     )
+    tutorials = [setup_en]
 
 
 class Shapez2World(World):
@@ -68,6 +80,15 @@ class Shapez2World(World):
         self.ut_active: bool = False
         self.location_id_to_alias: dict[int, str] = {}
 
+        adjust = self.options.location_adjustments
+
+        if self.options.goal == "operator_levels" and adjust["Operator level checks"] == 0:
+            raise OptionError(f"{self.player_name}: Goal operator_levels requires at least 1 operator level check.")
+        if adjust.count_min_locations() < 80 + adjust["Task lines"] + adjust["Operator lines"]:
+            # TODO add setting for disabling this
+            raise OptionError(f"{self.player_name}: Not enough guaranteed locations ({adjust.count_min_locations()}"
+                              f"for required items ({80 + adjust['Task lines'] + adjust['Operator lines']}).")
+
     def generate_early(self) -> None:
 
         # Load values from UT if this is a regenerated world
@@ -99,7 +120,6 @@ class Shapez2World(World):
 
         locations.pre_generate_logic(self)
         self.options.blueprint_shapes.verify_plando(self)
-        # TODO ensure there are at least 80 locations (using options), else OptionError
 
     def create_item(self, name: str) -> items.Shapez2Item:
         return items.generate_item(name, self)
@@ -124,6 +144,7 @@ class Shapez2World(World):
         item_pool = items.get_main_item_pool(self)
         self.starting_items = items.get_starting_items(self)
         if len(item_pool) > self.to_be_filled_locations:
+            # TODO make random checks amount generation happen in generate_early
             raise Exception(f"Player {self.player_name} has more guaranteed items ({len(item_pool)}) "
                             f"than to-be-filled locations ({self.to_be_filled_locations})."
                             f"Please report this to the apworld dev and provide the yaml used for generating.")
@@ -147,6 +168,7 @@ class Shapez2World(World):
                 "shape_generation_adjustments": self.options.shape_generation_adjustments.value,
                 "blueprint_shapes": self.options.blueprint_shapes.to_slot_data(),
                 "item_pool_modifiers": self.options.item_pool_modifiers.value,
+                "start_inventory": self.options.start_inventory.value,
                 "start_inventory_from_pool": self.options.start_inventory_from_pool.value,
             },
             # Needed for UT
