@@ -45,7 +45,7 @@ class Shapez2ScenarioContainer(APPlayerContainer):
                 "BlueprintCurrencyShapes": blueprint.get_blueprint_shapes(self),
                 "IntroductionWikiEntryId": "WKWelcome",
                 "InitiallyUnlockedUpgrades": ["RNInitial"],
-                "TutorialConfig": "TCMainTutorial"
+                "TutorialConfig": "TCNoTutorial"
             },
             "Progression": {
                 "Levels": {"Levels": milestones.get_milestones(self)},

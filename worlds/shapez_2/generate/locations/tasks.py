@@ -27,8 +27,9 @@ def create_locations(world: "Shapez2World",
     for task_line in range(len(task_shapes)):
         region = regions[f"Task line {task_line + 1}"]
         proc_names = tuple(event_by_processor[p] for p in task_processors[task_line])
-        for task_num in range(len(task_shapes[task_line])):
-            name = f"Task #{task_line + 1}-{5 - task_num}"
+        num_tasks = len(task_shapes[task_line])
+        for task_num in range(num_tasks):
+            name = f"Task #{task_line + 1}-{num_tasks - task_num}"
             rule = get_rule(proc_names[:len(proc_names)-task_num])
             region.locations.append(Shapez2Location(world.player, name, world.location_name_to_id[name], region,
                                                     all_locations[name].progress_type(world), rule))

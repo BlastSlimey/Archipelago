@@ -1,7 +1,7 @@
 # Based (read: copied almost wholesale and edited) off the KHDays and Manual Clients.
 
 import asyncio
-from typing import Dict, List
+from typing import Dict, List, Callable
 
 import Utils
 from CommonClient import CommonContext, server_loop, gui_enabled, get_base_parser
@@ -15,7 +15,6 @@ class Shapez2Context(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
-        self.game = 'Kingdom Hearts Days'
         self.slot_data = None
 
     async def server_auth(self, password_requested: bool = False):
@@ -30,70 +29,87 @@ class Shapez2Context(CommonContext):
 
     def run_gui(self):
         from kvui import GameManager
-        from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.uix.button import Button
         from kivy.uix.boxlayout import BoxLayout
         from kivy.uix.gridlayout import GridLayout
         from kivy.uix.layout import Layout
-
-        class TrackerLayout(BoxLayout):
-            pass
-
-        class CommanderButton(Button):
-            pass
-
-        class CommanderGroup(GridLayout):
-            pass
+        from kivy.uix.scrollview import ScrollView
+        from kivy.uix.widget import Widget
+        from kivy.uix.treeview import TreeView
 
         class Shapez2Manager(GameManager):
             base_title = "Archipelago shapez 2 Client"
             ctx: Shapez2Context
-            commander_buttons: Dict[int, List[CommanderButton]]
-            location_buttons: List[CommanderButton]
 
             def build(self) -> Layout:
                 container = super().build()
-                panel = TabbedPanelItem(text="Locations")
-                panel.content = self.build_locations_panel()
-                self.tabs.add_widget(panel)
+                self.add_client_tab("Milestones", self.build_milestones_panel())
+                self.add_client_tab("Tasks", self.build_tasks_panel())
+                self.add_client_tab("Operator levels", self.build_operator_panel())
                 return container
 
-            def build_locations_panel(self) -> TrackerLayout:
+            def build_milestones_panel(self) -> Widget:
                 try:
-                    adjust = self.ctx.slot_data["options"]["location_adjustments"]
-                    milestones: int = adjust["Milestones"]
-                    task_lines: int = adjust["Task lines"]
-                    operator_levels: int = adjust["Operator level checks"]
-                    tracker = TrackerLayout(orientation="horizontal")
-                    commander_group = CommanderGroup(cols=5)
+                    def action(num: int) -> Callable:
+                        return lambda instance: self.send_milestone(num)
+
+                    milestones: int = 20
+                    scroll = ScrollView(do_scroll=(False, True))
+                    commander_group = GridLayout(cols=5, size_hint_y=None)
                     for i in range(milestones):
-                        commander_button = CommanderButton(text=f"Milestone {i+1}")
-                        commander_button.bind(on_press=lambda instance: self.send_milestone(i+1))
+                        commander_button = Button(text=f"Milestone {i+1}")
+                        commander_button.bind(on_press=action(i+1))
                         commander_group.add_widget(commander_button)
+                    scroll.add_widget(commander_group)
+                    return scroll
+                except Exception as e:
+                    print(e)
+
+            def build_tasks_panel(self) -> Widget:
+                try:
+                    def action(line: int, num: int) -> Callable:
+                        return lambda instance: self.send_task(line, num)
+
+                    task_lines: int = 200
+                    scroll = ScrollView(do_scroll=(False, True))
+                    commander_group = GridLayout(cols=5, height=6000, size_hint_y=None)
                     for i in range(task_lines):
                         for j in range(1, 6):
-                            commander_button = CommanderButton(text=f"Task #{i+1}-{j}")
-                            commander_button.bind(on_press=lambda instance: self.send_task(i+1, j))
+                            commander_button = Button(text=f"Task #{i+1}-{j}", height=30, size_hint_y=None)
+                            commander_button.bind(on_press=action(i+1, j))
                             commander_group.add_widget(commander_button)
+                    scroll.add_widget(commander_group)
+                    return scroll
+                except Exception as e:
+                    print(e)
+
+            def build_operator_panel(self) -> Widget:
+                try:
+                    def action(level: int) -> Callable:
+                        return lambda instance: self.send_operator_level(level)
+
+                    operator_levels: int = 100
+                    scroll = ScrollView(do_scroll=(False, True))
+                    commander_group = GridLayout(cols=5, height=600, size_hint_y=None)
                     for i in range(operator_levels):
-                        commander_button = CommanderButton(text=f"Operator level {i+1}")
-                        commander_button.bind(on_press=lambda instance: self.send_operator_level(i+1))
+                        commander_button = Button(text=f"Operator level {i+1}", height=30, size_hint_y=None)
+                        commander_button.bind(on_press=action(i+1))
                         commander_group.add_widget(commander_button)
-                    tracker.add_widget(commander_group)
-                    return tracker
+                    scroll.add_widget(commander_group)
+                    return scroll
                 except Exception as e:
                     print(e)
 
             def send_milestone(self, num: int):
-                self.ctx.check_locations(tuple(
+                asyncio.create_task(self.ctx.check_locations(tuple(
                     all_locations[f"Milestone {num} reward #{i}"].location_id for i in range(1, 13)
-                ))
+                )))
 
             def send_task(self, line: int, num: int):
-                self.ctx.check_locations((all_locations[f"Task #{line}-{num}"].location_id, ))
+                asyncio.create_task(self.ctx.check_locations((all_locations[f"Task #{line}-{num}"].location_id, )))
 
             def send_operator_level(self, level: int):
-                self.ctx.check_locations((all_locations[f"Operator level {level}"].location_id, ))
+                asyncio.create_task(self.ctx.check_locations((all_locations[f"Operator level {level}"].location_id, )))
 
         self.ui = Shapez2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")

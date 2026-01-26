@@ -2,7 +2,7 @@
 import math
 from typing import Optional, TYPE_CHECKING
 
-from BaseClasses import Location, Region, LocationProgressType
+from BaseClasses import Location, Region, LocationProgressType, ItemClassification
 from .data.locations import milestones, tasks, operator_levels
 
 if TYPE_CHECKING:
@@ -86,19 +86,28 @@ def create_events(world: "Shapez2World",
                   regions: dict[str, Region],
                   processor_rules_dict: dict[tuple[str, ...], "AccessRule"]) -> None:
     from .generate.events import milestones, operator_lines, processors
+    from .items import Shapez2Item
 
     processors.get_events(world, regions)  # ALWAYS run this first!!!
     milestones.get_events(world, regions, processor_rules_dict)
     operator_lines.get_events(world, regions, processor_rules_dict)
 
     if world.options.goal == "milestones":
-        world.multiworld.completion_condition[world.player] = lambda state: state.can_reach_region(
-            f"Milestone {world.options.location_adjustments['Milestones']}", world.player
+        world.multiworld.completion_condition[world.player] = lambda state: (
+            state.has(f"[ACCESS] Milestone {world.options.location_adjustments['Milestones']}", world.player)
         )
     else:
-        world.multiworld.completion_condition[world.player] = lambda state: state.can_reach_location(
-            f"Operator level {world.options.location_adjustments['Operator level checks']}", world.player
+        item = Shapez2Item("Goal", ItemClassification.progression, None, world.player)
+        region = regions["Events"]
+        location = Shapez2Location(
+            world.player, "[EVENT] Last operator level", None, region, LocationProgressType.DEFAULT,
+            lambda state: state.can_reach_location(
+                f"Operator level {world.options.location_adjustments['Operator level checks']}", world.player
+            )
         )
+        region.locations.append(location)
+        location.place_locked_item(item)
+        world.multiworld.completion_condition[world.player] = lambda state: state.has("Goal", world.player)
 
 
 def create_and_place_locations(world: "Shapez2World",

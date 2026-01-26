@@ -7,10 +7,12 @@ from ...data import ItemData
 def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
     from ...data.items import buildings, island_buildings, mechanics, misc
     out = []
-    tabs: tuple[tuple[str, tuple[dict[str, ItemData], ...]], ...] = (
-        ("BuildingReward", (buildings.always, buildings.starting, buildings.simple_processors, buildings.sandbox)),
-        ("IslandGroupReward", (island_buildings.always, island_buildings.starting)),
-        ("MechanicReward", (mechanics.always, mechanics.starting, misc.task_lines, misc.operator_lines))
+    tabs: tuple[tuple[tuple[str, str], tuple[dict[str, ItemData], ...]], ...] = (
+        (("BuildingReward", "BuildingDefinitionGroupId"), (buildings.always, buildings.starting,
+                                                           buildings.simple_processors, buildings.sandbox)),
+        (("IslandGroupReward", "GroupId"), (island_buildings.always, island_buildings.starting)),
+        (("MechanicReward", "MechanicId"), (mechanics.always, mechanics.starting,
+                                            misc.task_lines, misc.operator_lines)),
     )
     for reward_type, tables in tabs:
         for table in tables:
@@ -24,7 +26,7 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
                     "Category": "Other",
                     "RequiredUpgradeIds": [],
                     "RequiredMechanicIds": [],
-                    "Rewards": [{"$type": reward_type, "BuildingDefinitionGroupId": reward}
+                    "Rewards": [{"$type": reward_type[0], reward_type[1]: reward}
                                 for reward in data.reward_ids],
                     "Costs": [{"$type": "ResearchPointsCost", "Amount": 1}]
                 })

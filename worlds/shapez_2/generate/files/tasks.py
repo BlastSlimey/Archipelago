@@ -35,7 +35,7 @@ def get_task_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]
         amounts = shape_amounts[task_line]
         tasks = []
         for task_num in range(len(shapes)):
-            loc_item = container.world.get_location(f"Task #{task_line}-{task_num}").item
+            loc_item = container.world.get_location(f"Task #{task_line+1}-{task_num+1}").item
             if loc_item.player != container.world.player:
                 rewards = [{"$type": "MechanicReward", "MechanicId": "RUAPItem"}]
             else:

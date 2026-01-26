@@ -9,17 +9,19 @@ class ConsoleWriter(StringIO):
         pass
 
 
-if __name__ == "__main__":
-    writer = ConsoleWriter()
-    # writer = open("generate/shapes/_temp/output.txt", "wt")
+def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrades: bool):
+    if write:
+        writer = open("generate/shapes/_temp/output.txt", "wt")
+    else:
+        writer = ConsoleWriter()
     with writer as file:
-        from generate.shapes import generator, downgrade_tetragonal, Processor
-        from generate.shapes.generate_tetragonal import Variant
+        if __name__ == "__main__":
+            from generate.shapes import generator, downgrade_tetragonal, Processor
+            from generate.shapes.generate_tetragonal import Variant
+        else:
+            from .generate.shapes import generator, downgrade_tetragonal, Processor
+            from .generate.shapes.generate_tetragonal import Variant
         import datetime
-        layers = 2
-        hexagonal = False
-        count = 4000
-        enable_downgrades = True
         start_time = datetime.datetime.utcnow()
         file.write(
             "This file contains randomly generated shapes, with expected requirements and downgrades.\n"
@@ -81,3 +83,6 @@ if __name__ == "__main__":
         file.write(f"-------------------------------------------------------------\n\n" + end_message)
         print(end_message)
 
+
+if __name__ == "__main__":
+    test(False, 4, False, 1000, True)

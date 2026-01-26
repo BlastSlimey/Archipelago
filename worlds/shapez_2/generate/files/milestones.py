@@ -47,6 +47,7 @@ def get_milestones(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]
             "PreviewImageId": "RNInitial",
             "Title": "@research.RNInitial.title",
             "Description": "@research.RNInitial.description",
+            "WikiEntryId": "WKWelcome",
         },
         "Lines": {"Lines": []},
         "Rewards": {"Rewards": [
@@ -77,6 +78,7 @@ def get_milestones(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]
                 "PreviewImageId": image,
                 "Title": f"Milestone #{milestone_num + 1}",
                 "Description": f"Another Milestone containing {checks_count} items",
+                "WikiEntryId": container.world.random.choice(wiki_entry_rewards),
             },
             "Lines": {"Lines": [
                 {"ReusedForPlayerLevel": milestone_num in container.world.operator_shapes,

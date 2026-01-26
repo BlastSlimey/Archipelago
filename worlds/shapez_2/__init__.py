@@ -1,4 +1,5 @@
 import logging
+import os
 from multiprocessing import Process
 from typing import Mapping, Any, TYPE_CHECKING
 
@@ -153,7 +154,10 @@ class Shapez2World(World):
         self.multiworld.itempool.extend(item_pool)
 
     def generate_output(self, output_directory: str) -> None:
-        output.Shapez2ScenarioContainer(self, output_directory).write()
+        output.Shapez2ScenarioContainer(self, os.path.join(
+            output_directory,
+            self.multiworld.get_out_file_name_base(self.player) + output.Shapez2ScenarioContainer.patch_file_ending
+        )).write()
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         from .data import version
