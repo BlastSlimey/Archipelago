@@ -19,6 +19,7 @@ reward_types = {
 def get_task_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
 
     multiplier = container.world.options.location_adjustments["Required shapes multiplier"]
+    locked = "Lock task lines" in container.world.options.location_modifiers
 
     def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
         _data = all_items[_item]
@@ -54,7 +55,7 @@ def get_task_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]
         out.append({
             "Title": f"Task Line #{task_line + 1}",
             "RequiredUpgradeIds": [],
-            "RequiredMechanicIds": [f"TaskLine{task_line + 1}"],
+            "RequiredMechanicIds": [f"TaskLine{task_line + 1}"] if locked else [],
             "SideQuests": tasks,
         })
 

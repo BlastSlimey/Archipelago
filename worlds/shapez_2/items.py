@@ -49,16 +49,24 @@ def get_main_item_pool(world: "Shapez2World") -> list[Shapez2Item]:
 
 
 def get_starting_items(world: "Shapez2World") -> list[str]:
-    from .generate.items import buildings, island_buildings, mechanics, task_lines
+    from .generate.items import buildings, island_buildings, mechanics, task_lines, operator_lines
 
     return [
         *buildings.generate_starting(world),
-        *island_buildings.generate_starting(world),
+        *island_buildings.generate_starting(),
         *mechanics.generate_starting(world),
         *task_lines.generate_starting(world),
         *world.options.start_inventory.value.keys(),
         *world.options.start_inventory_from_pool.value.keys(),
     ]
+
+
+def pre_generate_logic(world: "Shapez2World") -> None:
+    from .data.items.buildings import simple_processors
+
+    if "Random starting processor" in world.options.item_pool_modifiers:
+        processors = list(simple_processors)
+        world.starting_processor = world.random.choice(processors)
 
 
 def generate_filler(world: "Shapez2World") -> str:

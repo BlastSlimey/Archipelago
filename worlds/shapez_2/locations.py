@@ -55,15 +55,18 @@ def get_regions(world: "Shapez2World") -> dict[str, Region]:
 def connect_regions(world: "Shapez2World", regions: dict[str, Region]) -> None:
     from .data import region_connections
 
-    def get_rule(ext_rule: "ExtendedRule") -> "AccessRule":
-        return lambda state: ext_rule(state, world)
+    def get_rule(ext_rule: Optional["ExtendedRule"]) -> "AccessRule":
+        if ext_rule is None:
+            return lambda state: True
+        else:
+            return lambda state: ext_rule(state, world)
 
     for name, data in region_connections.connections.items():
         if data.entering_region in regions and data.exiting_region in regions:
             regions[data.exiting_region].connect(
                 regions[data.entering_region],
                 name,
-                lambda state: get_rule(data.rule)
+                get_rule(data.rule)
             )
 
 
@@ -85,11 +88,12 @@ def pre_generate_logic(world: "Shapez2World") -> None:
 def create_events(world: "Shapez2World",
                   regions: dict[str, Region],
                   processor_rules_dict: dict[tuple[str, ...], "AccessRule"]) -> None:
-    from .generate.events import milestones, operator_lines, processors
+    from .generate.events import milestones, operator_lines, processors, task_lines
     from .items import Shapez2Item
 
     processors.get_events(world, regions)  # ALWAYS run this first!!!
     milestones.get_events(world, regions, processor_rules_dict)
+    task_lines.get_events(world, regions)
     operator_lines.get_events(world, regions, processor_rules_dict)
 
     if world.options.goal == "milestones":

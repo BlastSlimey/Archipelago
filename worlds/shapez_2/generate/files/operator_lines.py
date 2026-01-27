@@ -31,6 +31,7 @@ line_data_by_processors = {
 def get_operator_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
 
     multiplier = container.world.options.location_adjustments["Required shapes multiplier"]
+    locked = "Lock operator lines" in container.world.options.location_modifiers
 
     out = []
     for line in range(container.world.options.location_adjustments["Operator lines"]):
@@ -39,7 +40,7 @@ def get_operator_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, 
         line_obj = {
             "Id": f"Random{line + 1}",
             "RequiredUpgradeIds": [],
-            "RequiredMechanicIds": [f"OperatorLine{line + 1}"],
+            "RequiredMechanicIds": [f"OperatorLine{line + 1}"] if locked else [],
         }
         if shape is None:
             has_crystals = Processor.CRYSTALLIZER in processors

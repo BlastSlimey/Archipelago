@@ -11,15 +11,8 @@ def generate_default(world: "Shapez2World") -> Iterator[Shapez2Item]:
     for name, data in always.items():
         yield Shapez2Item(name, data.classification(world), data.item_id, world.player)
 
-    if "Random starting processor" in world.options.item_pool_modifiers:
-        processors = list(simple_processors)
-        world.random.shuffle(processors)
-        world.starting_processor = processors.pop()
-        for name in processors:
-            data = simple_processors[name]
-            yield Shapez2Item(name, data.classification(world), data.item_id, world.player)
-    else:
-        for name, data in simple_processors.items():
+    for name, data in simple_processors.items():
+        if name != world.starting_processor:
             yield Shapez2Item(name, data.classification(world), data.item_id, world.player)
 
     if "Add sandbox buildings" in world.options.item_pool_modifiers:

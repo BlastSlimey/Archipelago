@@ -12,7 +12,7 @@ def generate_default(world: "Shapez2World") -> Iterator[Shapez2Item]:
         yield Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
 
 
-def generate_starting(world: "Shapez2World") -> Iterator[str]:
+def generate_starting() -> Iterator[str]:
     from ...data.items.island_buildings import starting
 
     yield from starting

@@ -12,9 +12,9 @@ class Shapez2ScenarioContainer(APPlayerContainer):
     game = "shapez 2"
     patch_file_ending = ".zip"
 
-    def __init__(self, world: "Shapez2World", path: str | None = None):
+    def __init__(self, world: "Shapez2World", path: str):
         self.world = world
-        super().__init__(path, world.player, world.player_name, "")
+        super().__init__(path=path, player=world.player, player_name=world.player_name, server="")
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         from .generate.files import (example_shapes, blueprint, milestones, tasks, upgrades, operator_lines,

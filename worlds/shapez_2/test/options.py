@@ -20,6 +20,18 @@ class Test3Milestones(Shapez2TestBase):
     }}
 
 
+class TestLockTaskLines(Shapez2TestBase):
+    options = {"location_modifiers": ["Lock task lines"]}
+
+
+class TestLockOperatorTab(Shapez2TestBase):
+    options = {"location_modifiers": ["Lock operator levels tab"]}
+
+
+class TestLockAll(Shapez2TestBase):
+    options = {"location_modifiers": ["Lock task lines", "Lock operator lines", "Lock operator levels tab"]}
+
+
 class TestMinimumTasksWithOperatorChecks(Shapez2TestBase):
     options = {"location_adjustments": {
         "Minimum checks per task line": 1,

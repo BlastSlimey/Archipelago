@@ -114,12 +114,17 @@ class Shapez2World(World):
 
         if self.options.goal == "operator_levels" and adjust["Operator level checks"] == 0:
             raise OptionError(f"{self.player_name}: Goal operator_levels requires at least 1 operator level check.")
-        if adjust.count_min_locations() < 70 + adjust["Task lines"] + adjust["Operator lines"]:
+        if adjust.count_min_locations() < (
+            70 + (adjust["Task lines"] if "Lock task lines" in self.options.location_modifiers else 0) +
+            (adjust["Operator lines"] if "Lock operator lines" in self.options.location_modifiers else 0)
+        ):
             # TODO add setting for disabling this
             raise OptionError(f"{self.player_name}: Not enough guaranteed locations ({adjust.count_min_locations()}) "
                               f"for required items ({80 + adjust['Task lines'] + adjust['Operator lines']}).")
 
         locations.pre_generate_logic(self)
+        items.pre_generate_logic(self)
+        self.starting_items = items.get_starting_items(self)
         self.options.blueprint_shapes.verify_plando(self)
 
     def create_item(self, name: str) -> items.Shapez2Item:
@@ -143,7 +148,6 @@ class Shapez2World(World):
 
     def create_items(self) -> None:
         item_pool = items.get_main_item_pool(self)
-        self.starting_items = items.get_starting_items(self)
         if len(item_pool) > self.to_be_filled_locations:
             # TODO make random checks amount generation happen in generate_early
             raise Exception(f"Player {self.player_name} has more guaranteed items ({len(item_pool)}) "

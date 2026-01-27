@@ -32,13 +32,14 @@ def get_milestones(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]
     multiplier = container.world.options.location_adjustments["Required shapes multiplier"]
 
     def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
-        _data = all_items[_item]
-        _type, _key = reward_types[_data.reward_type]
-        if isinstance(_data, PointsItemData):
-            yield {"$type": _type, "Amount": _data.amount}
-        else:
-            for _rew in _data.reward_ids:
-                yield {"$type": _type, _key: _rew}
+        if _item[0] != "[":  # event item
+            _data = all_items[_item]
+            _type, _key = reward_types[_data.reward_type]
+            if isinstance(_data, PointsItemData):
+                yield {"$type": _type, "Amount": _data.amount}
+            else:
+                for _rew in _data.reward_ids:
+                    yield {"$type": _type, _key: _rew}
 
     out = [{
         "Definition": {

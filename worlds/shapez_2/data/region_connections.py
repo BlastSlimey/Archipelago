@@ -8,7 +8,7 @@ def get_milestone_rule(x: int) -> ExtendedRule:
 
 
 def get_task_line_rule(x: int) -> ExtendedRule:
-    return lambda state, world: extended_has(world, state, f"Task line #{x}")
+    return lambda state, world: extended_has(world, state, f"[ACCESS] Task line {x}")
 
 
 def get_operator_section_rule(x: int) -> ExtendedRule:
@@ -19,7 +19,7 @@ def get_operator_section_rule(x: int) -> ExtendedRule:
     if x != 1:
         return rule
     else:
-        return lambda state, world: extended_has(world, state, "Operator Levels") and rule(state, world)
+        return lambda state, world: extended_has(world, state, "[ACCESS] Operator levels") and rule(state, world)
 
 
 connections: dict[str, RegionConnectionData] = {

@@ -110,6 +110,24 @@ class Goal(Choice):
     default = 0
 
 
+class LocationModifiers(CasefoldOptionSet):
+    """
+    Modifies Various aspects about location generation. You can add as many modifiers as you want.
+
+    - **Lock task lines** - Makes task lines require an item to be unlocked. Task lines #1-3 are always unlocked.
+    - **Lock operator lines** - Makes operator lines require an item to be unlocked.
+    - **Lock operator levels tab** - Makes the operator levels tab require an item to be unlocked.
+    """
+    # - **Add sandbox buildings** - Adds the sandbox item and fluid producers to the itempool.
+    display_name = "Location Modifiers"
+    valid_keys = [
+        "Lock task lines",
+        "Lock operator lines",
+        "Lock operator levels tab",
+    ]
+    default = ["Lock operator lines"]
+
+
 class LocationAdjustments(ExtendedOptionCounter):
     """
     Adjust various parameters of milestones, task lines, operator lines, etc.
@@ -317,6 +335,7 @@ class ItemPoolModifiers(CasefoldOptionSet):
 @dataclass
 class Shapez2Options(PerGameCommonOptions):
     goal: Goal
+    location_modifiers: LocationModifiers
     location_adjustments: LocationAdjustments
     shape_configuration: ShapeConfiguration
     shape_generation_modifiers: ShapeGenerationModifiers

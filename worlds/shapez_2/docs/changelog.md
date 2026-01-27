@@ -1,6 +1,12 @@
 # Changelog
 Versions are sorted in ascending order, i.e. the most recent changes are at the top.
 
+## 0.99.1
+
+- Fixed logic being broken entirely (goddammit even double-checking didn't protect me from lambdas in for loops)
+- Added `Location modifiers` option with modifiers `Lock task lines`, `Lock operator lines`, and `Lock operator levels tab`
+- Tweaked item generation such that starting items are actually taken into account for event generation
+
 ## 0.99.0 (pre-mod release)
 
 - Locations:
