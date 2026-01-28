@@ -41,13 +41,15 @@ def get_milestones(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]
                 for _rew in _data.reward_ids:
                     yield {"$type": _type, _key: _rew}
 
+    video, image = container.world.random.choice(milestone_graphics)
     out = [{
         "Definition": {
             "Id": "RNInitial",
-            "VideoId": "Milestone_InitialVD",
-            "PreviewImageId": "RNInitial",
-            "Title": "@research.RNInitial.title",
-            "Description": "@research.RNInitial.description",
+            "VideoId": video,
+            "PreviewImageId":image,
+            "Title": "Starting inventory",
+            "Description": "Everything that's unlocked right from the beginning, including the player-defined "
+                           "starting inventory.",
             "WikiEntryId": "WKWelcome",
         },
         "Lines": {"Lines": []},
