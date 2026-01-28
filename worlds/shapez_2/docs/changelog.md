@@ -16,6 +16,7 @@ Versions are sorted in ascending order, i.e. the most recent changes are at the 
 - Overhauled the classification of a bunch of items
 - Tweaked `location_adjustments` option description to mention minimum required locations
 - Added `Include blueprint points` to the `item_pool_modifiers` option
+- Added a shape generation debug file to the output zip
 
 ## 0.99.1
 

@@ -25,7 +25,7 @@ class Shapez2ScenarioContainer(APPlayerContainer):
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         from .generate.files import (example_shapes, blueprint, milestones, tasks, upgrades, operator_lines,
-                                     mechanics, starting_location)
+                                     mechanics, starting_location, debug)
         super().write_contents(opened_zipfile)
 
         scenario_id = self.world.multiworld.get_out_file_name_base(self.player)
@@ -170,3 +170,4 @@ class Shapez2ScenarioContainer(APPlayerContainer):
             scenario_json = scenario_json[:position] + b"\"FormatVersion\": 2," + scenario_json[position+18:]
         opened_zipfile.writestr("scenario_" + scenario_id + ".json", scenario_json)
         opened_zipfile.writestr("preset_" + scenario_id + ".json", orjson.dumps(scenario_preset))
+        opened_zipfile.writestr("shapes_debug.txt", debug.write_shapes_debug(self))

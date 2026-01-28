@@ -7,7 +7,6 @@
 advanced required shapes multiplier
 other players items shown with name + option
 option for adding miner extensions to starting milestone
-shape generation debug file in output
 shape splitter to make vanilla-like milestones possible
 option for additional platform floors
 setting for disabling strict location count checking
