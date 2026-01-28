@@ -40,6 +40,13 @@ class TestMinimumTasksWithOperatorChecks(Shapez2TestBase):
     }}
 
 
+class TestSomeStartingResearchAndBlueprintPoints(Shapez2TestBase):
+    options = {"location_adjustments": {
+        "Starting research points": 10,
+        "Starting blueprint points": 1000,
+    }}
+
+
 class TestNoMilestoneOperatorLines(Shapez2TestBase):
     options = {"shape_generation_modifiers": []}
 
@@ -60,9 +67,10 @@ class TestBlueprintPlando(Shapez2TestBase):
     options = {"blueprint_shapes": ["CuCuCuCu", "crcrcrcr:SbSbSbSb", "WuWu----"]}
 
 
-class TestArbitraryPointsItems(Shapez2TestBase):
+class TestOnlyArbitraryPointsItems(Shapez2TestBase):
     options = {"item_pool_modifiers": [
         "Arbitrary research points",
         "Arbitrary platform items",
         "Arbitrary blueprint points",
+        "Include blueprint points",
     ]}
