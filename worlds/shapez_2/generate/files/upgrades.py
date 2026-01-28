@@ -6,7 +6,7 @@ from ...data import ItemData
 
 def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
     from ...data.items import buildings, island_buildings, mechanics, misc
-    out = []
+
     tabs: tuple[tuple[tuple[str, str], tuple[dict[str, ItemData], ...]], ...] = (
         (("BuildingReward", "BuildingDefinitionGroupId"), (buildings.always, buildings.starting,
                                                            buildings.simple_processors, buildings.sandbox)),
@@ -14,6 +14,24 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
         (("MechanicReward", "MechanicId"), (mechanics.always, mechanics.starting,
                                             misc.task_lines, misc.operator_lines)),
     )
+
+    reward_type, tables = container.world.random.choice(tabs)
+    table = container.world.random.choice(tables)
+    surprise_item, data = container.world.random.choice(tuple(table.items()))
+    out = [{
+        "Id": "RNSurprise",
+        "PreviewImageId": "Shop_PlatformLayouts4",
+        "Title": "Surprise out-of-logic item",
+        "Description": "Rewards you with a random building, island platform, or mechanic "
+                       "without being taken into account by logic.",
+        "Category": "Other",
+        "RequiredUpgradeIds": [],
+        "RequiredMechanicIds": [],
+        "Rewards": [{"$type": reward_type[0], reward_type[1]: reward}
+                    for reward in data.reward_ids],
+        "Costs": [{"$type": "ResearchPointsCost", "Amount": 100}]
+    }]
+
     for reward_type, tables in tabs:
         for table in tables:
             for name, data in table.items():
@@ -30,6 +48,7 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
                                 for reward in data.reward_ids],
                     "Costs": [{"$type": "ResearchPointsCost", "Amount": 1}]
                 })
+
     return out
 
 
@@ -104,9 +123,7 @@ linear_upgrades: list[dict[str, Any]] = [
             {"Value":150,"Cost":{"$type":"ResearchPointsCost","Amount":30}}
         ],
         "RequiredUpgradeIds":[],
-        "RequiredMechanicIds":[
-            "RUFluids"
-        ],
+        "RequiredMechanicIds":[],
         "Category":"ProcessingSpeeds"
     },
     {
@@ -120,9 +137,7 @@ linear_upgrades: list[dict[str, Any]] = [
             {"Value":200,"Cost":{"$type":"ResearchPointsCost","Amount":30}}
         ],
         "RequiredUpgradeIds":[],
-        "RequiredMechanicIds":[
-            "RUTrains"
-        ],
+        "RequiredMechanicIds":[],
         "Category":"Trains"
     },
     {
@@ -137,9 +152,7 @@ linear_upgrades: list[dict[str, Any]] = [
             {"Value":500,"Cost":{"$type":"ResearchPointsCost","Amount":30}},
             {"Value":600,"Cost":{"$type":"ResearchPointsCost","Amount":50}}
         ],
-        "RequiredUpgradeIds":[
-            "RNTrains"
-        ],
+        "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
         "Category":"Trains"
     },
@@ -161,9 +174,7 @@ linear_upgrades: list[dict[str, Any]] = [
             {"Value":11,"Cost":{"$type":"ResearchPointsCost","Amount":6000}},
             {"Value":12,"Cost":{"$type":"ResearchPointsCost","Amount":9999}}
         ],
-        "RequiredUpgradeIds":[
-            "RNEndOfGame"
-        ],
+        "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
         "Category":"Other"
     }
