@@ -10,15 +10,13 @@ def get_processors_list(world: "Shapez2World") -> list[list[Processor]]:
     milestone_processors: list[list[Processor]] = []
     milestone_order: list[Processor] = []
     milestone_count = world.options.location_adjustments["Milestones"]
+    max_processors = world.options.shape_generation_adjustments["Maximum processors per milestone"]
     for _ in range(min(milestone_count, 8)):
         Processor.add_random_next(world.random, milestone_order, None)
     for i in range(milestone_count):
         order_index = (i * 8) // milestone_count if milestone_count > 8 else i
         proc = [milestone_order[order_index]]
-        if order_index > 0:
-            if not Processor.add_restricted_previous(world.random, proc, milestone_order[:order_index]):
-                Processor.add_random_next(world.random, proc, milestone_order[:order_index])
-        if order_index > 1:
+        for _ in range(min(max_processors - 1, i)):
             if not Processor.add_restricted_previous(world.random, proc, milestone_order[:order_index]):
                 Processor.add_random_next(world.random, proc, milestone_order[:order_index])
         milestone_processors.append(proc)
@@ -40,7 +38,7 @@ def get_shapes_list(
         # Assumes all milestones have at least 1 processor
         if len(milestone) == 1:
             builder1 = generate_shape(world, milestone, i)
-            builder2 = generate_shape(world, milestone, i)
+            builder2 = generate_shape(world, milestone, i, [builder1.build()])
             shapes1 = [builder1.build()]
             shapes2 = [builder2.build()]
             shapes1.insert(0, downgrade_shape(world, builder1, [], milestone[0], i).build())
@@ -48,7 +46,7 @@ def get_shapes_list(
             milestone_shapes.append((shapes1, shapes2))
         else:
             builder1 = generate_shape(world, milestone, i)
-            builder2 = generate_shape(world, milestone, i)
+            builder2 = generate_shape(world, milestone, i, [builder1.build()])
             shapes1 = [builder1.build()]
             shapes2 = [builder2.build()]
             builder1 = downgrade_shape(world, builder1, milestone[:-1], milestone[-1], i)
