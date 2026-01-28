@@ -30,6 +30,8 @@ milestone_graphics = [("Milestone_StackerLayer2VD", "RNStacker"), ("Milestone_Bl
 def get_milestones(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
 
     multiplier = container.world.options.location_adjustments["Required shapes multiplier"]
+    research_points = container.world.options.location_adjustments["Starting research points"]
+    blueprint_points = container.world.options.location_adjustments["Starting blueprint points"]
 
     def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
         if _item[0] != "[":  # event item
@@ -42,22 +44,28 @@ def get_milestones(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]
                     yield {"$type": _type, _key: _rew}
 
     video, image = container.world.random.choice(milestone_graphics)
+    rewards = [
+        *({"$type": "WikiEntryReward", "EntryId": entry} for entry in wiki_entry_rewards),
+        {"$type": "ChunkLimitReward",
+         "Amount": container.world.options.location_adjustments["Starting platform points"]},
+        *(reward for item in container.world.starting_items for reward in get_rewards(item)),
+    ]
+    if research_points:
+        rewards.append({"$type": "ResearchPointsReward", "Amount": research_points})
+    if blueprint_points:
+        rewards.append({"$type": "BlueprintCurrencyReward", "Amount": blueprint_points})
     out = [{
         "Definition": {
             "Id": "RNInitial",
             "VideoId": video,
-            "PreviewImageId":image,
+            "PreviewImageId": image,
             "Title": "Starting inventory",
             "Description": "Everything that's unlocked right from the beginning, including the player-defined "
                            "starting inventory.",
             "WikiEntryId": "WKWelcome",
         },
         "Lines": {"Lines": []},
-        "Rewards": {"Rewards": [
-            *({"$type": "WikiEntryReward", "EntryId": entry} for entry in wiki_entry_rewards),
-            {"$type": "ChunkLimitReward", "Amount": 250},
-            *(reward for item in container.world.starting_items for reward in get_rewards(item)),
-        ]}
+        "Rewards": {"Rewards": rewards}
     }]
 
     for milestone_num in range(container.world.options.location_adjustments["Milestones"]):

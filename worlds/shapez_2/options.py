@@ -147,6 +147,9 @@ class LocationAdjustments(ExtendedOptionCounter):
     - **Milestones** - 3-20
     - **Minimum checks per milestone** - 2-12
     - **Maximum checks per milestone** - 5-12
+    - **Starting platform points** - 250-2000
+    - **Starting research points** - 0-50
+    - **Starting blueprint points** - 0-10000
     - **Task lines** - 3-200
     - **Minimum checks per task line** - 1-5
     - **Maximum checks per task line** - 1-5
@@ -160,6 +163,9 @@ class LocationAdjustments(ExtendedOptionCounter):
         "Milestones",
         "Minimum checks per milestone",
         "Maximum checks per milestone",
+        "Starting platform points",
+        "Starting research points",
+        "Starting blueprint points",
         "Task lines",
         "Minimum checks per task line",
         "Maximum checks per task line",
@@ -172,6 +178,9 @@ class LocationAdjustments(ExtendedOptionCounter):
         "Milestones": 8,
         "Minimum checks per milestone": 8,
         "Maximum checks per milestone": 12,
+        "Starting platform points": 250,
+        "Starting research points": 0,
+        "Starting blueprint points": 0,
         "Task lines": 20,
         "Minimum checks per task line": 3,
         "Maximum checks per task line": 5,
@@ -184,6 +193,9 @@ class LocationAdjustments(ExtendedOptionCounter):
         "Milestones": (3, 20),
         "Minimum checks per milestone": (2, 12),
         "Maximum checks per milestone": (5, 12),
+        "Starting platform points": (250, 2000),
+        "Starting research points": (0, 50),
+        "Starting blueprint points": (0, 10000),
         "Task lines": (3, 200),
         "Minimum checks per task line": (1, 5),
         "Maximum checks per task line": (1, 5),
@@ -324,6 +336,7 @@ class ItemPoolModifiers(CasefoldOptionSet):
     - **Arbitrary research points** - Allows research points items to give any amount in range of 1-100 instead of snapping them to nice numbers.
     - **Arbitrary platform items** - Allows platform items to give any amount in range of 1-500 instead of snapping them to nice numbers.
     - **Arbitrary blueprint points** - Allows blueprint points to give amounts in range of 1000-10000 snapped to 100-step numbers instead of 1000-step numbers.
+    - **Unlock extensions with miners** - Makes shape and fluid miners also unlock their extensions with them.
     """
     # - **Add sandbox buildings** - Adds the sandbox item and fluid producers to the itempool.
     display_name = "Item Pool Modifiers"
@@ -334,8 +347,9 @@ class ItemPoolModifiers(CasefoldOptionSet):
         "Arbitrary research points",
         "Arbitrary platform items",
         "Arbitrary blueprint points",
+        "Unlock extensions with miners",
     ]
-    default = ["Random starting processor"]
+    default = ["Random starting processor", "Unlock extensions with miners"]
 
 
 @dataclass

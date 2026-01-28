@@ -2,9 +2,6 @@ from .. import ItemData
 from ..classification import *
 
 always: dict[str, ItemData] = {
-    "Fluid Miner": ItemData(1000, always_progression, "RemoteFluidMiner", ("FluidMinerExtractorsGroup", ), 1),
-    "Shape Miner Extension": ItemData(1001, always_useful, "RemoteShapeMinerExtension", ("ShapeMinerChainsGroup", ), 1),
-    "Fluid Miner Extension": ItemData(1002, always_useful, "RemoteFluidMinerExtension", ("FluidMinerChainsGroup", ), 1),
     "Space Pipe": ItemData(1003, always_progression, "RemoteSpacePipe", ("SpacePipesGroup", ), 1),
     "Rails": ItemData(1006, always_useful, "RemoteRails", ("TrainLaunchersGroup", "TrainCatchersGroup",
                                                            "RailLiftUp1X1X2Group", "RailLiftDown1X1X2Group",
@@ -44,7 +41,15 @@ always: dict[str, ItemData] = {
 
 starting: dict[str, ItemData] = {
     "Space Belt": ItemData(1100, always_progression, "RemoteSpaceBelt", ("SpaceBeltsGroup", ), 1),
-    "Shape Miner": ItemData(1101, always_progression, "RemoteShapeMiner", ("ShapeMinerExtractorsGroup", ), 1),
     "1x1 Foundation": ItemData(1105, always_progression_skip_balancing, "Remote1x1Foundation", ("FoundationGroup_1x1", ), 1),
     "1x2 Foundation": ItemData(1106, always_progression_skip_balancing, "Remote1x2Foundation", ("FoundationGroup_1x2", ), 1),
+}
+
+miners: dict[str, ItemData] = {
+    "Shape Miner": ItemData(1200, always_progression, "RemoteShapeMiner", ("ShapeMinerExtractorsGroup", ), 1),
+    "Fluid Miner": ItemData(1201, always_progression, "RemoteFluidMiner", ("FluidMinerExtractorsGroup", ), 1),
+    "Shape Miner Extension": ItemData(1202, always_useful, "RemoteShapeMinerExtension", ("ShapeMinerChainsGroup", ), 1),
+    "Fluid Miner Extension": ItemData(1203, always_useful, "RemoteFluidMinerExtension", ("FluidMinerChainsGroup", ), 1),
+    "Shape Miner + Extension": ItemData(1204, always_progression, "RemoteShapeMinerPlusExtension", ("ShapeMinerExtractorsGroup", "ShapeMinerChainsGroup"), 1),
+    "Fluid Miner + Extension": ItemData(1205, always_progression, "RemoteFluidMinerPlusExtension", ("FluidMinerExtractorsGroup", "FluidMinerChainsGroup"), 1),
 }

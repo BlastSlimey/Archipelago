@@ -6,13 +6,15 @@ if TYPE_CHECKING:
 
 
 def generate_default(world: "Shapez2World") -> Iterator[Shapez2Item]:
-    from ...data.items.mechanics import always
-
-    operator_levels_locked = "Lock operator levels tab" in world.options.location_modifiers
+    from ...data.items.mechanics import always, special
 
     for name, data in always.items():
-        if operator_levels_locked or name != "Operator Levels":
-            yield Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
+        yield Shapez2Item(name, data.classification(world), data.item_id, world.player)
+
+    if "Lock operator levels tab" in world.options.location_modifiers:
+        name = "Operator Levels"
+        data = special[name]
+        yield Shapez2Item(name, data.classification(world), data.item_id, world.player)
 
 
 def generate_starting(world: "Shapez2World") -> Iterator[str]:

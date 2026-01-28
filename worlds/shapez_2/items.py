@@ -2,7 +2,7 @@ from random import Random
 from typing import TYPE_CHECKING, Any
 
 from BaseClasses import Item
-from .data.items import buildings, island_buildings, mechanics, misc
+from .data.items import buildings, all_items
 
 if TYPE_CHECKING:
     from . import Shapez2World
@@ -15,24 +15,18 @@ class Shapez2Item(Item):
 def lookup_table() -> dict[str, int]:
     return {
         name: data.item_id
-        for table in (buildings.always, buildings.starting, buildings.simple_processors, buildings.sandbox,
-                      island_buildings.always, island_buildings.starting, mechanics.always, mechanics.starting,
-                      misc.task_lines, misc.operator_lines, misc.research_points, misc.platforms, misc.blueprint_points)
+        for table in all_items.maps
         for name, data in table.items()
     }
 
 
 def generate_item(name: str, world: "Shapez2World") -> Shapez2Item:
-    from .data.items import all_items
-
     data = all_items[name]
     # Item id from lookup table is used instead of id from data for safety purposes
     return Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
 
 
 def get_item_lookup_table() -> dict[str, int]:
-    from .data.items import all_items
-
     return {name: data.item_id for name, data in all_items.items()}
 
 
@@ -53,7 +47,7 @@ def get_starting_items(world: "Shapez2World") -> list[str]:
 
     return [
         *buildings.generate_starting(world),
-        *island_buildings.generate_starting(),
+        *island_buildings.generate_starting(world),
         *mechanics.generate_starting(world),
         *task_lines.generate_starting(world),
         *world.options.start_inventory.value.keys(),
@@ -62,10 +56,8 @@ def get_starting_items(world: "Shapez2World") -> list[str]:
 
 
 def pre_generate_logic(world: "Shapez2World") -> None:
-    from .data.items.buildings import simple_processors
-
     if "Random starting processor" in world.options.item_pool_modifiers:
-        processors = list(simple_processors)
+        processors = list(buildings.simple_processors)
         world.starting_processor = world.random.choice(processors)
 
 

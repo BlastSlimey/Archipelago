@@ -4,7 +4,6 @@ from ..classification import *
 always: dict[str, ItemData] = {
     "2nd Floor": ItemData(2000, always_progression, "Remote2ndFloor", ("RULayer2", ), 2),
     "Blueprints": ItemData(2001, always_useful, "RemoteBlueprints", ("RUBlueprints", ), 2),
-    "Operator Levels": ItemData(2002, always_progression, "RemoteOperatorLevels", ("RUPlayerLevel", ), 2),
     "3rd Platform Floor": ItemData(2003, always_useful, "Remote3rdPlatformFloor", ("RUIslandLayer3", ), 2),
     # Entirely for display purposes
     # "Infinite Goals": ItemData(000, always_progression, "RemoteInfiniteGoals", ("RUInfiniteGoals", ), 2),
@@ -19,4 +18,8 @@ starting: dict[str, ItemData] = {
     "Trains": ItemData(2103, always_useful, "RemoteTrains", ("RUTrains", ), 2),
     "Fluids": ItemData(2104, always_progression, "RemoteFluids", ("RUFluids", ), 2),
     "Upgrades": ItemData(2105, always_progression, "RemoteUpgrades", ("RUSideUpgrades", ), 2),
+}
+
+special: dict[str, ItemData] = {
+    "Operator Levels": ItemData(2200, always_progression, "RemoteOperatorLevels", ("RUPlayerLevel", ), 2),
 }

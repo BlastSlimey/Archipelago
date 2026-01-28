@@ -1,6 +1,13 @@
 # Changelog
 Versions are sorted in ascending order, i.e. the most recent changes are at the top.
 
+## 0.99.3 (mid-stream hotfix)
+
+- Actually fixed fluids, wires, and trains toolbars never being unlocked
+- Fixed crystals having incorrect logic in very rare cases
+- Added `Unlock extensions with miners` to the `item_pool_modifiers` option
+- Added `Starting platform points`, `Starting research points`, and `Starting blueprint points` to the `location_adjustments` option
+
 ## 0.99.2
 
 - Fixed some upgrades never being unlocked

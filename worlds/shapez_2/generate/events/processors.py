@@ -49,24 +49,32 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         ))
         reg.locations.append(loc)
 
-    if all(it in world.starting_items for it in ("Fluid Miner", "Painter", "Pump", "Pipe", "Space Pipe")):
+    if (
+        all(it in world.starting_items for it in ("Painter", "Pump", "Pipe", "Space Pipe")) and
+        any(it in world.starting_items for it in ("Fluid Miner", "Fluid Miner + Extension"))
+    ):
         world.starting_items.append("[PROCESSOR] Painter")
     else:
         loc = Shapez2Location(
             world.player, "[PROCESSOR] Painter", None, reg, LocationProgressType.PRIORITY,
-            lambda state: extended_has_all(world, state, "Fluid Miner", "Painter", "Pump", "Pipe", "Space Pipe")
+            lambda state: extended_has_all(world, state, "Painter", "Pump", "Pipe", "Space Pipe") and
+                          extended_has_any(world, state, "Fluid Miner", "Fluid Miner + Extension")
         )
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Painter", ItemClassification.progression, None, world.player
         ))
         reg.locations.append(loc)
 
-    if all(it in world.starting_items for it in ("Fluid Miner", "Color Mixer", "Pump", "Pipe", "Space Pipe")):
+    if (
+        all(it in world.starting_items for it in ("Color Mixer", "Pump", "Pipe", "Space Pipe")) and
+        any(it in world.starting_items for it in ("Fluid Miner", "Fluid Miner + Extension"))
+    ):
         world.starting_items.append("[PROCESSOR] Mixer")
     else:
         loc = Shapez2Location(
             world.player, "[PROCESSOR] Mixer", None, reg, LocationProgressType.PRIORITY,
-            lambda state: extended_has_all(world, state, "Fluid Miner", "Color Mixer", "Pump", "Pipe", "Space Pipe")
+            lambda state: extended_has_all(world, state, "Color Mixer", "Pump", "Pipe", "Space Pipe") and
+                          extended_has_any(world, state, "Fluid Miner", "Fluid Miner + Extension")
         )
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Mixer", ItemClassification.progression, None, world.player
@@ -85,13 +93,16 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         ))
         reg.locations.append(loc)
 
-    if all(it in world.starting_items for it in ("Fluid Miner", "Color Mixer", "Pump", "Pipe", "Space Pipe")):
+    if (
+        all(it in world.starting_items for it in ("Crystal Generator", "Pump", "Pipe", "Space Pipe")) and
+        any(it in world.starting_items for it in ("Fluid Miner", "Fluid Miner + Extension"))
+    ):
         world.starting_items.append("[PROCESSOR] Crystallizer")
     else:
         loc = Shapez2Location(
             world.player, "[PROCESSOR] Crystallizer", None, reg, LocationProgressType.PRIORITY,
-            lambda state: extended_has_all(world, state, "Fluid Miner", "Crystal Generator",
-                                           "Pump", "Pipe", "Space Pipe")
+            lambda state: extended_has_all(world, state, "Crystal Generator", "Pump", "Pipe", "Space Pipe") and
+                          extended_has_any(world, state, "Fluid Miner", "Fluid Miner + Extension")
         )
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Crystallizer", ItemClassification.progression, None, world.player
