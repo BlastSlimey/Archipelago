@@ -1,10 +1,11 @@
-# Based (read: copied almost wholesale and edited) off the KHDays and Manual Clients.
+# Based (read: copied almost wholesale and edited) off the KHDays and Manual clients.
 
 import asyncio
-from typing import Dict, List, Callable
+from typing import Callable
 
 import Utils
 from CommonClient import CommonContext, server_loop, gui_enabled, get_base_parser
+from NetUtils import ClientStatus
 
 from .data.locations import all_locations
 
@@ -30,12 +31,10 @@ class Shapez2Context(CommonContext):
     def run_gui(self):
         from kvui import GameManager
         from kivy.uix.button import Button
-        from kivy.uix.boxlayout import BoxLayout
         from kivy.uix.gridlayout import GridLayout
         from kivy.uix.layout import Layout
         from kivy.uix.scrollview import ScrollView
         from kivy.uix.widget import Widget
-        from kivy.uix.treeview import TreeView
 
         class Shapez2Manager(GameManager):
             base_title = "Archipelago shapez 2 Client"
@@ -46,6 +45,7 @@ class Shapez2Context(CommonContext):
                 self.add_client_tab("Milestones", self.build_milestones_panel())
                 self.add_client_tab("Tasks", self.build_tasks_panel())
                 self.add_client_tab("Operator levels", self.build_operator_panel())
+                self.add_client_tab("Goal", self.build_goal_panel())
                 return container
 
             def build_milestones_panel(self) -> Widget:
@@ -95,6 +95,20 @@ class Shapez2Context(CommonContext):
                         commander_button = Button(text=f"Operator level {i+1}", height=30, size_hint_y=None)
                         commander_button.bind(on_press=action(i+1))
                         commander_group.add_widget(commander_button)
+                    scroll.add_widget(commander_group)
+                    return scroll
+                except Exception as e:
+                    print(e)
+
+            def build_goal_panel(self) -> Widget:
+                try:
+                    scroll = ScrollView(do_scroll=(False, True))
+                    commander_group = GridLayout(cols=1, height=30, size_hint_y=None)
+                    commander_button = Button(text="Goal", height=30, size_hint_y=None)
+                    commander_button.bind(on_press=lambda instance: asyncio.create_task(
+                        self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                    ))
+                    commander_group.add_widget(commander_button)
                     scroll.add_widget(commander_group)
                     return scroll
                 except Exception as e:

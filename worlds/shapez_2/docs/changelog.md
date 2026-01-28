@@ -9,6 +9,7 @@ Versions are sorted in ascending order, i.e. the most recent changes are at the 
 - Fixed fluids, wires, and trains toolbars never being unlocked
 - Fixed current research points permanently being hidden
 - Added surprise out-of-logic item as upgrade (this is what actually fixes the research points visibility)
+- Added goal tab to manual-like client (this also fixes not being able to send the goal flag to the server)
 
 ## 0.99.1
 
