@@ -1,7 +1,9 @@
+import os
 import zipfile
 from typing import TYPE_CHECKING, Any
 from orjson import orjson
 
+import Utils
 from worlds.Files import APPlayerContainer
 
 if TYPE_CHECKING:
@@ -12,9 +14,14 @@ class Shapez2ScenarioContainer(APPlayerContainer):
     game = "shapez 2"
     patch_file_ending = ".zip"
 
-    def __init__(self, world: "Shapez2World", path: str):
+    def __init__(self, world: "Shapez2World", output_directory: str):
         self.world = world
-        super().__init__(path=path, player=world.player, player_name=world.player_name, server="")
+        mw = world.multiworld
+        container_path = os.path.join(
+            output_directory,
+            f"AP-{mw.seed_name}-P{world.player}-{mw.get_file_safe_player_name(world.player)}_{Utils.__version__}.zip"
+        )
+        super().__init__(path=container_path, player=world.player, player_name=world.player_name, server="")
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         from .generate.files import (example_shapes, blueprint, milestones, tasks, upgrades, operator_lines,
