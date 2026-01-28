@@ -10,6 +10,12 @@ Versions are sorted in ascending order, i.e. the most recent changes are at the 
 - Fixed current research points permanently being hidden
 - Added surprise out-of-logic item as upgrade (this is what actually fixes the research points visibility)
 - Added goal tab to manual-like client (this also fixes not being able to send the goal flag to the server)
+- Fixed multiworld output zip file being rejected by webhost if they contain a shapez 2 output zip
+- Fixed `Maximum processors per milestone` in the `shape_generation_adjustments` option not working
+- Prevented milestones from having the same final shape twice 
+- Overhauled the classification of a bunch of items
+- Tweaked `location_adjustments` option description to mention minimum required locations
+- Added `Include blueprint points` to the `item_pool_modifiers` option
 
 ## 0.99.1
 

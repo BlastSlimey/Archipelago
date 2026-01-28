@@ -118,7 +118,6 @@ class Shapez2World(World):
             70 + (adjust["Task lines"] if "Lock task lines" in self.options.location_modifiers else 0) +
             (adjust["Operator lines"] if "Lock operator lines" in self.options.location_modifiers else 0)
         ):
-            # TODO add setting for disabling this
             raise OptionError(f"{self.player_name}: Not enough guaranteed locations ({adjust.count_min_locations()}) "
                               f"for required items ({80 + adjust['Task lines'] + adjust['Operator lines']}).")
 
@@ -149,7 +148,6 @@ class Shapez2World(World):
     def create_items(self) -> None:
         item_pool = items.get_main_item_pool(self)
         if len(item_pool) > self.to_be_filled_locations:
-            # TODO make random checks amount generation happen in generate_early
             raise Exception(f"Player {self.player_name} has more guaranteed items ({len(item_pool)}) "
                             f"than to-be-filled locations ({self.to_be_filled_locations})."
                             f"Please report this to the apworld dev and provide the yaml used for generating.")

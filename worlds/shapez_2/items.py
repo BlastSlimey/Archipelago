@@ -49,7 +49,7 @@ def get_main_item_pool(world: "Shapez2World") -> list[Shapez2Item]:
 
 
 def get_starting_items(world: "Shapez2World") -> list[str]:
-    from .generate.items import buildings, island_buildings, mechanics, task_lines, operator_lines
+    from .generate.items import buildings, island_buildings, mechanics, task_lines
 
     return [
         *buildings.generate_starting(world),
@@ -99,11 +99,14 @@ def generate_filler(world: "Shapez2World") -> str:
                     ],
                 ],
             ],
-            *(f"{x} Blueprint Points" for x in range(1000, 3000, steps[8])),
-            [
-                *(f"{x} Blueprint Points" for x in range(3000, 10000, steps[9])),
-            ],
         ]
+        if "Include blueprint points" in world.options.item_pool_modifiers:
+            world.filler_nested.extend([
+                *(f"{x} Blueprint Points" for x in range(1000, 3000, steps[8])),
+                [
+                    *(f"{x} Blueprint Points" for x in range(3000, 10000, steps[9])),
+                ],
+            ])
     return random_choice_nested(world.random, world.filler_nested)
 
 

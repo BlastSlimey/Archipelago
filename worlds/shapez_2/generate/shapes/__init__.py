@@ -68,7 +68,6 @@ class ShapeBuilder:
         self.tasked = tasked
         self.has_crystals = False
         self.blueprint: list[tuple[int, bool, dict[str, str | Sequence[str] | int]]] = []
-        # TODO add rotation-less direction (i.e. e.g. looking from east is now considered unrotated), needs to be None first so that a layer can then permanently set it
         # blueprint data naming conventions:
         #   part = "Cu"
         #   shape = "C"

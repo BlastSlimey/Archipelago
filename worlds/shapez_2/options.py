@@ -136,7 +136,12 @@ class LocationAdjustments(ExtendedOptionCounter):
 
     Most names are self-explanatory. However, do note that...
     - **Random operator lines** means "X out of all operator lines are random".
-    - **Required shapes multiplier** is in percent, i.e. 100 is default amount of shapes. Also, default amounts are based on the (vanilla) regular scenario.
+    - **Required shapes multiplier** is in percent, i.e. 100 is default amount of shapes.
+      Also, default amounts are based on the (vanilla) regular scenario.
+
+    Do note that you have to add enough (minimum) locations to fit all non-filler items
+    (filler items are research/platform/blueprint points).
+    Excluding task line and operator line keys, there are ~70 items.
 
     Allowed values (in range) are...
     - **Milestones** - 3-20
@@ -289,7 +294,6 @@ class BlueprintShapes(Choice):
             for val in self.plando:
                 if not isinstance(val, str):
                     reasons.append(f"Shapes list must only contain strings, but found {type(val)}")
-                # TODO Verify shape codes in world.generate_early()
             if not (0 < len(self.plando) <= 5):
                 reasons.append(f"Number of blueprint shapes must be in range 1-5, but found {len(self.plando)}")
             if reasons:
@@ -316,6 +320,7 @@ class ItemPoolModifiers(CasefoldOptionSet):
     Modifies what items your world puts into the item pool. You can add as many modifiers as you want.
 
     - **Random starting processor** - Adds a random processor building that doesn't require other buildings to the starting milestone.
+    - **Include blueprint points** - Allows blueprint points to be added as filler items. If blueprint costs are disabled ingame, blueprint point rewards will be invisible ingame.
     - **Arbitrary research points** - Allows research points items to give any amount in range of 1-100 instead of snapping them to nice numbers.
     - **Arbitrary platform items** - Allows platform items to give any amount in range of 1-500 instead of snapping them to nice numbers.
     - **Arbitrary blueprint points** - Allows blueprint points to give amounts in range of 1000-10000 snapped to 100-step numbers instead of 1000-step numbers.
@@ -325,6 +330,7 @@ class ItemPoolModifiers(CasefoldOptionSet):
     valid_keys = [
         # "Add sandbox buildings",
         "Random starting processor",
+        "Include blueprint points",
         "Arbitrary research points",
         "Arbitrary platform items",
         "Arbitrary blueprint points",
