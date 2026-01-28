@@ -51,7 +51,7 @@ class Shapez2ScenarioContainer(APPlayerContainer):
                 "ResearchLevelsAreProgressive": True,
                 "BlueprintCurrencyShapes": blueprint.get_blueprint_shapes(self),
                 "IntroductionWikiEntryId": "WKWelcome",
-                "InitiallyUnlockedUpgrades": ["RNInitial"],
+                "InitiallyUnlockedUpgrades": ["RNInitial", *upgrades.milestone_ids],
                 "TutorialConfig": "TCNoTutorial"
             },
             "Progression": {

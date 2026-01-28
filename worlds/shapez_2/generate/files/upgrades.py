@@ -2,18 +2,22 @@ from typing import Any
 
 from ...output import Shapez2ScenarioContainer
 from ...data import ItemData
+from ...data.items import buildings, island_buildings, mechanics, misc
+
+tabs: tuple[tuple[tuple[str, str], tuple[dict[str, ItemData], ...]], ...] = (
+    (("BuildingReward", "BuildingDefinitionGroupId"), (buildings.always, buildings.starting,
+                                                       buildings.simple_processors, buildings.sandbox)),
+    (("IslandGroupReward", "GroupId"), (island_buildings.always, island_buildings.starting)),
+    (("MechanicReward", "MechanicId"), (mechanics.always, mechanics.starting,
+                                        misc.task_lines, misc.operator_lines)),
+)
+
+milestone_ids: tuple[str, ...] = ("RNStackerLayer2", "RNBlueprints", "RNIslandBuilding", "RNFluids",
+                                  "RNTrains", "RNPinPusher", "RNColorMixing", "RNIslandLayer3",
+                                  "RNCrystals", "RNEndOfGame", "RNWireBasics")
 
 
 def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
-    from ...data.items import buildings, island_buildings, mechanics, misc
-
-    tabs: tuple[tuple[tuple[str, str], tuple[dict[str, ItemData], ...]], ...] = (
-        (("BuildingReward", "BuildingDefinitionGroupId"), (buildings.always, buildings.starting,
-                                                           buildings.simple_processors, buildings.sandbox)),
-        (("IslandGroupReward", "GroupId"), (island_buildings.always, island_buildings.starting)),
-        (("MechanicReward", "MechanicId"), (mechanics.always, mechanics.starting,
-                                            misc.task_lines, misc.operator_lines)),
-    )
 
     reward_type, tables = container.world.random.choice(tabs)
     table = container.world.random.choice(tables)
@@ -31,6 +35,20 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
                     for reward in data.reward_ids],
         "Costs": [{"$type": "ResearchPointsCost", "Amount": 100}]
     }]
+
+    for vanilla in milestone_ids:
+        out.append({
+            "Id": vanilla,
+            "PreviewImageId": "",
+            "Title": vanilla,
+            "Description": "",
+            "Hidden": True,
+            "Category": "Other",
+            "RequiredUpgradeIds": [],
+            "RequiredMechanicIds": [],
+            "Rewards": [],
+            "Costs": [{"$type": "ResearchPointsCost", "Amount": 1}]
+        })
 
     for reward_type, tables in tabs:
         for table in tables:
