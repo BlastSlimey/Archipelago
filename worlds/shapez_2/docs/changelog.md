@@ -1,6 +1,15 @@
 # Changelog
 Versions are sorted in ascending order, i.e. the most recent changes are at the top.
 
+## 0.99.2
+
+- Fixed some upgrades never being unlocked
+- Fixed starting milestone still being called "Rotate & Cut" and having the vanilla description
+  - Also made it have a random preview image and video
+- Fixed fluids, wires, and trains toolbars never being unlocked
+- Fixed current research points permanently being hidden
+- Added surprise out-of-logic item as upgrade (this is what actually fixes the research points visibility)
+
 ## 0.99.1
 
 - Fixed logic being broken entirely (goddammit even double-checking didn't protect me from lambdas in for loops)
