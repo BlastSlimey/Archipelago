@@ -8,7 +8,7 @@ tabs: tuple[tuple[tuple[str, str], tuple[dict[str, ItemData], ...]], ...] = (
     (("BuildingReward", "BuildingDefinitionGroupId"), (buildings.always, buildings.starting,
                                                        buildings.simple_processors, buildings.sandbox)),
     (("IslandGroupReward", "GroupId"), (island_buildings.always, island_buildings.starting, island_buildings.miners)),
-    (("MechanicReward", "MechanicId"), (mechanics.always, mechanics.starting, mechanics.starting,
+    (("MechanicReward", "MechanicId"), (mechanics.always, mechanics.starting, mechanics.special,
                                         misc.task_lines, misc.operator_lines)),
 )
 
