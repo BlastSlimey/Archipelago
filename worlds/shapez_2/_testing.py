@@ -62,15 +62,50 @@ def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrade
                 Processor.add_random_next(rand, proc, None)
             complexity = rand.randint(len(proc) + 2, 10 + i * 2)
             builder = generator.generate_new(rand, proc, complexity, hexagonal, layers)
-            file.write(f"Shape #{i+1}:   {builder.build()}\n"
+            shape = builder.build()
+            file.write(f"Shape #{i+1}:   {shape}\n"
                        f"Parameters: Complexity: {complexity}\n"
                        f"            Required processors: [{', '.join(p.name for p in proc)}]\n"
                        f"Layer data ({len(builder.blueprint)}): "
-                       f"[{', '.join(str(l) for l in builder.blueprint)}]\n")
+                       f"[{', '.join(str(l) for l in builder.blueprint)}]\n"
+                       f"Cached tasks: [")
+            for cached in builder.cached_tasks:
+                file.write("".join(str(int(b)) for b in cached) + ", ")
+            file.write("]\n")
             downgrades = rand.randint(1, min(len(proc), i // 2 + 1)) if enable_downgrades else 0
             for _ in range(downgrades):
                 missing = proc.pop()
                 builder = downgrade_tetragonal.downgrade_4(rand, builder, proc, missing, complexity)
+                down_shape = builder.build()
+                tries = 0
+                while shape == down_shape:
+                    brek = False
+                    if not proc or tries > 2:
+                        brek = True
+                    if not brek and missing in Processor.restrictions():
+                        needed = Processor.restrictions()[missing]
+                        if proc[-1] in needed:
+                            brek = True
+                        else:
+                            file.write(f"  - Downgraded shape identical, putting {missing.name} one down "
+                                       f"(try #{tries+1})\n")
+                            proc.insert(-1, missing)
+                            missing = proc.pop()
+                            builder = downgrade_tetragonal.downgrade_4(rand, builder, proc, missing, complexity)
+                            down_shape = builder.build()
+                            tries += 1
+                            continue
+                    if brek:
+                        file.write(f"  - Downgraded shape identical, but {missing.name} "
+                                   f"could not be placed one below or at bottom\n")
+                        break
+                    file.write(f"  - Downgraded shape identical, putting {missing.name} at bottom (try #{tries+1})\n")
+                    proc.insert(0, missing)
+                    missing = proc.pop()
+                    builder = downgrade_tetragonal.downgrade_4(rand, builder, proc, missing, complexity)
+                    down_shape = builder.build()
+                    tries += 1
+                shape = down_shape
                 file.write(f"  - Removing {missing.name}:\n"
                            f"    {builder.build()}\n"
                            f"    Layer data ({len(builder.blueprint)}): "
@@ -85,4 +120,4 @@ def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrade
 
 
 if __name__ == "__main__":
-    test(False, 4, False, 1000, True)
+    test(True, 4, False, 1000, True)

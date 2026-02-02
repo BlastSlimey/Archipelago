@@ -27,7 +27,7 @@ def get_shapes_list(
     task_processors: list[list[Processor]]
 ) -> list[list[str]]:
     from .generator import generate_shape
-    from .downgrader import downgrade_shape
+    from .downgrader import downgrade_shape, distinct_downgrades
 
     task_shapes: list[list[str]] = []
     i = -1
@@ -35,10 +35,7 @@ def get_shapes_list(
         i += 1
         complexity = world.random.randint(len(task) + 2 + (i // 3), len(task) + 3 + i)
         builder = generate_shape(world, task, complexity)
-        shapes = [builder.build()]
-        for j in range(1, len(task)):
-            builder = downgrade_shape(world, builder, task[:-j], task[-j], complexity)
-            shapes.insert(0, builder.build())
+        shapes = distinct_downgrades(world, builder, task.copy(), len(task)-1, complexity, builder.build())[0]
         if i < 3 or (len(task) < 5 and world.random.choice((True, False, False))):
             # Assumes the first three lines always have less than 5 processors
             builder = downgrade_shape(world, builder, [], task[0], complexity)

@@ -28,7 +28,7 @@ def get_shapes_list(
     milestone_processors: list[list[Processor]]
 ) -> list[tuple[list[str], list[str]]]:
     from .generator import generate_shape
-    from .downgrader import downgrade_shape
+    from .downgrader import distinct_downgrades
 
     milestone_shapes: list[tuple[list[str], list[str]]] = []
 
@@ -36,25 +36,11 @@ def get_shapes_list(
     for milestone in milestone_processors:
         i += 3
         # Assumes all milestones have at least 1 processor
-        if len(milestone) == 1:
-            builder1 = generate_shape(world, milestone, i)
-            builder2 = generate_shape(world, milestone, i, [builder1.build()])
-            shapes1 = [builder1.build()]
-            shapes2 = [builder2.build()]
-            shapes1.insert(0, downgrade_shape(world, builder1, [], milestone[0], i).build())
-            shapes2.insert(0, downgrade_shape(world, builder2, [], milestone[0], i).build())
-            milestone_shapes.append((shapes1, shapes2))
-        else:
-            builder1 = generate_shape(world, milestone, i)
-            builder2 = generate_shape(world, milestone, i, [builder1.build()])
-            shapes1 = [builder1.build()]
-            shapes2 = [builder2.build()]
-            builder1 = downgrade_shape(world, builder1, milestone[:-1], milestone[-1], i)
-            builder2 = downgrade_shape(world, builder2, milestone[:-1], milestone[-1], i)
-            shapes1.insert(0, builder1.build())
-            shapes2.insert(0, builder2.build())
-            shapes1.insert(0, downgrade_shape(world, builder1, milestone[:-2], milestone[-2], i).build())
-            shapes2.insert(0, downgrade_shape(world, builder2, milestone[:-2], milestone[-2], i).build())
-            milestone_shapes.append((shapes1, shapes2))
+        builder1 = generate_shape(world, milestone, i)
+        builder2 = generate_shape(world, milestone, i, [builder1.build()])
+        milestone_shapes.append((
+            distinct_downgrades(world, builder1, milestone.copy(), min(2, len(milestone)), i, builder1.build())[0],
+            distinct_downgrades(world, builder2, milestone.copy(), min(2, len(milestone)), i, builder2.build())[0],
+        ))
 
     return milestone_shapes

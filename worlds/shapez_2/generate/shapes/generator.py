@@ -39,13 +39,14 @@ def generate_new(rand: Random, processors: list[Processor], complexity: int, is_
         current_comp = complexity
 
         # Get layer count
-        min_non_pin_count = 2 if Processor.STACKER in processors and not (Processor.CUTTER in processors and
-                                                                          Processor.ROTATOR in processors and
-                                                                          Processor.SWAPPER not in processors) else 1
+        # min_non_pin_count = 2 if Processor.STACKER in processors and not (Processor.CUTTER in processors and
+        #                                                                   Processor.ROTATOR in processors and
+        #                                                                   Processor.SWAPPER not in processors) else 1
+        min_non_pin_count = 2 if Processor.STACKER in processors else 1
         min_pin_count = 0 if Processor.PIN_PUSHER not in processors else 1
         if Processor.STACKER in processors or Processor.PIN_PUSHER in processors:
-            max_count = min(max_layer_count, current_comp - 1 -
-                            len(processors) + (Processor.STACKER in processors) + (Processor.PIN_PUSHER in processors))
+            max_count = min(max_layer_count, current_comp - 1 - len(processors) +
+                            (Processor.STACKER in processors) + (Processor.PIN_PUSHER in processors))
             if min_non_pin_count + min_pin_count <= max_count:
                 layer_count = rand.randint(min_non_pin_count + min_pin_count, max_count)
             else:
@@ -70,8 +71,13 @@ def generate_new(rand: Random, processors: list[Processor], complexity: int, is_
             layer_data[forced_non_pin_layer].force_non_pins = True
         if min_non_pin_count == 1 and Processor.STACKER in processors:
             layer_data[0].processors.append(Processor.STACKER)
+        if Processor.PIN_PUSHER in processors and Processor.STACKER not in processors:
+            for lay in range(1, layer_count):
+                if Processor.PIN_PUSHER not in layer_data[lay].processors:
+                    layer_data[lay].processors.append(Processor.PIN_PUSHER)
 
-        for proc in processors:
+        for proc_num in range(len(processors)):
+            proc = processors[proc_num]
             if proc in (Processor.PIN_PUSHER, Processor.STACKER):
                 continue
             to_task = rand.randint(0, layer_count - 1)
@@ -91,9 +97,17 @@ def generate_new(rand: Random, processors: list[Processor], complexity: int, is_
                         to_task = (to_task + 1) % layer_count
                         if temp_to_task == to_task:
                             break
+                for restr, needed in Processor.restrictions().items():
+                    if proc == restr:
+                        while not any(_proc in layer_data[to_task].processors[:proc_num] for _proc in needed):
+                            to_task = (to_task + 1) % layer_count
+                            if temp_to_task == to_task:
+                                break
                 # Following is not in else clause in order to avoid endless loops and being put on a forced pins layer
-                while Processor.PIN_PUSHER in layer_data[to_task].processors:
-                    to_task = (to_task + 1) % layer_count
+                if proc != Processor.CRYSTALLIZER and not (proc == Processor.MIXER and
+                                                           Processor.CRYSTALLIZER in layer_data[to_task].processors):
+                    while Processor.PIN_PUSHER in layer_data[to_task].processors:
+                        to_task = (to_task + 1) % layer_count
             layer_data[to_task].processors.append(proc)
 
         current_comp -= layer_count - 1
@@ -109,8 +123,8 @@ def generate_new(rand: Random, processors: list[Processor], complexity: int, is_
         # Maybe just let one or two complexity slip through
         check_negative_comp = True
         if check_negative_comp:
-            sep = '\n    '
             if current_comp < 0:
+                sep = '\n    '
                 raise Exception(f"Negative complexity:\n"
                                 f"complexity = {complexity}\n"
                                 f"current complexity = {current_comp}\n"
@@ -124,6 +138,7 @@ def generate_new(rand: Random, processors: list[Processor], complexity: int, is_
 
         for data in layer_data:
             builder.tasked = data.tasked
+            builder.cached_tasks.append(data.tasked.copy())
             generate_layer(rand, data.complexity, builder, regen_pools=regen_pools, force_non_pins=data.force_non_pins)
 
     if any(not isinstance(layer, str) for layer in builder.shape):

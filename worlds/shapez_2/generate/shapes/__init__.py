@@ -2,6 +2,8 @@ import enum
 from random import Random
 from typing import Self, Sequence
 
+restr: dict | None = None
+
 
 class Processor(enum.IntEnum):
     CUTTER = 0
@@ -15,11 +17,14 @@ class Processor(enum.IntEnum):
 
     @classmethod
     def restrictions(cls) -> dict[Self, tuple[Self, Self]]:
-        return {
-            cls.ROTATOR: (cls.CUTTER, cls.SWAPPER),
-            cls.CRYSTALLIZER: (cls.CUTTER, cls.PIN_PUSHER),
-            cls.MIXER: (cls.PAINTER, cls.CRYSTALLIZER),
-        }
+        global restr
+        if restr is None:
+            restr = {
+                cls.ROTATOR: (cls.CUTTER, cls.SWAPPER),
+                cls.CRYSTALLIZER: (cls.CUTTER, cls.PIN_PUSHER),
+                cls.MIXER: (cls.PAINTER, cls.CRYSTALLIZER),
+            }
+        return restr
 
     @classmethod
     def add_random_next(cls, random: Random, active: list[Self], possible: list[Self] | None) -> None:
@@ -68,6 +73,7 @@ class ShapeBuilder:
         self.tasked = tasked
         self.has_crystals = False
         self.blueprint: list[tuple[int, bool, dict[str, str | Sequence[str] | int]]] = []
+        self.cached_tasks: list[list[bool]] = []
         # blueprint data naming conventions:
         #   part = "Cu"
         #   shape = "C"

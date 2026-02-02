@@ -217,9 +217,6 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder,
             variants[Variant.pins] = False
             if Processor.CUTTER not in builder or Processor.ROTATOR not in builder:
                 variants[Variant.full_crystal] = False
-        if Processor.STACKER not in builder and len(builder.shape):
-            variants[:] = [False] * len(variants)
-            variants[Variant.pins] = True
         if force_non_pins:
             variants[Variant.pins] = False
 
