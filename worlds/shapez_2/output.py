@@ -25,7 +25,7 @@ class Shapez2ScenarioContainer(APPlayerContainer):
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         from .generate.files import (example_shapes, blueprint, milestones, tasks, upgrades, operator_lines,
-                                     mechanics, starting_location, debug)
+                                     mechanics, starting_location, debug, preset)
         super().write_contents(opened_zipfile)
 
         scenario_id = self.world.multiworld.get_out_file_name_base(self.player)
@@ -127,40 +127,7 @@ class Shapez2ScenarioContainer(APPlayerContainer):
           "Description": "@scenario-preset.default.description",
           "Parameters": {
             "ScenarioId": scenario_id,
-            "MapGenerationParameters": {
-              "FluidsSpawnPrimaryColors": True,
-              "FluidsSpawnSecondaryColors": False,
-              "FluidsSpawnTertiaryColors": False,
-              "FluidPatchLikelinessPercent": 40,
-              "FluidPatchBaseSize": 2,
-              "FluidPatchSizeGrowPercentPerChunk": 70,
-              "FluidPatchMaxSize": 4,
-              "ShapePatchLikelinessPercent": 100,
-              "ShapePatchBaseSize": 2,
-              "ShapePatchSizeGrowPercentPerChunk": 70,
-              "ShapePatchMaxSize": 7,
-              "ShapePatchShapeColorfulnessPercent": 50,
-              "ShapePatchRareShapeLikelinessPercent": 30,
-              "ShapePatchVeryRareShapeLikelinessPercent": 10,
-              "ShapePatchGenerationLikeliness": [
-                {"GenerationType": "TertiaryColorFullShapePure","MinimumDistanceToOrigin": 40,"Weight": 1},
-                {"GenerationType": "TertiaryColorFullShape","MinimumDistanceToOrigin": 32,"Weight": 1},
-                {"GenerationType": "TertiaryColorAlmostFullShape","MinimumDistanceToOrigin": 28,"Weight": 1},
-                {"GenerationType": "TertiaryColorHalfShape","MinimumDistanceToOrigin": 24,"Weight": 1},
-                {"GenerationType": "SecondaryColorFullShapePure","MinimumDistanceToOrigin": 20,"Weight": 1},
-                {"GenerationType": "SecondaryColorFullShape","MinimumDistanceToOrigin": 16,"Weight": 2},
-                {"GenerationType": "SecondaryColorAlmostFullShape","MinimumDistanceToOrigin": 12,"Weight": 2},
-                {"GenerationType": "SecondaryColorHalfShape","MinimumDistanceToOrigin": 10,"Weight": 3},
-                {"GenerationType": "PrimaryColorFullShapePure","MinimumDistanceToOrigin": 8,"Weight": 3},
-                {"GenerationType": "PrimaryColorFullShape","MinimumDistanceToOrigin": 6,"Weight": 4},
-                {"GenerationType": "PrimaryColorAlmostFullShape","MinimumDistanceToOrigin": 4,"Weight": 4},
-                {"GenerationType": "PrimaryColorHalfShape","MinimumDistanceToOrigin": 3,"Weight": 5},
-                {"GenerationType": "UncoloredFullShapePure","MinimumDistanceToOrigin": 2,"Weight": 10},
-                {"GenerationType": "UncoloredFullShape","MinimumDistanceToOrigin": 1,"Weight": 30},
-                {"GenerationType": "UncoloredAlmostFullShape","MinimumDistanceToOrigin": 1,"Weight": 50},
-                {"GenerationType": "UncoloredHalfShape","MinimumDistanceToOrigin": 0,"Weight": 100}
-              ]
-            },
+            "MapGenerationParameters": preset.map_generation_params,
             "GameRuleParameters": {"RuleIds": []}
           }
         }
