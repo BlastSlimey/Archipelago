@@ -27,11 +27,15 @@ milestone_graphics = [("Milestone_StackerLayer2VD", "RNStacker"), ("Milestone_Bl
                       ("Milestone_FinalVD", "RNFinal")]
 
 
-def get_milestones(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
+def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[str, str]],
+                   other_players_items: set[str]) -> list[dict[str, Any]]:
+    from .mechanics import add_other_item
 
     multiplier = container.world.options.location_adjustments["Required shapes multiplier"]
     research_points = container.world.options.location_adjustments["Starting research points"]
     blueprint_points = container.world.options.location_adjustments["Starting blueprint points"]
+    show_other = container.world.options.show_other_players_items.current_key
+    all_worlds = container.world.multiworld.worlds
 
     def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
         if _item[0] != "[":  # event item
@@ -78,7 +82,10 @@ def get_milestones(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]
         for check_num in range(checks_count):
             loc_item = container.world.get_location(f"Milestone {milestone_num + 1} reward #{check_num + 1}").item
             if loc_item.player != container.world.player:
-                rewards.append({"$type": "MechanicReward", "MechanicId": "RUAPItem"})
+                if show_other == "no_names":
+                    rewards.append({"$type": "MechanicReward", "MechanicId": "RUAPItem"})
+                else:
+                    add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
             else:
                 rewards.extend(get_rewards(loc_item.name))
 

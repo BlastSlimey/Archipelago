@@ -171,6 +171,7 @@ class Shapez2World(World):
                 "shape_generation_adjustments": self.options.shape_generation_adjustments.value,
                 "blueprint_shapes": self.options.blueprint_shapes.to_slot_data(),
                 "item_pool_modifiers": self.options.item_pool_modifiers.value,
+                "show_other_players_items": self.options.show_other_players_items.value,
                 "start_inventory": self.options.start_inventory.value,
                 "start_inventory_from_pool": self.options.start_inventory_from_pool.value,
             },

@@ -352,6 +352,25 @@ class ItemPoolModifiers(CasefoldOptionSet):
     default = ["Random starting processor", "Unlock extensions with miners"]
 
 
+class ShowOtherPlayersItems(Choice):
+    """
+    Shows the names of items in-game that do not belong to your own world.
+
+    - **No** - Labels all of those items as "AP Item".
+    - **Item** - Shows the name of each of those items.
+    - **Player** - Additionally appends the player's name to the item's name.
+    - **Classification** - Additionally appends the item's classification (progression, filler, ...) to its name.
+    - **Item** - Appends bot the player's name and the classification to the item's name.
+    """
+    display_name = "Show other players' items"
+    option_no = 0
+    option_item = 1
+    option_player = 2
+    option_classification = 3
+    option_player_classification = 4
+    default = 1
+
+
 @dataclass
 class Shapez2Options(PerGameCommonOptions):
     goal: Goal
@@ -362,4 +381,5 @@ class Shapez2Options(PerGameCommonOptions):
     shape_generation_adjustments: ShapeGenerationAdjustments
     blueprint_shapes: BlueprintShapes
     item_pool_modifiers: ItemPoolModifiers
+    show_other_players_items: ShowOtherPlayersItems
     start_inventory_from_pool: StartInventoryPool

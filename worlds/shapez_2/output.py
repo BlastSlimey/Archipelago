@@ -29,6 +29,8 @@ class Shapez2ScenarioContainer(APPlayerContainer):
         super().write_contents(opened_zipfile)
 
         scenario_id = self.world.multiworld.get_out_file_name_base(self.player)
+        mechanic_definitions = mechanics.get_mechanic_definitions(self)
+        other_players_items: set[str] = set()  # ONLY FOR LOOKUP!!!
         scenario: dict[str, Any] = {
             "FormatVersion": 2,
             "GameVersion": 1058,
@@ -55,8 +57,9 @@ class Shapez2ScenarioContainer(APPlayerContainer):
                 "TutorialConfig": "TCNoTutorial"
             },
             "Progression": {
-                "Levels": {"Levels": milestones.get_milestones(self)},
-                "SideQuestGroups": {"SideQuestGroups": tasks.get_task_lines(self)},
+                "Levels": {"Levels": milestones.get_milestones(self, mechanic_definitions, other_players_items)},
+                "SideQuestGroups": {"SideQuestGroups": tasks.get_task_lines(self, mechanic_definitions,
+                                                                            other_players_items)},
                 "SideUpgrades": {
                     "UpgradeCategories": ["ProcessingSpeeds","Buildings","Platforms","Trains","Wires",
                                           "Decorations","Other"],
@@ -76,46 +79,46 @@ class Shapez2ScenarioContainer(APPlayerContainer):
                     "LinearUpgrades": upgrades.linear_upgrades
                 }
             },
-            "StartingLocation":{
-                "InitialViewport":{
-                    "PositionY":-11.56,
-                    "Zoom":480.0,
-                    "Angle":70.0,
-                    "ShowAllBuildingLayers":True,
-                    "ShowAllIslandLayers":True
+            "StartingLocation": {
+                "InitialViewport": {
+                    "PositionY": -11.56,
+                    "Zoom": 480.0,
+                    "Angle": 70.0,
+                    "ShowAllBuildingLayers": True,
+                    "ShowAllIslandLayers": True
                 },
-                "InitialIslands":{"InitialIslands":[{"Position_GC":{"x":-1},"LayoutId":"Layout_HUB"}]},
-                "FixedPatches":{"FixedPatches": starting_location.get_fixed_patches(self)},
-                "StartingChunks":{"StartingChunks":[]}
+                "InitialIslands": {"InitialIslands": [{"Position_GC": {"x": -1}, "LayoutId": "Layout_HUB"}]},
+                "FixedPatches": {"FixedPatches": starting_location.get_fixed_patches(self)},
+                "StartingChunks": {"StartingChunks": []}
             },
-            "PlayerLevelConfig":{
-                "IconicLevelShapes":{"LevelShapes": example_shapes.get_iconic_shapes(self)},
-                "IconicLevelShapeInterval":1,
+            "PlayerLevelConfig": {
+                "IconicLevelShapes": {"LevelShapes": example_shapes.get_iconic_shapes(self)},
+                "IconicLevelShapeInterval": 1,
                 "GoalLines": operator_lines.get_operator_lines(self),
-                "Rewards": operator_lines.get_operator_rewards(self)
+                "Rewards": operator_lines.get_operator_rewards(self, mechanic_definitions, other_players_items)
             },
-            "Mechanics":{
-                "Mechanics": mechanics.get_mechanic_definitions(self),
-                "BuildingLayerMechanicIds":["RULayer2","RULayer3"],
-                "IslandLayerMechanicIds":["RUIslandLayer2","RUIslandLayer3"],
-                "IslandLayersUnlockOrder":[-1,1],
-                "BlueprintsMechanicId":"RUBlueprints",
-                "RailsMechanicId":"RUTrains",
-                "IslandManagementMechanicId":"RUIslandPlacement",
-                "PlayerLevelMechanicId":"RUPlayerLevel",
-                "TrainHubDeliveryMechanicId":"RUTrainHubDelivery"
+            "Mechanics": {
+                "Mechanics": mechanic_definitions,
+                "BuildingLayerMechanicIds": ["RULayer2", "RULayer3"],
+                "IslandLayerMechanicIds": ["RUIslandLayer2", "RUIslandLayer3"],
+                "IslandLayersUnlockOrder": [-1, 1],
+                "BlueprintsMechanicId": "RUBlueprints",
+                "RailsMechanicId": "RUTrains",
+                "IslandManagementMechanicId": "RUIslandPlacement",
+                "PlayerLevelMechanicId": "RUPlayerLevel",
+                "TrainHubDeliveryMechanicId": "RUTrainHubDelivery"
             },
-            "ConvertersConfig":{"Configs":{}},
-            "ResearchStationConfig":{"Recipes":{}},
-            "RailColorsConfig":{
-                "RailColors":[
-                    {"Id":{"RailColorId":"Blue"},"Tint":"197FE5"},
-                    {"Id":{"RailColorId":"Green"},"Tint":"19E566"},
-                    {"Id":{"RailColorId":"Red"},"Tint":"F43F3F"},
-                    {"Id":{"RailColorId":"White"},"Tint":"EAEAEA"},
-                    {"Id":{"RailColorId":"Cyan"},"Tint":"19E5EA"},
-                    {"Id":{"RailColorId":"Magenta"},"Tint":"EA19EA"},
-                    {"Id":{"RailColorId":"Yellow"},"Tint":"EAEA19"}
+            "ConvertersConfig": {"Configs": {}},
+            "ResearchStationConfig": {"Recipes": {}},
+            "RailColorsConfig": {
+                "RailColors": [
+                    {"Id": {"RailColorId": "Blue"}, "Tint": "197FE5"},
+                    {"Id": {"RailColorId": "Green"}, "Tint": "19E566"},
+                    {"Id": {"RailColorId": "Red"}, "Tint": "F43F3F"},
+                    {"Id": {"RailColorId": "White"}, "Tint": "EAEAEA"},
+                    {"Id": {"RailColorId": "Cyan"}, "Tint": "19E5EA"},
+                    {"Id": {"RailColorId": "Magenta"}, "Tint": "EA19EA"},
+                    {"Id": {"RailColorId": "Yellow"}, "Tint": "EAEA19"}
                 ]
             },
             "ToolbarConfig": "#include_raw:Scenarios/Shared/Toolbar/ToolbarConfig"

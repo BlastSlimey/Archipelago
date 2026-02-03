@@ -66,7 +66,12 @@ def get_operator_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, 
     return out
 
 
-def get_operator_rewards(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
+def get_operator_rewards(container: "Shapez2ScenarioContainer", mechanics: list[dict[str, str]],
+                         other_players_items: set[str]) -> list[dict[str, Any]]:
+    from .mechanics import add_other_item
+
+    show_other = container.world.options.show_other_players_items.value
+    all_worlds = container.world.multiworld.worlds
 
     def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
         _data = all_items[_item]
@@ -107,7 +112,11 @@ def get_operator_rewards(container: "Shapez2ScenarioContainer") -> list[dict[str
     for check in range(checks_count):
         loc_item = container.world.get_location(f"Operator level {checks_count - check}").item
         if loc_item.player != container.world.player:
-            rewards = [{"$type": "MechanicReward", "MechanicId": "RUAPItem"}]
+            if not show_other:
+                rewards = [{"$type": "MechanicReward", "MechanicId": "RUAPItem"}]
+            else:
+                rewards = []
+                add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
         else:
             rewards = [*get_rewards(loc_item.name)]
         out.append({

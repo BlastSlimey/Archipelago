@@ -1,6 +1,49 @@
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
+from BaseClasses import Item, ItemClassification as ItCl
 from ...output import Shapez2ScenarioContainer
+
+if TYPE_CHECKING:
+    from ... import Shapez2World
+
+
+classification_names = {
+    ItCl.progression: "Progression",
+    ItCl.useful: "Useful",
+    ItCl.filler: "Filler",
+    ItCl.trap: "Trap",
+}
+
+
+def add_other_item(mechanic_defs: list[dict[str, str]], rewards: list[dict[str, Any]], item: Item,
+                   other_players_items: set[str], world: "Shapez2World") -> None:
+    web = world.multiworld.worlds[item.player].web
+    option = world.options.show_other_players_items.current_key
+    if option == "no":
+        rewards.append({"$type": "MechanicReward", "MechanicId": "RUAPItem"})
+    else:
+        name = item.name
+        mech_id = f"RU{item.player}_{name}"
+        if mech_id not in other_players_items:
+            display_name = name
+            if "player" in option:
+                display_name = world.multiworld.player_name[item.player] + "'s " + display_name
+            if web is not None and web.item_descriptions is not None and name in web.item_descriptions:
+                description = web.item_descriptions[name]
+            else:
+                description = "An item that belongs to another player."
+            if "classification" in option:
+                class_name = classification_names[item.classification & (ItCl.progression | ItCl.useful |
+                                                                         ItCl.filler | ItCl.trap)]
+                description = f"({class_name}) " + description
+            mechanic_defs.append({
+                "Id": mech_id,
+                "Title": display_name,
+                "Description": description,
+                "IconId": "PlayerLevel"
+            })
+            other_players_items.add(mech_id)
+        rewards.append({"$type": "MechanicReward", "MechanicId": mech_id})
 
 
 def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict[str, str]]:
