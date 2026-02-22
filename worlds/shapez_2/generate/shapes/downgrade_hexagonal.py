@@ -40,6 +40,7 @@ def downgrade_6(rand: Random, builder: ShapeBuilder, remaining_processors: list[
 
     builder.shape = []
     builder.has_crystals = False
+    builder.splits = 0
     mixer_replacements = None if missing_processor != Processor.MIXER else {
         "u": "u",
         "r": "r",
