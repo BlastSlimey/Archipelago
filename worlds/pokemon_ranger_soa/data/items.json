@@ -1,7 +1,7 @@
 [
     {
         "label": "Progressive Grass Defense",
-        "item_id": 0,
+        "item_id": 1,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -12,7 +12,7 @@
     },
     {
         "label": "Progressive Water Defense",
-        "item_id": 1,
+        "item_id": 2,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -23,7 +23,7 @@
     },
     {
         "label": "Progressive Electric Defense",
-        "item_id": 2,
+        "item_id": 3,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -34,7 +34,7 @@
     },
     {
         "label": "Progressive Fire Defense",
-        "item_id": 3,
+        "item_id": 4,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -45,7 +45,7 @@
     },
     {
         "label": "Progressive Fighting Defense",
-        "item_id": 4,
+        "item_id": 5,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -56,7 +56,7 @@
     },
     {
         "label": "Progressive Poison Defense",
-        "item_id": 5,
+        "item_id": 6,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -67,7 +67,7 @@
     },
     {
         "label": "Progressive Psychic Defense",
-        "item_id": 6,
+        "item_id": 7,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -78,7 +78,7 @@
     },
     {
         "label": "Progressive Bug Defense",
-        "item_id": 7,
+        "item_id": 8,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -89,7 +89,7 @@
     },
     {
         "label": "Progressive Ground Defense",
-        "item_id": 8,
+        "item_id": 9,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -100,7 +100,7 @@
     },
     {
         "label": "Progressive Flying Defense",
-        "item_id": 9,
+        "item_id": 10,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -111,7 +111,7 @@
     },
     {
         "label": "Progressive Dark Defense",
-        "item_id": 10,
+        "item_id": 11,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -122,7 +122,7 @@
     },
     {
         "label": "Progressive Rock Defense",
-        "item_id": 11,
+        "item_id": 12,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -133,7 +133,7 @@
     },
     {
         "label": "Progressive Ghost Defense",
-        "item_id": 12,
+        "item_id": 13,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -144,7 +144,7 @@
     },
     {
         "label": "Progressive Ice Defense",
-        "item_id": 13,
+        "item_id": 14,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -155,7 +155,7 @@
     },
     {
         "label": "Progressive Normal Defense",
-        "item_id": 14,
+        "item_id": 15,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -166,7 +166,7 @@
     },
     {
         "label": "Progressive Steel Defense",
-        "item_id": 15,
+        "item_id": 16,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -177,7 +177,7 @@
     },
     {
         "label": "Progressive Dragon Defense",
-        "item_id": 16,
+        "item_id": 17,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -188,7 +188,7 @@
     },
     {
         "label": "Progressive Time Assist",
-        "item_id": 17,
+        "item_id": 18,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -199,7 +199,7 @@
     },
     {
         "label": "Progressive Latent Power",
-        "item_id": 18,
+        "item_id": 19,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -210,7 +210,7 @@
     },
     {
         "label": "Combo Bonus",
-        "item_id": 19,
+        "item_id": 20,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -221,7 +221,7 @@
     },
     {
         "label": "Progressive Recovery",
-        "item_id": 20,
+        "item_id": 21,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -232,7 +232,7 @@
     },
     {
         "label": "Energy Plus",
-        "item_id": 21,
+        "item_id": 22,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -243,7 +243,7 @@
     },
     {
         "label": "Progressive Power Plus",
-        "item_id": 22,
+        "item_id": 23,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -254,7 +254,7 @@
     },
     {
         "label": "Progressive Long Line",
-        "item_id": 23,
+        "item_id": 24,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -265,7 +265,7 @@
     },
     {
         "label": "Supreme Defense",
-        "item_id": 24,
+        "item_id": 25,
         "classification": 1,
         "item_categories": [
             "styler_upgrade",
@@ -274,11 +274,168 @@
         "bit_offset": null,
         "copies": 1
     },
+
+    {
+        "label": "Partner Pokemon - Chimchar",
+        "item_id": 101,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 1,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Piplup",
+        "item_id": 102,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 2,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Turtwig",
+        "item_id": 103,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 3,
+        "copies": 1
+    },
+
+    {
+        "label": "Partner Pokemon - Pachirisu",
+        "item_id": 104,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 4,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Snorunt",
+        "item_id": 105,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 5,
+        "copies": 1
+    },
+
+    {
+        "label": "Partner Pokemon - Machop",
+        "item_id": 106,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 6,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Croagunk",
+        "item_id": 107,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 7,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Hippopotas",
+        "item_id": 108,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 8,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Mime Jr.",
+        "item_id": 109,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 10,
+        "copies": 1
+    },
+
+    {
+        "label": "Partner Pokemon - Kricketot",
+        "item_id": 110,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 11,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Cranidos",
+        "item_id": 111,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 12,
+        "copies": 1
+    },
+
+    {
+        "label": "Partner Pokemon - Misdreavus",
+        "item_id": 112,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 13,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Gible",
+        "item_id": 113,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 14,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Sneasel",
+        "item_id": 114,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 15,
+        "copies": 1
+    },
+    {
+        "label": "Partner Pokemon - Shieldon",
+        "item_id": 115,
+        "classification": 10,
+        "item_categories": [
+            "partner"
+        ],
+        "bit_offset": 16,
+        "copies": 1
+    },
+
     {
         "label": "Progressive Power",
-        "item_id": 1000,
+        "item_id": 1001,
         "classification": 9,
         "item_categories": [
+            "styler_upgrade",
             "progressive",
             "player_attributes"
         ],
@@ -287,9 +444,10 @@
     },
     {
         "label": "Progressive Energy",
-        "item_id": 1001,
+        "item_id": 1002,
         "classification": 9,
         "item_categories": [
+            "styler_upgrade",
             "progressive",
             "player_attributes"
         ],
@@ -298,9 +456,10 @@
     },
     {
         "label": "Progressive Attributes",
-        "item_id": 1002,
+        "item_id": 1003,
         "classification": 9,
         "item_categories": [
+            "styler_upgrade",
             "progressive",
             "player_attributes"
         ],
@@ -308,8 +467,20 @@
         "copies": 1
     },
     {
+        "label": "Progressive Styler",
+        "item_id": 1004,
+        "classification": 1,
+        "item_categories": [
+            "styler_upgrade",
+            "player_attributes",
+            "progressive"
+        ],
+        "bit_offset": 5,
+        "copies": 2
+    },
+    {
         "label": "Progressive Rank",
-        "item_id": 1003,
+        "item_id": 1005,
         "classification": 1,
         "item_categories": [
             "progressive",

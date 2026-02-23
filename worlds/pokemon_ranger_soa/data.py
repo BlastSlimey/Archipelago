@@ -16,9 +16,6 @@ from BaseClasses import ItemClassification
 
 BASE_OFFSET = 1000
 
-BROWSER_START_ADDRESS = 0x020BA2DD
-BROWSER_RANK_START_ADDRESS = 0x020BA551
-
 
 class GameStateEnum(IntEnum):
     OVERWORLD = 0x00
@@ -156,12 +153,31 @@ class ItemCategory(StrEnum):
     UNIQUE = auto()
     PROGRESSIVE = auto()
     EVENT = auto()
+    PARTNER = auto()
 
 
-class RamAddress(NamedTuple):
-    address: int
+class AddressesGroup(NamedTuple):
+    addresses: list[int]
+    label: str
     bit_length: Optional[int] = None
-    label: Optional[str] = None
+    descriptor: Optional[str] = None
+
+    @property
+    def first(self):
+        return self.addresses[0]
+
+    @classmethod
+    def create_from_dict(cls, info: dict):
+        addresses_as_int = [
+            int(num, 16) if isinstance(num, str) else num for num in info.get("address")
+        ]
+
+        return AddressesGroup(
+            addresses=addresses_as_int,
+            bit_length=info.get("bit_offset"),
+            label=info.get("label"),
+            descriptor=info.get("descriptor"),
+        )
 
 
 @dataclass
@@ -189,13 +205,15 @@ class PokemonRSOAData:
     items: Dict[int, ItemData]
     styler_levels: List[Tuple[int, int]]  # each entry is a level with Energy, Power
 
-    ram_addresses: Dict[str, RamAddress]
+    ram_addresses: Dict[str, AddressesGroup]
+    rom_addresses: Dict[str, AddressesGroup]
 
     def __init__(self) -> None:
         self.species = {}
         self.locations = {}
         self.items = {}
         self.ram_addresses = {}
+        self.rom_addresses = {}
         self.styler_levels = []
 
 
@@ -216,24 +234,23 @@ def _init():
     extracted_items: List[Dict] = load_json_data("items.json")
 
     for i, item_data in enumerate(extracted_items):
-        item = ItemData(**item_data)
-
+        try:
+            item = ItemData(**item_data)
+        except:
+            print("errored loading item: ")
+            print(item_data)
+            raise
         data.items[item.item_id] = item
 
-    ram_addresses = load_json_data("addresses.json")
+    ram_addresses = load_json_data("addresses_ram.json")
     for entry in ram_addresses:
-        address_int = (
-            int(entry.get("address"), 16)
-            if isinstance(entry.get("address"), str)
-            else entry.get("address")
-        )
-
-        r = RamAddress(
-            address=address_int,
-            bit_length=entry.get("bit_offset"),
-            label=entry.get("label"),
-        )
+        r = AddressesGroup.create_from_dict(entry)
         data.ram_addresses[r.label] = r
+
+    rom_addresses = load_json_data("addresses_rom.json")
+    for entry in rom_addresses:
+        r = AddressesGroup.create_from_dict(entry)
+        data.rom_addresses[r.label] = r
 
     styler_levels = load_json_data("styler_level.json")
     for i, level in enumerate(styler_levels, start=1):

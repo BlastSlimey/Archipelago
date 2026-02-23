@@ -190,6 +190,21 @@ class RankUpIncrement(Range):
     default = 1
 
 
+class StylerModelItem(Choice):
+    """
+    Determines if the styler models
+    School, Capture, ... are provided vanilla
+    or as an item.
+    """
+
+    auto_display_name = True
+
+    option_vanilla = 0
+    option_item = 1
+
+    default = 1
+
+
 class PokemonRSOADeathLink(DeathLink):
     __doc__ = (
         DeathLink.__doc__
@@ -230,6 +245,8 @@ class PokemonRSOAOptions(PerGameCommonOptions):
     rank_up_type: RankUpType
     rank_up_count: RankUpItemCount
     rank_up_increment: RankUpIncrement
+
+    styler_model_item: StylerModelItem
 
 
 option_groups = [

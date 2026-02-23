@@ -14,19 +14,21 @@ from worlds._bizhawk.client import BizHawkClient
 
 from worlds._bizhawk.client import BizHawkClient
 
-from .data import data, BROWSER_START_ADDRESS, ItemCategory, ItemData, GameStateEnum
+from .data import data, ItemCategory, ItemData, GameStateEnum
 from . import items, options
+from .items import offset_item_value
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
 
 RECEIVED_ITEM_ADDRESS = data.ram_addresses["RECEIVED_ITEM_ADDRESS"]
+NOP_INSTRUCTION_BYTES = bytes.fromhex("0000A0E3")
 
 
 class PokemonRangerSOA(BizHawkClient):
     game = "PokemonRangerSOA"
     system = "NDS"
-    patch_suffix = None
+    patch_suffix = ".apprsoa"
 
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
@@ -44,6 +46,7 @@ class PokemonRangerSOA(BizHawkClient):
     level: int
     energy: int
     has_energy_plus: bool
+    styler_model: int
 
     level_up_patched: bool
 
@@ -59,6 +62,7 @@ class PokemonRangerSOA(BizHawkClient):
         self.current_map_id = None
         self.level_up_patched = False
         self.has_energy_plus = False
+        self.styler_model = 0
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
 
@@ -96,13 +100,27 @@ class PokemonRangerSOA(BizHawkClient):
             game_state = None
             browser_captures_bytes = bytes(0)
             num_receieved_items = 0
+            styler_and_rank = None
+            current_mission = None
+            room_id = None
 
             read_result = await bizhawk.read(
                 ctx.bizhawk_ctx,
                 [
-                    (data.ram_addresses["GAME_STATE"].address, 1, "ARM9 System Bus"),
-                    (BROWSER_START_ADDRESS, 0x7A, "ARM9 System Bus"),
-                    (RECEIVED_ITEM_ADDRESS.address, 3, "ARM9 System Bus"),
+                    (data.ram_addresses["GAME_STATE"].first, 1, "ARM9 System Bus"),
+                    (
+                        data.ram_addresses["BROWSER_TABLE_ADDRESS"].first,
+                        0x7A,
+                        "ARM9 System Bus",
+                    ),
+                    (RECEIVED_ITEM_ADDRESS.first, 3, "ARM9 System Bus"),
+                    (
+                        data.ram_addresses["CURRENT_STYLER_AND_RANK"].first,
+                        1,
+                        "ARM9 System Bus",
+                    ),
+                    (data.ram_addresses["CURRENT_MISSION"].first, 1, "ARM9 System Bus"),
+                    (data.ram_addresses["CURRENT_ROOM_ID"].first, 2, "ARM9 System Bus"),
                 ],
             )
 
@@ -110,6 +128,9 @@ class PokemonRangerSOA(BizHawkClient):
                 game_state = int.from_bytes(read_result[0], "little")
                 browser_captures_bytes = read_result[1]
                 num_receieved_items = int.from_bytes(read_result[2], "little")
+                styler_and_rank = int.from_bytes(read_result[3], "little")
+                current_mission = int.from_bytes(read_result[4], "little")
+                room_id = int.from_bytes(read_result[5], "little")
 
             if (
                 ctx.slot_data["level_up_type"] != options.LevelUpType.option_vanilla
@@ -127,6 +148,25 @@ class PokemonRangerSOA(BizHawkClient):
             AT THE MOMENT THE SOMETHING IS LAGGY, THIS IS TO REDUCE
             LAG IN COMBAT.
             """
+
+            if (
+                ctx.slot_data["styler_model_item"]
+                != options.StylerModelItem.option_vanilla
+                and (current_mission == 0x01)  # means it's AFTER the ingame upgrade
+                and ((styler_and_rank >> 4) & 0xF != self.styler_model)
+            ):
+
+                item = next(
+                    i for i in data.items.values() if i.label == "Progressive Styler"
+                )
+                # can be replaced with id when more stable / settled on static ids.
+                item_id = offset_item_value(item.item_id)
+
+                output = await self.handle_player_attributes(ctx, item, item_id)
+                await bizhawk.write(
+                    ctx.bizhawk_ctx,
+                    output,
+                )
 
             if num_receieved_items < len(ctx.items_received):
                 await self.handle_received_items(ctx, guards, num_receieved_items)
@@ -219,7 +259,7 @@ class PokemonRangerSOA(BizHawkClient):
             [
                 *writes,
                 (
-                    data.ram_addresses["RECEIVED_ITEM_ADDRESS"].address,
+                    data.ram_addresses["RECEIVED_ITEM_ADDRESS"].first,
                     (num_receieved_items + 1).to_bytes(3, "little"),
                     "ARM9 System Bus",
                 ),
@@ -246,7 +286,7 @@ class PokemonRangerSOA(BizHawkClient):
             ctx.bizhawk_ctx,
             [
                 (
-                    data.ram_addresses["STYLUS_UPGRADE_TABLE_ADDRESS"].address
+                    data.ram_addresses["STYLUS_UPGRADE_TABLE_ADDRESS"].first
                     + byte_index,
                     1,
                     "ARM9 System Bus",
@@ -288,11 +328,11 @@ class PokemonRangerSOA(BizHawkClient):
                 ctx.bizhawk_ctx,
                 [
                     (
-                        data.ram_addresses["CURRENT_HEALTH"].address,
+                        data.ram_addresses["CURRENT_HEALTH"].first,
                         1,
                         "ARM9 System Bus",
                     ),
-                    (data.ram_addresses["MAX_HEALTH"].address, 1, "ARM9 System Bus"),
+                    (data.ram_addresses["MAX_HEALTH"].first, 1, "ARM9 System Bus"),
                 ],
             )
 
@@ -301,12 +341,12 @@ class PokemonRangerSOA(BizHawkClient):
 
             writes += [
                 (
-                    data.ram_addresses["CURRENT_HEALTH"].address,
+                    data.ram_addresses["CURRENT_HEALTH"].first,
                     bytes([current_hp + 5]),
                     "ARM9 System Bus",
                 ),
                 (
-                    data.ram_addresses["MAX_HEALTH"].address,
+                    data.ram_addresses["MAX_HEALTH"].first,
                     bytes([max_hp + 5]),
                     "ARM9 System Bus",
                 ),
@@ -314,7 +354,7 @@ class PokemonRangerSOA(BizHawkClient):
 
         writes += [
             (
-                data.ram_addresses["STYLUS_UPGRADE_TABLE_ADDRESS"].address + byte_index,
+                data.ram_addresses["STYLUS_UPGRADE_TABLE_ADDRESS"].first + byte_index,
                 bytes([new_byte]),
                 "ARM9 System Bus",
             )
@@ -327,13 +367,34 @@ class PokemonRangerSOA(BizHawkClient):
     ):
         count = sum(1 for it in ctx.items_received if it.item == item_id)
 
-        if item.label == "Progressive Rank":
-            rank = min(count * ctx.slot_data["rank_up_increment"], 10)
+        if item.label in ["Progressive Styler", "Progressive Rank"]:
+            read_result = await bizhawk.read(
+                ctx.bizhawk_ctx,
+                [
+                    (
+                        data.ram_addresses["CURRENT_STYLER_AND_RANK"].first,
+                        1,
+                        "ARM9 System Bus",
+                    )
+                ],
+            )
+            styler_and_rank = int.from_bytes(read_result[0], "little")
+
+            if item.label == "Progressive Rank":
+                rank = min(count * ctx.slot_data["rank_up_increment"], 10)
+                new_value = (styler_and_rank & 0xF0) | (rank & 0x0F)
+
+            elif item.label == "Progressive Styler":
+                styler = min(2, count)  # Figure out if there are only 2 styler models
+                self.styler_model = styler
+                new_value = (styler_and_rank & 0x0F) | (styler << 4)
+            else:
+                return []
 
             return [
                 (
-                    data.ram_addresses["CURRENT_RANK"].address,
-                    bytes([rank]),
+                    data.ram_addresses["CURRENT_STYLER_AND_RANK"].first,
+                    bytes([new_value]),
                     "ARM9 System Bus",
                 )
             ]
@@ -344,7 +405,7 @@ class PokemonRangerSOA(BizHawkClient):
         if item.label in ["Progressive Power", "Progressive Attributes"]:
             writes.append(
                 (
-                    data.ram_addresses["STYLUS_LEVEL"].address,
+                    data.ram_addresses["STYLUS_LEVEL"].first,
                     bytes([level]),
                     "ARM9 System Bus",
                 )
@@ -354,11 +415,11 @@ class PokemonRangerSOA(BizHawkClient):
                 ctx.bizhawk_ctx,
                 [
                     (
-                        data.ram_addresses["CURRENT_HEALTH"].address,
+                        data.ram_addresses["CURRENT_HEALTH"].first,
                         1,
                         "ARM9 System Bus",
                     ),
-                    (data.ram_addresses["MAX_HEALTH"].address, 1, "ARM9 System Bus"),
+                    (data.ram_addresses["MAX_HEALTH"].first, 1, "ARM9 System Bus"),
                 ],
             )
             if count == 1:
@@ -383,12 +444,12 @@ class PokemonRangerSOA(BizHawkClient):
 
             writes += [
                 (
-                    data.ram_addresses["CURRENT_HEALTH"].address,
+                    data.ram_addresses["CURRENT_HEALTH"].first,
                     bytes([current_hp + increase]),
                     "ARM9 System Bus",
                 ),
                 (
-                    data.ram_addresses["MAX_HEALTH"].address,
+                    data.ram_addresses["MAX_HEALTH"].first,
                     bytes([max_hp + increase]),
                     "ARM9 System Bus",
                 ),
@@ -400,19 +461,19 @@ class PokemonRangerSOA(BizHawkClient):
         await bizhawk.write(
             ctx.bizhawk_ctx,
             [
+                # (
+                #     data.ram_addresses["INSTRUCTION_LEVEL_UP_STYLER_LEVEL_UP"].first,
+                #     NOP_INSTRUCTION_BYTES,
+                #     "ARM9 System Bus",
+                # ),
+                # (
+                #     data.ram_addresses["INSTRUCTION_LEVEL_UP_MAX_HEALTH_UP"].first,
+                #     NOP_INSTRUCTION_BYTES,
+                #     "ARM9 System Bus",
+                # ),
                 (
-                    data.ram_addresses["INSTRUCTION_LEVEL_UP_STYLER_LEVEL_UP"].address,
-                    bytes.fromhex("0000A0E3"),
-                    "ARM9 System Bus",
-                ),
-                (
-                    data.ram_addresses["INSTRUCTION_LEVEL_UP_MAX_HEALTH_UP"].address,
-                    bytes.fromhex("0000A0E3"),
-                    "ARM9 System Bus",
-                ),
-                (
-                    data.ram_addresses["INSTRUCTION_LEVEL_UP_HEALTH_UP"].address,
-                    bytes.fromhex("0000A0E3"),
+                    data.ram_addresses["INSTRUCTION_LEVEL_UP_HEALTH_UP"].first,
+                    NOP_INSTRUCTION_BYTES,
                     "ARM9 System Bus",
                 ),
             ],

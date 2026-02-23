@@ -60,3 +60,10 @@ There are two ways to prevent level up:
   - x02 139638	d	h	0	Main RAM	nop to block current health increasing on level up, 
                                         gets flushed out after combat
 
+
+# Party
+
+ - changing (in this case addresses for party mon 3, 0BAEEC )   0BAEF4 from 01 to 02 
+    makes the pokémon dissapear from your party, and show an empty spot. Changing it back to 01 makes
+    it reapear again.
+ - 
