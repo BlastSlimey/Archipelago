@@ -1,7 +1,6 @@
 import json
 from dataclasses import is_dataclass, asdict
 from typing import Any
-from .data import data, BROWSER_START_ADDRESS, BROWSER_RANK_START_ADDRESS
 
 
 def modify_data_to_new_json(

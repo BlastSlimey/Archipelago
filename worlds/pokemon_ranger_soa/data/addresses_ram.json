@@ -15,6 +15,11 @@
         "bit_length": null
     },
     {
+        "label": "QUEST_TABLE_ADDRESS",
+        "address": ["0x020B264D"],
+        "bit_length": null
+    },
+    {
         "label": "STYLUS_UPGRADE_TABLE_ADDRESS",
         "address": ["0x020BAE7C"],
         "bit_length": null

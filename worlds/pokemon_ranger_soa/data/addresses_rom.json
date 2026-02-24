@@ -24,5 +24,12 @@
             "0x1D0DC", "0x1D0F4", "0x1D104"],
         "bit_length": 32,
         "descriptor": "nop"
+    },
+    {
+        "label": "INSTRUCTION_STYLER_UPGRADE_SET",
+        "address": ["0x1AC8C"],
+        "bit_length": 32,
+        "descriptor": "nop"
+
     }
 ]

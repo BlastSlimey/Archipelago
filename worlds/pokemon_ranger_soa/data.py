@@ -25,22 +25,27 @@ class GameStateEnum(IntEnum):
     ...
 
 
-class LocationCategory(IntEnum):
-    BROWSER = 1
-    BROWSER_RANK = 2
-    MISSION = 3
-    QUEST = 4
+class LocationCategory(StrEnum):
+    BROWSER = auto()
+    BROWSER_RANK = auto()
+    MISSION = auto()
+    QUEST = auto()
 
 
-class LocationData(NamedTuple):
+@dataclass
+class LocationData:
     name: str
     label: str
-    parent_region: str
-    default_item: int
-    address: Union[int, List[int]]
-    flag: int
+    parent_region: Optional[str]
+    default_item: Optional[int]
+    addresses: Optional[List[str]]
+    flag: Optional[int]
     category: LocationCategory
-    tags: FrozenSet[str]
+    id: Optional[int]
+
+    def __post_init__(self):
+        if not isinstance(self.category, LocationCategory):
+            self.category = LocationCategory(self.category)
 
 
 class PokeAssistCategory(IntEnum):
@@ -200,7 +205,9 @@ class ItemData:
 
 
 class PokemonRSOAData:
-    species: Dict[int, SpeciesData]
+    species: Dict[
+        int, SpeciesData
+    ]  # browser id - SpeciesData, duplicate forms have duplicate ids.
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
     styler_levels: List[Tuple[int, int]]  # each entry is a level with Energy, Power
@@ -223,6 +230,18 @@ def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
     )
 
 
+def location_category_to_id(base_number: int, category: str):
+    if category == LocationCategory.MISSION:
+        return base_number + 1
+    if category == LocationCategory.QUEST:
+        return base_number + 100
+    if category == LocationCategory.BROWSER:
+        return base_number + 1000
+    if category == LocationCategory.BROWSER_RANK:
+        return base_number + 10000
+    raise ValueError(category)
+
+
 def _init():
 
     extracted_species: List[Dict] = load_json_data("species.json")
@@ -241,6 +260,45 @@ def _init():
             print(item_data)
             raise
         data.items[item.item_id] = item
+
+    extracted_locations: Dict[str, Dict] = load_json_data("locations.json")
+
+    counter = 0
+    for name, location_data in extracted_locations.items():
+        counter += 1
+        try:
+            prefix, number = name.split("_")
+            number = location_category_to_id(int(number), location_data["category"])
+        except ValueError:
+            number = None
+            print(f"error generating a number for: {name}, {location_data}")
+
+        if isinstance(location_data["addresses"], str):
+            location_data["addresses"] = [location_data["addresses"]]
+
+        data.locations[name] = LocationData(name=name, id=number, **location_data)
+
+    for string in ["Capture {}", "Capture {} Rank"]:
+        if string == "Capture {}":
+            category = LocationCategory.BROWSER
+        if string == "Capture {} Rank":
+            category = LocationCategory.BROWSER_RANK
+        for browser_id, species_data in data.species.items():
+
+            id = location_category_to_id(browser_id, category)
+
+            name = string.format(species_data.name)
+            location = LocationData(
+                name=name,
+                label=name,
+                parent_region=None,
+                default_item=None,
+                addresses=None,
+                flag=None,
+                category=category,
+                id=id,
+            )
+            data.locations[name] = location
 
     ram_addresses = load_json_data("addresses_ram.json")
     for entry in ram_addresses:

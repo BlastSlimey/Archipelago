@@ -47,6 +47,9 @@ def _nop_instructions(
 ) -> None:
 
     addresses = []
+
+    addresses += data.rom_addresses["INSTRUCTION_STYLER_UPGRADE_SET"].addresses
+
     if world.options.level_up_type > 0:
         addresses += data.rom_addresses[
             "INSTRUCTION_LEVEL_UP_STYLER_LEVEL_UP"

@@ -52,8 +52,6 @@ def create_item_label_to_code_map() -> Dict[str, int]:
 
     label_to_code_map["Filler Item"] = offset_item_value(10000)
 
-    print(data.items)
-
     return label_to_code_map
 
 

@@ -10,6 +10,11 @@ NTR-YP2E-USA
 csr32: 5f520677
 
 
+# ROM
+
+
+
+
 # trap ideas
 
 ## Bidoof Encounter trap

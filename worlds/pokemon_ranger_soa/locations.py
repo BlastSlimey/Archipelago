@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Set
 
-from BaseClasses import ItemClassification, Location
+from BaseClasses import ItemClassification, Location, Region
 
-from .data import data
+from .data import data, LocationData, LocationCategory
 
 from . import items
 
@@ -17,8 +17,11 @@ class PokemonRSOALocation(Location):
 
 
 def location_to_ap_id(location: data.LocationData) -> int:
-    raise NotImplementedError
-    # return int(location.label)
+    return location.id
+
+
+def ap_id_to_location(id) -> data.LocationData:
+    return next(location for location in data.locations.values() if location.id == id)
 
 
 def create_location_label_to_id_map() -> Dict[str, int]:
@@ -27,15 +30,8 @@ def create_location_label_to_id_map() -> Dict[str, int]:
     """
     label_to_id_map: Dict[str, int] = {}
 
-    # for region_data in data.regions.values():
-    #     for location_name in region_data.locations:
-    #         location_data = data.locations[location_name]
-    #
-    #         label_to_id_map[location_data.label] = location_to_ap_id(location_data)
-
-    for browser_id, pokemon in data.species.items():
-        location_name = f"Capture {pokemon.name}"
-        label_to_id_map[location_name] = browser_id
+    for name, location_data in data.locations.items():
+        label_to_id_map[location_data.label] = location_to_ap_id(location_data)
 
     return label_to_id_map
 
@@ -46,13 +42,75 @@ def get_location_names_with_ids(location_labels: list[str]) -> dict[str, int | N
 
 
 def create_all_locations(world: PokemonRSOA) -> None:
-    create_mission_locations(world)
-    create_quest_locations(world)
+    region = world.get_region("Overworld")
+
+    for name, location_data in data.locations.items():
+        if location_data.category not in [
+            LocationCategory.MISSION,
+            LocationCategory.QUEST,
+        ]:
+            continue
+
+        print(name, location_data)
+        print(world.location_name_to_id)
+
+        new_location = PokemonRSOALocation(
+            world.player,
+            name,
+            world.location_name_to_id[location_data.label],
+            region,
+        )
+
+        region.locations.append(new_location)
+
     create_pokemon_locations(world)
 
 
-def create_mission_locations(world: PokemonRSOA) -> None:
-    return
+# def create_locations_by_category(
+#     world: "PokemonRSOA",
+#     regions: Dict[str, Region],
+#     categories: Set[LocationCategory],
+# ) -> None:
+#     """
+#     Iterates through region data and adds locations to the multiworld if
+#     those locations include any of the provided tags.
+#     """
+#     for region_name, region_data in data.regions.items():
+#         region = regions[region_name]
+#         filtered_locations = [
+#             loc
+#             for loc in region_data.locations
+#             if data.locations[loc].category in categories
+#         ]
+#
+#         for location_name in filtered_locations:
+#             location_data = data.locations[location_name]
+#
+#             location_id = location_to_ap_id(location_data)
+#             if location_data.flag == 0:  # Dexsanity location
+#                 national_dex_id = int(
+#                     location_name[-3:]
+#                 )  # Location names are formatted POKEDEX_REWARD_###
+#
+#                 # Don't create this pokedex location if player can't find it in the wild
+#                 if (
+#                     NATIONAL_ID_TO_SPECIES_ID[national_dex_id]
+#                     in world.blacklisted_wilds
+#                 ):
+#                     continue
+#
+#                 location_id += POKEDEX_OFFSET + national_dex_id
+#
+#             location = PokemonEmeraldLocation(
+#                 world.player,
+#                 location_data.label,
+#                 location_id,
+#                 region,
+#                 location_name,
+#                 location_data.addresses,
+#                 location_data.default_item,
+#             )
+#             region.locations.append(location)
 
 
 def create_quest_locations(world: PokemonRSOA) -> None:

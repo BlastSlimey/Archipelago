@@ -120,6 +120,4 @@ class PokemonRSOA(World):
         slot_data = self.options.as_dict(*[f.name for f in fields(PokemonRSOAOptions)])
         slot_data["blacklisted_captures"] = self.blacklisted_captures
 
-        print(slot_data)
-
         return slot_data

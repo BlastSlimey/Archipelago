@@ -14,7 +14,14 @@ from worlds._bizhawk.client import BizHawkClient
 
 from worlds._bizhawk.client import BizHawkClient
 
-from .data import data, ItemCategory, ItemData, GameStateEnum
+from .data import (
+    data,
+    ItemCategory,
+    ItemData,
+    GameStateEnum,
+    LocationCategory,
+    location_category_to_id,
+)
 from . import items, options
 from .items import offset_item_value
 
@@ -50,6 +57,8 @@ class PokemonRangerSOA(BizHawkClient):
 
     level_up_patched: bool
 
+    partner_quests = set[int]
+
     def initialize_client(self):
         self.local_checked_locations = set()
         self.local_set_events = {}
@@ -63,6 +72,7 @@ class PokemonRangerSOA(BizHawkClient):
         self.level_up_patched = False
         self.has_energy_plus = False
         self.styler_model = 0
+        self.partner_quests = set()
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
 
@@ -80,7 +90,6 @@ class PokemonRangerSOA(BizHawkClient):
             return
 
         if not ctx.items_handling & 0b010:
-
             ctx.items_handling = 0b011
             Utils.async_start(
                 ctx.send_msgs(
@@ -99,6 +108,8 @@ class PokemonRangerSOA(BizHawkClient):
 
             game_state = None
             browser_captures_bytes = bytes(0)
+            quest_bytes = bytes(0)
+
             num_receieved_items = 0
             styler_and_rank = None
             current_mission = None
@@ -121,6 +132,11 @@ class PokemonRangerSOA(BizHawkClient):
                     ),
                     (data.ram_addresses["CURRENT_MISSION"].first, 1, "ARM9 System Bus"),
                     (data.ram_addresses["CURRENT_ROOM_ID"].first, 2, "ARM9 System Bus"),
+                    (
+                        data.ram_addresses["QUEST_TABLE_ADDRESS"].first,
+                        60,
+                        "ARM9 System Bus",
+                    ),
                 ],
             )
 
@@ -131,6 +147,7 @@ class PokemonRangerSOA(BizHawkClient):
                 styler_and_rank = int.from_bytes(read_result[3], "little")
                 current_mission = int.from_bytes(read_result[4], "little")
                 room_id = int.from_bytes(read_result[5], "little")
+                quest_bytes = read_result[6]
 
             if (
                 ctx.slot_data["level_up_type"] != options.LevelUpType.option_vanilla
@@ -155,7 +172,6 @@ class PokemonRangerSOA(BizHawkClient):
                 and (current_mission == 0x01)  # means it's AFTER the ingame upgrade
                 and ((styler_and_rank >> 4) & 0xF != self.styler_model)
             ):
-
                 item = next(
                     i for i in data.items.values() if i.label == "Progressive Styler"
                 )
@@ -172,7 +188,7 @@ class PokemonRangerSOA(BizHawkClient):
                 await self.handle_received_items(ctx, guards, num_receieved_items)
 
             game_clear = False
-            local_checked_locations: set[int] = set()
+            local_checked_locations: Set[int] = set()
 
             for browser_number, species in data.species.items():
                 offset = species.browser_offset
@@ -182,9 +198,11 @@ class PokemonRangerSOA(BizHawkClient):
 
                 byte_value = browser_captures_bytes[offset]
                 if ((byte_value >> species.browser_flag) & 1) != 0:
-                    location_id = species.browser_id
+                    location_id = location_category_to_id(
+                        species.browser_id, LocationCategory.BROWSER
+                    )
 
-                    if location_id in ctx.slot_data["blacklisted_captures"]:
+                    if species.browser_id in ctx.slot_data["blacklisted_captures"]:
                         continue
                     local_checked_locations.add(location_id)
 
@@ -193,6 +211,30 @@ class PokemonRangerSOA(BizHawkClient):
             if local_captured_pokemon >= target:
                 game_clear = True
 
+            quests_checked: Set[int] = set()
+            for i, byte in enumerate(quest_bytes, start=1):
+                if not (0 < i < 61):
+                    continue
+
+                if not (byte & 0b00000010):
+                    continue
+
+                index = None
+                if 41 <= i <= 43:
+                    if 41 not in self.partner_quests:
+                        index = 41
+                    else:
+                        index = 42
+                    self.partner_quests.add(index)
+                elif i > 43:
+                    index = i - 1
+                else:
+                    index = i
+
+                location_id = location_category_to_id(index, LocationCategory.QUEST)
+                quests_checked.add(location_id)
+
+            local_checked_locations |= quests_checked
             if local_checked_locations != self.local_checked_locations:
                 self.local_checked_locations = local_checked_locations
 
