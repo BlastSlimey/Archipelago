@@ -13,7 +13,35 @@ csr32: 5f520677
 # ROM
 
 
+ARM9 has an offset of 1FFC000 from its ram address
 
+
+# logic
+    Vien forest can't be reached before starting mission 3 
+    mission 3 complete screen is shown in the forest
+    
+    mission 3 has the burned area blocked before its complete, 
+    and going up in vien forest is also blocked
+
+    Mission 4, going up out of pueltown obviously blocked
+    Completing the dim sum issues still won't open it up
+
+
+Partner pokémon potential patch that you can get it with you:
+around 0x020 15DA8, can't read in ghidra for some reason
+Changing that to a 
+LDRH R1, [R6, R4]
+Hex: E19610B4
+Little endian in ROM: B4 10 96 E1
+will load the current slot 1 pokémon, copying it into after a screen
+reload.
+    
+020 15D54
+
+Figure out how to read the code in ghidra
+figure out if the code is only used for recruiting the new
+found Pokémon directly into party. If it is this is a usable entrypoint,
+else this is not usable.
 
 # trap ideas
 

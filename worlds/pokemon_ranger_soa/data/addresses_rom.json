@@ -30,6 +30,11 @@
         "address": ["0x1AC8C"],
         "bit_length": 32,
         "descriptor": "nop"
-
+    },
+    {
+        "label": "INSTRUCTION_PARTNER_FARM_SET",
+        "address": ["0x367D0"],
+        "bit_length": 32,
+        "descriptor": "nop"
     }
 ]

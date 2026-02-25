@@ -212,6 +212,7 @@ class PokemonRangerSOA(BizHawkClient):
                 game_clear = True
 
             quests_checked: Set[int] = set()
+            alternate_quests: Set[int] = set()
             for i, byte in enumerate(quest_bytes, start=1):
                 if not (0 < i < 61):
                     continue
@@ -221,11 +222,7 @@ class PokemonRangerSOA(BizHawkClient):
 
                 index = None
                 if 41 <= i <= 43:
-                    if 41 not in self.partner_quests:
-                        index = 41
-                    else:
-                        index = 42
-                    self.partner_quests.add(index)
+                    alternate_quests.add(i)
                 elif i > 43:
                     index = i - 1
                 else:
@@ -233,6 +230,12 @@ class PokemonRangerSOA(BizHawkClient):
 
                 location_id = location_category_to_id(index, LocationCategory.QUEST)
                 quests_checked.add(location_id)
+
+            alternate_to_actual = [
+                location_category_to_id(41, LocationCategory.QUEST),
+                location_category_to_id(42, LocationCategory.QUEST),
+            ][: len(alternate_quests)]
+            quests_checked |= alternate_to_actual
 
             local_checked_locations |= quests_checked
             if local_checked_locations != self.local_checked_locations:

@@ -435,7 +435,6 @@
         "item_id": 1001,
         "classification": 9,
         "item_categories": [
-            "styler_upgrade",
             "progressive",
             "player_attributes"
         ],
@@ -447,7 +446,6 @@
         "item_id": 1002,
         "classification": 9,
         "item_categories": [
-            "styler_upgrade",
             "progressive",
             "player_attributes"
         ],
@@ -459,7 +457,6 @@
         "item_id": 1003,
         "classification": 9,
         "item_categories": [
-            "styler_upgrade",
             "progressive",
             "player_attributes"
         ],
@@ -471,7 +468,6 @@
         "item_id": 1004,
         "classification": 1,
         "item_categories": [
-            "styler_upgrade",
             "player_attributes",
             "progressive"
         ],
