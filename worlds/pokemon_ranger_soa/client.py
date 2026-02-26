@@ -58,6 +58,7 @@ class PokemonRangerSOA(BizHawkClient):
     level_up_patched: bool
 
     partner_quests = Set[int]
+    first_partner = Optional[int]
     allowed_partners = Set[int]
 
     def initialize_client(self):
@@ -74,7 +75,8 @@ class PokemonRangerSOA(BizHawkClient):
         self.has_energy_plus = False
         self.styler_model = 0
         self.partner_quests = set()
-        self.allowed_partners = {188}
+        self.first_partner = None
+        self.allowed_partners = set()
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
 
@@ -198,25 +200,38 @@ class PokemonRangerSOA(BizHawkClient):
             if (
                 partner_counts_as_party_slot == 7
                 and partner not in self.allowed_partners
+                and partner != 0
             ):
-                with open("debug_log.txt", "a") as f:
-                    f.write(
-                        f"[DEBUG] {partner_pokemon=}, {partner_counts_as_party_slot=}, {partner=}, {self.allowed_partners=}\n"
-                    )
-                default_partner = (0x0FFF00BC).to_bytes(4, "little")
+                # with open("debug_log.txt", "a") as f:
+                #     f.write(
+                #         f"[DEBUG] {partner_pokemon=}, {partner_counts_as_party_slot=}, {partner=}, {self.allowed_partners=}\n"
+                #     )
+                if len(self.allowed_partners) >= 1:
+                    partner = 0x0FFF0000 | self.first_partner
+                    default_partner = (0x0FFF00BC).to_bytes(4, "little")
 
-                with open("debug_log.txt", "a") as f:
-                    f.write(f"[DEBUG] {default_partner=}, {type(default_partner)=}")
-                await bizhawk.write(
-                    ctx.bizhawk_ctx,
-                    [
-                        (
-                            data.ram_addresses["PARTNER_POKEMON_ADDRESS"].first,
-                            default_partner,
-                            "ARM9 System Bus",
-                        )
-                    ],
-                )
+                    await bizhawk.write(
+                        ctx.bizhawk_ctx,
+                        [
+                            (
+                                data.ram_addresses["PARTNER_POKEMON_ADDRESS"].first,
+                                default_partner,
+                                "ARM9 System Bus",
+                            )
+                        ],
+                    )
+                else:
+                    """Experimental feature!!!"""
+                    await bizhawk.write(
+                        ctx.bizhawk_ctx,
+                        [
+                            (
+                                data.ram_addresses["PARTNER_POKEMON_ADDRESS"].first,
+                                (0).to_bytes(24, "little"),
+                                "ARM9 System Bus",
+                            )
+                        ],
+                    )
 
             if num_receieved_items < len(ctx.items_received):
                 await self.handle_received_items(ctx, guards, num_receieved_items)
@@ -546,9 +561,9 @@ class PokemonRangerSOA(BizHawkClient):
             if p.name == pokemon_name:
                 pokemon = p
                 break
-        self.allowed_partners |= set(pokemon.species_ids)
+        self.allowed_partners += list(pokemon.species_ids)
         # currently I just add al HOWEVER not all forms should be possible
-        # as partner vanilla.
+        # as partner vanilla. unless we randomize or set partners randomly this is not an issue.
 
         byte_offset = item.bit_offset // 8
         result = await bizhawk.read(
