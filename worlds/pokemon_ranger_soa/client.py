@@ -57,7 +57,8 @@ class PokemonRangerSOA(BizHawkClient):
 
     level_up_patched: bool
 
-    partner_quests = set[int]
+    partner_quests = Set[int]
+    allowed_partners = Set[int]
 
     def initialize_client(self):
         self.local_checked_locations = set()
@@ -73,6 +74,7 @@ class PokemonRangerSOA(BizHawkClient):
         self.has_energy_plus = False
         self.styler_model = 0
         self.partner_quests = set()
+        self.allowed_partners = {188}
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
 
@@ -114,6 +116,7 @@ class PokemonRangerSOA(BizHawkClient):
             styler_and_rank = None
             current_mission = None
             room_id = None
+            partner_pokemon = bytes(0)
 
             read_result = await bizhawk.read(
                 ctx.bizhawk_ctx,
@@ -137,6 +140,11 @@ class PokemonRangerSOA(BizHawkClient):
                         60,
                         "ARM9 System Bus",
                     ),
+                    (
+                        data.ram_addresses["PARTNER_POKEMON_ADDRESS"].first,
+                        10,
+                        "ARM9 System Bus",
+                    ),
                 ],
             )
 
@@ -148,6 +156,7 @@ class PokemonRangerSOA(BizHawkClient):
                 current_mission = int.from_bytes(read_result[4], "little")
                 room_id = int.from_bytes(read_result[5], "little")
                 quest_bytes = read_result[6]
+                partner_pokemon = read_result[7]
 
             if (
                 ctx.slot_data["level_up_type"] != options.LevelUpType.option_vanilla
@@ -157,8 +166,7 @@ class PokemonRangerSOA(BizHawkClient):
                     # await self.patch_level_up_instructions(ctx)
                     self.level_up_patched = True
                 return
-            else:
-                self.level_up_patched = False
+            self.level_up_patched = False
 
             """
             BEING IN BATTLE WILL STOP THINGS BELOW OCCURRING!
@@ -182,6 +190,32 @@ class PokemonRangerSOA(BizHawkClient):
                 await bizhawk.write(
                     ctx.bizhawk_ctx,
                     output,
+                )
+
+            partner_counts_as_party_slot = partner_pokemon[8]
+            partner = int.from_bytes(partner_pokemon[0:2], "little")
+
+            if (
+                partner_counts_as_party_slot == 7
+                and partner not in self.allowed_partners
+            ):
+                with open("debug_log.txt", "a") as f:
+                    f.write(
+                        f"[DEBUG] {partner_pokemon=}, {partner_counts_as_party_slot=}, {partner=}, {self.allowed_partners=}\n"
+                    )
+                default_partner = (0x0FFF00BC).to_bytes(4, "little")
+
+                with open("debug_log.txt", "a") as f:
+                    f.write(f"[DEBUG] {default_partner=}, {type(default_partner)=}")
+                await bizhawk.write(
+                    ctx.bizhawk_ctx,
+                    [
+                        (
+                            data.ram_addresses["PARTNER_POKEMON_ADDRESS"].first,
+                            default_partner,
+                            "ARM9 System Bus",
+                        )
+                    ],
                 )
 
             if num_receieved_items < len(ctx.items_received):
@@ -208,8 +242,8 @@ class PokemonRangerSOA(BizHawkClient):
 
             local_captured_pokemon = len(local_checked_locations)
             target = ctx.slot_data["capture_count_target"]
-            if local_captured_pokemon >= target:
-                game_clear = True
+            # if local_captured_pokemon >= target:
+            #     game_clear = True
 
             quests_checked: Set[int] = set()
             alternate_quests: Set[int] = set()
@@ -231,10 +265,12 @@ class PokemonRangerSOA(BizHawkClient):
                 location_id = location_category_to_id(index, LocationCategory.QUEST)
                 quests_checked.add(location_id)
 
-            alternate_to_actual = [
-                location_category_to_id(41, LocationCategory.QUEST),
-                location_category_to_id(42, LocationCategory.QUEST),
-            ][: len(alternate_quests)]
+            alternate_to_actual = set(
+                (
+                    location_category_to_id(41, LocationCategory.QUEST),
+                    location_category_to_id(42, LocationCategory.QUEST),
+                )[: len(alternate_quests)]
+            )
             quests_checked |= alternate_to_actual
 
             local_checked_locations |= quests_checked
@@ -297,6 +333,10 @@ class PokemonRangerSOA(BizHawkClient):
 
         elif ItemCategory.PLAYER_ATTRIBUTES in item.item_categories:
             val = await self.handle_player_attributes(ctx, item, next_item.item)
+            writes.extend(val)
+
+        elif ItemCategory.PARTNER in item.item_categories:
+            val = await self.handle_give_partner_pokemon(ctx, item, next_item.item)
             writes.extend(val)
 
         await bizhawk.write(
@@ -481,12 +521,6 @@ class PokemonRangerSOA(BizHawkClient):
             if data.styler_levels[prev_level][0] == max_hp and self.has_energy_plus:
                 increase += 5
 
-            with open("debug_log.txt", "a") as f:
-                f.write(
-                    f"[DEBUG] {current_hp=}, {max_hp=}, {increase}, {level=}, {prev_level}, {count=}, \n"
-                    f"{self.has_energy_plus=}, {data.styler_levels[level][0]=}, {data.styler_levels[prev_level][0]=}\n\n"
-                )
-
             writes += [
                 (
                     data.ram_addresses["CURRENT_HEALTH"].first,
@@ -500,6 +534,46 @@ class PokemonRangerSOA(BizHawkClient):
                 ),
             ]
 
+        return writes
+
+    async def handle_give_partner_pokemon(
+        self, ctx: "BizHawkClientContext", item: ItemData, item_id: int
+    ):
+        item_type, pokemon_name = item.label.split(" - ")
+
+        pokemon = None
+        for p in data.species.values():
+            if p.name == pokemon_name:
+                pokemon = p
+                break
+        self.allowed_partners |= set(pokemon.species_ids)
+        # currently I just add al HOWEVER not all forms should be possible
+        # as partner vanilla.
+
+        byte_offset = item.bit_offset // 8
+        result = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (
+                    data.ram_addresses["PARTNER_POKEMON_TABLE_ADDRESS"].first
+                    + byte_offset,
+                    1,
+                    "ARM9 System Bus",
+                )
+            ],
+        )
+        current = result[0][0]
+        bit = item.bit_offset % 8
+
+        new_value = current | (0b1 << bit)
+
+        writes = [
+            (
+                data.ram_addresses["PARTNER_POKEMON_TABLE_ADDRESS"].first + byte_offset,
+                new_value.to_bytes(1, "little"),
+                "ARM9 System Bus",
+            )
+        ]
         return writes
 
     async def patch_level_up_instructions(self, ctx: "BizHawkClientContext"):

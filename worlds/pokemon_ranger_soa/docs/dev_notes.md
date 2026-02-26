@@ -99,4 +99,12 @@ There are two ways to prevent level up:
  - changing (in this case addresses for party mon 3, 0BAEEC )   0BAEF4 from 01 to 02 
     makes the pokémon dissapear from your party, and show an empty spot. Changing it back to 01 makes
     it reapear again.
- - 
+
+byte 9 determines if the pokémon takes up a slot in your inventory and if you can release it (07) seems to be used for partners
+and 01 for normal pokémon. Other numbers also do things but it's kinda weird, 02 or something makes them share a spot??
+
+ # something level up related
+020af358 -> r0
+
+02139C84 ldrb r1, [r6, #+0x18], when level < 99, r6 = 02 2F1634
+				when level = 99, r6 = 02 2FA9B4

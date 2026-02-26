@@ -4265,7 +4265,7 @@
             "level": 3
         },
         "poke_assist": 1,
-        "friendship_gauge": [
+        "friendship_gauge": [[],
             6000
         ],
         "browser_offset": 100,
