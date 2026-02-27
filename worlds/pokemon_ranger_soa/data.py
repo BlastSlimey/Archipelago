@@ -97,6 +97,34 @@ class FieldMoveCategory(IntEnum):
     RIVER_FLOW = 23
 
 
+class FieldMoveCategoryNew(IntEnum):
+    NONE = 0
+    CUT = 1
+    CRUSH = 2
+    PSY_POWER = 3
+    TACKLE = 4
+    ELECTRIFY = 5
+    SOAK = 6
+    BURN = 7
+    TUNNEL = 8
+    RECHARGE = 9
+    AGILITY = 10
+    FLY = 11
+    TELEPORT = 12
+    RAIN_DANCE = 13
+    DEMIST = 14
+    FLASH = 15
+    AIRLIFT = 16
+    ELEVATE = 17
+    STINK = 18
+    SAND_FILL = 19
+    AURA_BLAST = 20
+    RIVER_FLOW = 21
+    MAGMA_FLOW = 22
+    SWIM = 23
+    DARK_POWER = 24
+
+
 @dataclass(frozen=True)
 class FieldMove:
     category: FieldMoveCategory
@@ -114,15 +142,20 @@ class FieldMove:
 class SpeciesData:
     name: str
     label: str
+
     browser_id: int
+    national_id: int
     species_ids: List[int]
     hex_ids: List[str]
+    poke_id_indexes: List[int]
+
     field_move: FieldMove
     poke_assist: PokeAssistCategory
     friendship_gauge: tuple[int]
 
     browser_offset: int
     browser_flag: int
+
     browser_rank_offset: Optional[int] = None
     browser_rank_flag: Optional[int] = None
 
@@ -159,6 +192,7 @@ class ItemCategory(StrEnum):
     PROGRESSIVE = auto()
     EVENT = auto()
     PARTNER = auto()
+    FIELD_MOVE = auto()
 
 
 class AddressesGroup(NamedTuple):

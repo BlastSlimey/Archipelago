@@ -1,6 +1,7 @@
 import json
 from dataclasses import is_dataclass, asdict
 from typing import Any
+from .data import data, SpeciesData
 
 
 def modify_data_to_new_json(
@@ -50,3 +51,39 @@ def modify_data_to_new_json(
         json.dump(processed, f, indent=4)
 
     print(f"Wrote modified data to {output_file}")
+
+
+import pkgutil
+import csv
+import io
+from typing import List, Dict, Any
+
+
+def load_csv_data(data_name: str) -> List[Dict[str, Any]]:
+    raw_data = pkgutil.get_data(__name__, "data/" + data_name)
+
+    if raw_data is None:
+        raise FileNotFoundError(f"Could not find data/{data_name}")
+
+    text = raw_data.decode("utf-8-sig")
+    reader = csv.reader(io.StringIO(text))
+    return list(reader)
+
+
+def add_national_desk():
+    pok = list(data.species.values())
+
+    # mapping = {}
+    # file = load_csv_data("nameid_index_map.txt")
+    #
+    # for row in file:
+    #     nat, *nums = row
+    #     mapping[int(nat)] = [int(n) for n in nums]
+    #
+    # for p in pok:
+    #     p.poke_id_indexes = mapping[p.national_id]
+
+    modify_data_to_new_json("worlds/pokemon_ranger_soa/data/new_species.json", pok)
+
+
+add_national_desk()

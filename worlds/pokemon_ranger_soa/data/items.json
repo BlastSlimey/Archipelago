@@ -2,7 +2,7 @@
     {
         "label": "Progressive Grass Defense",
         "item_id": 1,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -13,7 +13,7 @@
     {
         "label": "Progressive Water Defense",
         "item_id": 2,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -24,7 +24,7 @@
     {
         "label": "Progressive Electric Defense",
         "item_id": 3,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -35,7 +35,7 @@
     {
         "label": "Progressive Fire Defense",
         "item_id": 4,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -46,7 +46,7 @@
     {
         "label": "Progressive Fighting Defense",
         "item_id": 5,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -57,7 +57,7 @@
     {
         "label": "Progressive Poison Defense",
         "item_id": 6,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -68,7 +68,7 @@
     {
         "label": "Progressive Psychic Defense",
         "item_id": 7,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -79,7 +79,7 @@
     {
         "label": "Progressive Bug Defense",
         "item_id": 8,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -90,7 +90,7 @@
     {
         "label": "Progressive Ground Defense",
         "item_id": 9,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -101,7 +101,7 @@
     {
         "label": "Progressive Flying Defense",
         "item_id": 10,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -112,7 +112,7 @@
     {
         "label": "Progressive Dark Defense",
         "item_id": 11,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -123,7 +123,7 @@
     {
         "label": "Progressive Rock Defense",
         "item_id": 12,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -134,7 +134,7 @@
     {
         "label": "Progressive Ghost Defense",
         "item_id": 13,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -145,7 +145,7 @@
     {
         "label": "Progressive Ice Defense",
         "item_id": 14,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -156,7 +156,7 @@
     {
         "label": "Progressive Normal Defense",
         "item_id": 15,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -167,7 +167,7 @@
     {
         "label": "Progressive Steel Defense",
         "item_id": 16,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -178,7 +178,7 @@
     {
         "label": "Progressive Dragon Defense",
         "item_id": 17,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -189,7 +189,7 @@
     {
         "label": "Progressive Time Assist",
         "item_id": 18,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -200,7 +200,7 @@
     {
         "label": "Progressive Latent Power",
         "item_id": 19,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -211,7 +211,7 @@
     {
         "label": "Combo Bonus",
         "item_id": 20,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "unique"
@@ -222,7 +222,7 @@
     {
         "label": "Progressive Recovery",
         "item_id": 21,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -233,7 +233,7 @@
     {
         "label": "Energy Plus",
         "item_id": 22,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "unique"
@@ -244,7 +244,7 @@
     {
         "label": "Progressive Power Plus",
         "item_id": 23,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -255,7 +255,7 @@
     {
         "label": "Progressive Long Line",
         "item_id": 24,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "progressive"
@@ -266,7 +266,7 @@
     {
         "label": "Supreme Defense",
         "item_id": 25,
-        "classification": 1,
+        "classification": 10,
         "item_categories": [
             "styler_upgrade",
             "unique"
@@ -466,7 +466,7 @@
     {
         "label": "Progressive Styler",
         "item_id": 1004,
-        "classification": 1,
+        "classification": 2,
         "item_categories": [
             "player_attributes",
             "progressive"
@@ -486,8 +486,250 @@
         "copies": 10
     },
     {
-        "label": "Filler Item",
-        "item_id": 10000,
+        "label": "Progressive Cut",
+        "item_id": 10001,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Crush",
+        "item_id": 10002,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Psy Power",
+        "item_id": 10003,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Tackle",
+        "item_id": 10004,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Electrify",
+        "item_id": 10005,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Soak",
+        "item_id": 10006,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Burn",
+        "item_id": 10007,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Tunnel",
+        "item_id": 10008,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Recharge",
+        "item_id": 10009,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Ability",
+        "item_id": 10010,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Fly",
+        "item_id": 10011,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Teleport",
+        "item_id": 10012,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Rain Dance",
+        "item_id": 10013,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Demist",
+        "item_id": 10014,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Flash",
+        "item_id": 10015,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Airlift",
+        "item_id": 10016,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Elevate",
+        "item_id": 10017,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Stink",
+        "item_id": 10018,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Sand Fill",
+        "item_id": 10019,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive River Flow",
+        "item_id": 10021,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Magma Flow",
+        "item_id": 10022,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Progressive Swim",
+        "item_id": 10023,
+        "classification": 1,
+        "item_categories": [
+            "progressive",
+            "field_move"
+        ],
+        "bit_offset": null,
+        "copies": 1
+    },
+    {
+        "label": "Woah. This is worthless!",
+        "item_id": 100000,
         "classification": 0,
         "item_categories": [
             "filler"

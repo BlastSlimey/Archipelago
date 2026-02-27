@@ -45,10 +45,14 @@ class PokemonRSOA(World):
 
     blacklisted_captures: Set[int]
 
+    exclude_field_moves: Set[str]
+
     def __init__(self, multiworld, player):
         super(PokemonRSOA, self).__init__(multiworld, player)
 
         self.blacklist_captures = set()
+
+        self.exclude_field_moves = set()
 
     def get_filler_item_name(self) -> str:
         return "Filler Item"

@@ -16,6 +16,11 @@ csr32: 5f520677
 ARM9 has an offset of 1FFC000 from its ram address
 
 
+
+PokeID has a ROM address of 02BF1A00
+
+letss try editing directluy in 02BF1A40 
+
 # logic
     Vien forest can't be reached before starting mission 3 
     mission 3 complete screen is shown in the forest
@@ -108,3 +113,10 @@ and 01 for normal pokémon. Other numbers also do things but it's kinda weird, 0
 
 02139C84 ldrb r1, [r6, #+0x18], when level < 99, r6 = 02 2F1634
 				when level = 99, r6 = 02 2FA9B4
+
+
+# field move
+
+I was able to edit the field move for charmander through editing the table
+
+each Pokémon uses 24 bytes, are they contigous??? idk, eek

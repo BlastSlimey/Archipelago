@@ -226,6 +226,49 @@ class DeathlinkDamage(Range):
     default = 40
 
 
+class FieldMoveItem(Choice):
+    """
+    If this is on, all Field moves are locked
+    behind their respective items.
+    Not all field moves might be included as item
+    based on available locations and will always be locked.
+    """
+
+    auto_display_name = True
+
+    option_vanilla = 0
+    option_item = 1
+
+    default = 1
+
+
+class FieldMoveLevelItem(Range):
+    """
+    If this is higher than 1, Each Fieldmove with multiple levels turns
+    into a progressive field move. The maximum field moves for each
+    level is the maximum available level.
+
+    For moves that go up to 5:
+
+    1: 5
+    2: 2 - 5
+    3: 1 - 3 - 5
+    4: 1 - 2 - 3 - 5
+    5: 1 - 2 - 3 - 4 - 5
+
+    Moves that go up to 3:
+    1: 3
+    2: 1 - 3
+    3: 1 - 2 - 3
+    """
+
+    auto_display_name = True
+    range_start = 1
+    range_end = 5
+
+    default = 1
+
+
 @dataclass
 class PokemonRSOAOptions(PerGameCommonOptions):
     goal: Goal
@@ -247,6 +290,9 @@ class PokemonRSOAOptions(PerGameCommonOptions):
     rank_up_increment: RankUpIncrement
 
     styler_model_item: StylerModelItem
+
+    field_move_item: FieldMoveItem
+    field_move_levels: FieldMoveLevelItem
 
 
 option_groups = [

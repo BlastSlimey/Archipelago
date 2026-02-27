@@ -39,6 +39,8 @@ def write_tokens(
 
     _nop_instructions(world, patch)
 
+    _remove_field_moves(world, patch)
+
     patch.write_file("token_data.bin", patch.get_token_binary())
 
 
@@ -68,3 +70,20 @@ def _nop_instructions(
             address,
             struct.pack("<I", 0xE3A00000),
         )
+
+
+def _remove_field_moves(
+    world: "PokemonRSOA", patch: PokemonRangerSOAProcedurePatch
+) -> None:
+    if world.options.field_move_item == world.options.field_move_item.option_vanilla:
+        return
+
+    for pok in data.species.values():
+
+        for val in pok.poke_id_indexes:
+            address = data.ram_addresses["POKE_ID_TABLE_ADDRESS"] + val * 24 + 5
+            patch.write_token(
+                APTokenTypes.WRITE,
+                address,
+                struct.pack("<B", 0),
+            )

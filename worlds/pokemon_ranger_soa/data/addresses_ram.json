@@ -30,6 +30,11 @@
         "bit_length": null
     },
     {
+        "label": "POKE_ID_TABLE_ADDRESS",
+        "address": ["0x02237168"],
+        "bit_length": null
+    },
+    {
         "label": "INSTRUCTION_LEVEL_UP_HEALTH_UP",
         "address": ["0x02139638"],
         "bit_length": 32

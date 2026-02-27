@@ -319,13 +319,28 @@ class PokemonRangerSOA(BizHawkClient):
     async def handle_death_link(
         self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]
     ) -> None:
-        # TODO
         if ctx.slot_data.get("death_link", Toggle.option_false) != Toggle.option_true:
             return
 
         if "DeathLink" not in ctx.tags:
             await ctx.update_death_link(True)
             self.previous_death_link = ctx.last_death_link
+
+        read_result = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (data.ram_addresses["CURRENT_HEALTH"].first, 1, "ARM9 System Bus"),
+            ],
+        )  # combat health uses a different memory address, find this.
+        #
+
+        current_hp = read_result[0][0]
+
+        if current_hp is None:
+            return
+
+        if current_hp == 0:
+            pass
 
     async def handle_received_items(
         self,
@@ -590,6 +605,16 @@ class PokemonRangerSOA(BizHawkClient):
             )
         ]
         return writes
+
+    async def handle_give_field_move(
+        self, ctx: "BizHawkClientContext", item: ItemData, item_id: int
+    ):
+
+
+        writes = []
+
+        for pok in data.species.values():
+
 
     async def patch_level_up_instructions(self, ctx: "BizHawkClientContext"):
         await bizhawk.write(

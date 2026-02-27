@@ -76,6 +76,15 @@ def create_all_items(world: PokemonRSOA) -> None:
 
     itempool: List[Item] = []
 
+    if world.options.field_move_item != world.options.field_move_item.option_vanilla:
+        for i, item in data.items.items():
+            if ItemCategory.FIELD_MOVE not in item.item_categories:
+                continue
+            if item.label.lstrip("Progressive ") in world.exclude_field_moves:
+                continue
+            new_item = world.create_item(item.label)
+            itempool.append(new_item)
+
     number_of_items = len(itempool)
     number_of_unfilled_locations = len(
         world.multiworld.get_unfilled_locations(world.player)
