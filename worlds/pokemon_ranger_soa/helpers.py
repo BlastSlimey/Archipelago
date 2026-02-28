@@ -50,8 +50,6 @@ def modify_data_to_new_json(
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(processed, f, indent=4)
 
-    print(f"Wrote modified data to {output_file}")
-
 
 import pkgutil
 import csv

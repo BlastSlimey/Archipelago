@@ -21,6 +21,7 @@ from .data import (
     GameStateEnum,
     LocationCategory,
     location_category_to_id,
+    FieldMoveCategory,
 )
 from . import items, options
 from .items import offset_item_value
@@ -233,9 +234,6 @@ class PokemonRangerSOA(BizHawkClient):
                         ],
                     )
 
-            if num_receieved_items < len(ctx.items_received):
-                await self.handle_received_items(ctx, guards, num_receieved_items)
-
             game_clear = False
             local_checked_locations: Set[int] = set()
 
@@ -306,6 +304,9 @@ class PokemonRangerSOA(BizHawkClient):
                     ]
                 )
 
+            if num_receieved_items < len(ctx.items_received):
+                await self.handle_received_items(ctx, guards, num_receieved_items)
+
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
             pass
@@ -321,6 +322,7 @@ class PokemonRangerSOA(BizHawkClient):
     ) -> None:
         if ctx.slot_data.get("death_link", Toggle.option_false) != Toggle.option_true:
             return
+        return
 
         if "DeathLink" not in ctx.tags:
             await ctx.update_death_link(True)
@@ -367,6 +369,10 @@ class PokemonRangerSOA(BizHawkClient):
 
         elif ItemCategory.PARTNER in item.item_categories:
             val = await self.handle_give_partner_pokemon(ctx, item, next_item.item)
+            writes.extend(val)
+
+        elif ItemCategory.FIELD_MOVE in item.item_categories:
+            val = await self.handle_give_field_move(ctx, item, next_item.item)
             writes.extend(val)
 
         await bizhawk.write(
@@ -609,12 +615,20 @@ class PokemonRangerSOA(BizHawkClient):
     async def handle_give_field_move(
         self, ctx: "BizHawkClientContext", item: ItemData, item_id: int
     ):
-
-
         writes = []
 
+        field_move = item.item_id % 100
         for pok in data.species.values():
+            if pok.field_move.category != field_move:
+                continue
+            for row in pok.poke_id_indexes:
 
+                writes += (
+                    data.ram_addresses["POKE_ID_TABLE_ADDRESS"].first + row * 24 + 5,
+                    field_move.to_bytes(1, "little"),
+                    "ARM9 System Bus",
+                )
+        return writes
 
     async def patch_level_up_instructions(self, ctx: "BizHawkClientContext"):
         await bizhawk.write(

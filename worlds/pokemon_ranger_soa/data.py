@@ -70,34 +70,34 @@ class PokeAssistCategory(IntEnum):
     DRAGON = 18
 
 
+# class FieldMoveCategory(IntEnum):
+#     NONE = 0
+#     BURN = 1  # 7 - done
+#     CRUSH = 2 # 2 - done
+#     CUT = 3  # 1 - done
+#     ELECTRIFY = 4  # 5 - done
+#     PSY_POWER = 5  # 3 - done
+#     SOAK = 6 # 6 - done
+#     TUNNEL = 7  # 8 - done
+#     TACKLE = 8  # 4 - done
+#     AGILITY = 9 # 10 - done
+#     FLY = 10 # 11 - done
+#     RECHARGE = 11 # 9 - done
+#     TELEPORT = 12 # 12 - done
+#     AIRLIFT = 13 # 16 - done
+#     DARK_POWER = 14 # 24 - done
+#     DEMIST = 15 # 14 - done
+#     ELEVATE = 16 # 17 -
+#     FLASH = 17 # 15 - done
+#     MAGMA_FLOW = 18 # 22 - done
+#     RAIN_DANCE = 19 # 13 - done
+#     SAND_FILL = 20 # 19 - done
+#     STINK = 21 # 18 - done
+#     SWIM = 22 # 23 - done
+#     RIVER_FLOW = 23 # 21 - done
+
+
 class FieldMoveCategory(IntEnum):
-    NONE = 0
-    BURN = 1
-    CRUSH = 2
-    CUT = 3
-    ELECTRIFY = 4
-    PSY_POWER = 5
-    SOAK = 6
-    TUNNEL = 7
-    TACKLE = 8
-    AGILITY = 9
-    FLY = 10
-    RECHARGE = 11
-    TELEPORT = 12
-    AIRLIFT = 13
-    DARK_POWER = 14
-    DEMIST = 15
-    ELEVATE = 16
-    FLASH = 17
-    MAGMA_FLOW = 18
-    RAIN_DANCE = 19
-    SAND_FILL = 20
-    STINK = 21
-    SWIM = 22
-    RIVER_FLOW = 23
-
-
-class FieldMoveCategoryNew(IntEnum):
     NONE = 0
     CUT = 1
     CRUSH = 2

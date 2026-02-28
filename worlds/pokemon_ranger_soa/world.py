@@ -55,7 +55,7 @@ class PokemonRSOA(World):
         self.exclude_field_moves = set()
 
     def get_filler_item_name(self) -> str:
-        return "Filler Item"
+        return "Woah. This is worthless!"
 
     def generate_early(self) -> None:
         possible_species = [

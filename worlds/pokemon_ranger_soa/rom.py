@@ -56,8 +56,8 @@ def _nop_instructions(
         addresses += data.rom_addresses[
             "INSTRUCTION_LEVEL_UP_STYLER_LEVEL_UP"
         ].addresses
-        addresses += data.rom_addresses["INSTRUCTION_LEVEL_UP_MAX_HEALTH_UP"].addresses
-
+        # addresses += data.rom_addresses["INSTRUCTION_LEVEL_UP_MAX_HEALTH_UP"].addresses
+        # This sets the game to 0 hp on new save. Causes issues.
     if world.options.rank_up_type > 0:
         addresses += data.rom_addresses["INSTRUCTION_RANGER_RANK_SET"].addresses
 
@@ -81,7 +81,8 @@ def _remove_field_moves(
     for pok in data.species.values():
 
         for val in pok.poke_id_indexes:
-            address = data.ram_addresses["POKE_ID_TABLE_ADDRESS"] + val * 24 + 5
+            print("removing shit")
+            address = data.rom_addresses["POKE_ID_TABLE_ADDRESS"].first + val * 24 + 5
             patch.write_token(
                 APTokenTypes.WRITE,
                 address,

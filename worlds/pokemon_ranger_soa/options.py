@@ -239,7 +239,7 @@ class FieldMoveItem(Choice):
     option_vanilla = 0
     option_item = 1
 
-    default = 1
+    default = option_item
 
 
 class FieldMoveLevelItem(Range):

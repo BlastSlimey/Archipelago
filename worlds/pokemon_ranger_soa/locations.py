@@ -7,6 +7,7 @@ from BaseClasses import ItemClassification, Location, Region
 from .data import data, LocationData, LocationCategory
 
 from . import items
+from .items import PokemonRSOAItem
 
 if TYPE_CHECKING:
     from .world import PokemonRSOA
@@ -51,12 +52,9 @@ def create_all_locations(world: PokemonRSOA) -> None:
         ]:
             continue
 
-        print(name, location_data)
-        print(world.location_name_to_id)
-
         new_location = PokemonRSOALocation(
             world.player,
-            name,
+            location_data.label,
             world.location_name_to_id[location_data.label],
             region,
         )
@@ -138,3 +136,18 @@ def create_pokemon_locations(world: PokemonRSOA) -> None:
         )
 
         region.locations.append(new_location)
+
+        event = PokemonRSOALocation(
+            world.player, f"Capture {pokemon.name} Event", None, region
+        )
+        event.show_in_spoiler = False
+
+        event.place_locked_item(
+            PokemonRSOAItem(
+                f"CAPTURE_{pokemon.browser_id}",
+                ItemClassification.progression_skip_balancing,
+                None,
+                world.player,
+            )
+        )
+        region.locations.append(event)

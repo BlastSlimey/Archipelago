@@ -1,5 +1,12 @@
 [
   {
+      "label": "POKE_ID_TABLE_ADDRESS",
+      "address": ["0x2BF1A28"],
+      "bit_length": 32,
+      "descriptor": "address"
+  },
+
+  {
         "label": "INSTRUCTION_LEVEL_UP_STYLER_LEVEL_UP",
         "address": ["0x1A0D4"],
         "bit_length": 32,
