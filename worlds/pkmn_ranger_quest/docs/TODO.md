@@ -1,6 +1,5 @@
 # Important
 
 # Features
-- game info page
-- setup page
-- changelog
+- remaining poke assist types
+- field move quests
