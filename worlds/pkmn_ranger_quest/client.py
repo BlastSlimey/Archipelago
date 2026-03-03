@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Collection
 
 from NetUtils import ClientStatus
 
@@ -29,6 +29,7 @@ class RangerQuestClient(BizHawkClient):
         self.open_captures: dict[int, list[int]] = {}  # {internal pokemon id: [item indices, ...]}
         self.open_assists: tuple[list[int], list[int]] = [], []  # ([item index, ...], [assist type id, ...])
         self.debug_counter = 0
+        self.checked_locations = set()
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         header = (await bizhawk.read(
@@ -70,6 +71,9 @@ class RangerQuestClient(BizHawkClient):
 
             self.debug_counter = (self.debug_counter + 1) % 1000
 
+            if not self.checked_locations and ctx.locations_checked:
+                self.checked_locations.update(ctx.locations_checked)
+
             for item_index in range(self.items_received, len(ctx.items_received)):
                 self.items_received += 1
                 network_item = ctx.items_received[item_index]
@@ -83,7 +87,9 @@ class RangerQuestClient(BizHawkClient):
                     self.open_assists[0].append(item_index)
                     self.open_assists[1].append(items.assist[name].type_id)
                 else:
-                    raise Exception(f"Quest type of \"{name}\" unknown")
+                    self.logger.warning(f"Quest type of \"{name}\" unknown, most likely due to an incompatible "
+                                        f"version. If this quest is already completed, then no further action is "
+                                        f"needed. Otherwise, you need to downgrade to an older version.")
 
             read = await bizhawk.read(
                 ctx.bizhawk_ctx, (
@@ -97,7 +103,7 @@ class RangerQuestClient(BizHawkClient):
             checked = []
             if not self.has_touched and read[1] != b'\x00':
                 self.has_touched = True
-                await ctx.check_locations((RangerQuestWorld.location_name_to_id["Inspect a pokémon"], ))
+                await self.check_locations({RangerQuestWorld.location_name_to_id["Inspect a pokémon"]}, ctx)
             if not is_ptr(read[2]):
                 return  # not in-capture, so rest can be skipped
             capture_ptr = to_ptr(read[2])
@@ -132,9 +138,9 @@ class RangerQuestClient(BizHawkClient):
                         checked.append(f"Complete quest #{item_index+1}")
 
             if checked:
-                await ctx.check_locations(tuple(RangerQuestWorld.location_name_to_id[check] for check in checked))
+                await self.check_locations(set(RangerQuestWorld.location_name_to_id[check] for check in checked), ctx)
 
-            if len(ctx.locations_checked) >= ctx.slot_data["goal_amount"]:
+            if len(self.checked_locations) >= ctx.slot_data["goal_amount"]:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
         except bizhawk.RequestFailedError:
@@ -145,6 +151,10 @@ class RangerQuestClient(BizHawkClient):
     def print(self, obj, delay=20):
         if self.debug_counter % delay == 0:
             print(obj)
+
+    async def check_locations(self, locations: set[int], ctx: "BizHawkClientContext"):
+        self.checked_locations.update(locations)
+        await ctx.check_locations(locations)
 
 
 def is_ptr(value: bytes) -> bool:

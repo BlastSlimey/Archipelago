@@ -1,6 +1,11 @@
 # Changelog
 Versions are sorted in ascending order, i.e. the most recent changes are at the top.
 
+## 1.0.1
+
+- Fixed goal only being sent after reconnecting the client to the server
+- Fixed some capture quests' names due to bad grammar
+
 ## 1.0.0
 
 - Capture quests (off-missions, missions-only, off-mission legendaries, special missions)
