@@ -27,16 +27,23 @@ assist: dict[str, AssistItemData] = {  # TODO get missing ids
     # "Use a ??? type Poké Assist": AssistItemData(117, 17),
 }
 
-_field_ids: list[tuple[str, int]] = [  # TODO ids are only placeholders
-    ("Cross", 1),
-    ("Cut", 2),
-    ("Crush", 3),
-    ("Soak", 4),
-    ("Burn", 5),
-    ("Recharge", 6),
-    ("Tackle", 7),
-    ("Gust", 8),
-    # ("Flash", 9), missions only
+_field_ids: list[tuple[str, int]] = [
+    ("Tackle", 2),
+    ("Cut", 3),
+    ("Burn", 4),
+    ("Soak", 5),
+    ("Crush", 6),
+    ("Recharge", 7),
+    # ("Dig", 9), unused
+    ("Gust", 0xa),
+    # ("Jump", 0xd), unused
+    ("Cross", 0xe),
+    # ("Toxic", 0x11), unused
+    # ("Magic", 0x12), unused
+    # ("Flash", 0x17), missions only
+    # ("Mic", 0x18), unused
+    # ("Stickman", 0x1c), unused
+    # ("Heart", 0x1e), unused
 ]
 
 field_any: dict[str, FieldItemData] = {
