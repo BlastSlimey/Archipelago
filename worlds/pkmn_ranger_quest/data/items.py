@@ -2,8 +2,8 @@ from . import CaptureItemData, AssistItemData, FieldItemData, pokemon
 
 
 capture: dict[str, CaptureItemData] = {
-    f"Capture {'an' if name in 'AEIOU' else 'a'} {name}": CaptureItemData(data.number + 1000, data.number,
-                                                                          pokemon.internal_ids[name])
+    f"Capture {'an' if name[0] in 'AEIOU' else 'a'} {name}": CaptureItemData(data.number + 1000, data.number,
+                                                                             pokemon.internal_ids[name])
     for name, data in pokemon.by_name.items()
 }
 
