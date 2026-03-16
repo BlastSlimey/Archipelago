@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING, Collection
+from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
 
@@ -71,8 +71,8 @@ class RangerQuestClient(BizHawkClient):
 
             self.debug_counter = (self.debug_counter + 1) % 1000
 
-            if not self.checked_locations and ctx.locations_checked:
-                self.checked_locations.update(ctx.locations_checked)
+            if not self.checked_locations and ctx.checked_locations:
+                self.checked_locations.update(ctx.checked_locations)
 
             for item_index in range(self.items_received, len(ctx.items_received)):
                 self.items_received += 1
