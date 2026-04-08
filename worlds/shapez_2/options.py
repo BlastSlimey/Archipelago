@@ -14,8 +14,8 @@ class CasefoldOptionSet(OptionSet):
     valid_keys_casefold = True
 
     def __init__(self, value: typing.Iterable[str]):
+        super().__init__(value)
         self.value: set[str] = set(val.casefold() for val in value)
-        super(OptionSet, self).__init__()
 
     def __contains__(self, item: str):
         return item.casefold() in self.value
