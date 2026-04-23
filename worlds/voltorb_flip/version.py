@@ -7,9 +7,10 @@ class VersionCompatibility(NamedTuple):
 
 
 # DO NOT put any number higher than 255
-version: tuple[int, int, int] = (1, 1, 0)
+version: tuple[int, int, int] = (1, 1, 1)
 
 compatibility: dict[tuple[int, int, int], VersionCompatibility] = {
+    (1, 1, 1): VersionCompatibility((0, 6, 3)),
     (1, 1, 0): VersionCompatibility((0, 6, 3)),
     (1, 0, 0): VersionCompatibility((0, 6, 3)),
     (0, 1, 0): VersionCompatibility((0, 6, 3)),
@@ -22,6 +23,7 @@ def ap_minimum() -> tuple[int, int, int]:
 
 if __name__ == "__main__":
     import orjson, os, zipfile
+    from worlds.Files import container_version
 
     apworld = "voltorb_flip"
     dev_dir = "D:/Games/Archipelago/custom_worlds/dev/"
@@ -31,7 +33,9 @@ if __name__ == "__main__":
             "game": "Voltorb Flip",
             "minimum_ap_version": ".".join(str(i) for i in ap_minimum()),
             "authors": ["BlastSlimey"],
-            "world_version": ".".join(str(i) for i in version)
+            "world_version": ".".join(str(i) for i in version),
+            "version": container_version,
+            "compatible_version": 7,
         }
         zipf2.writestr(os.path.join(apworld, "archipelago.json"), orjson.dumps(metadata))
         for root, dirs, files in os.walk("."):

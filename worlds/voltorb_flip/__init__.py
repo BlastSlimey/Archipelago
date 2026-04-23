@@ -34,10 +34,10 @@ class VoltorbFlipWorld(World):
         self.regions: dict[str, Region] = {}
         self.max_level = 0
         self.last_coin = 0
+        self.luck_classification = ItemClassification.progression_deprioritized_skip_balancing
 
     def create_item(self, name: str) -> "Item":
-        return VoltorbFlipItem(name, ItemClassification.progression_deprioritized_skip_balancing,
-                               self.item_name_to_id[name], self.player)
+        return VoltorbFlipItem(name, self.luck_classification, self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
         return "Luck"
@@ -96,6 +96,8 @@ class VoltorbFlipWorld(World):
         self.multiworld.regions.extend(self.regions.values())
 
     def create_items(self) -> None:
+        if self.options.artificial_logic == "off":
+            self.luck_classification = ItemClassification.filler
         for _ in range(sum(len(reg.locations) for reg in self.regions.values())):
             self.multiworld.itempool.append(self.create_item("Luck"))
 
