@@ -51,3 +51,6 @@ Though, the setup is a bit complicated, so let me explain it quickly:
 If you play a singleplayer randomizer, you can jump straight ahead into the gameplay. Otherwise, I'd recommend reading
 the tutorials on https://archipelago.gg since that requires a bit more knowledge if you don't have someone 
 else who hosts the "multiworld".
+
+If you have any questions, bugs to report, or need help with something (either this game or AP in general), join the
+Archipelago Discord server and look for the shapez 2 thread in `#future-game-design`.

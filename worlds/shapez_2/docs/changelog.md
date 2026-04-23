@@ -8,6 +8,7 @@ APWorld:
 - Fixed the first 3 task lines sometimes having a (logically) impossible shape
 Client:
 - First public version
+- Will be updated independently
 
 ## Is this version compatible with older multiworld slots?
 Manual-like client yes, back to 0.99.0 (will be deprecated soon though)
