@@ -17,7 +17,7 @@ Once you have generated the multiworld, a `.zip` file will be generated for your
 then it will be inside the multiworld's output `.zip` file. If hosted on the website (no matter if generated locally 
 or on the website), there will be download link next to the name of your slot on the room page. Your world's `.zip` 
 file will contain a `scenario_[...].json` file and a `preset_[...].json` file. Put those files into the
-`scenarios` and `scenario-presets` subfolders (respectively) in the mod's folder. 
+`scenarios` and `scenario-presets` subfolders (respectively) in the mod's folder (create those if they don't exist yet). 
 If you don't know where that is, then open the game, click `Mods`, and click the folder icon next to the mod's name.
 
 ## Playing your slot
