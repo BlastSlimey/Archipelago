@@ -13,23 +13,23 @@ def get_fixed_patches(container: "Shapez2ScenarioContainer") -> list[dict[str, A
     return [
         {
             "Shape": shapes_order[0],
-            "Position_LC":{"x":31,"y":30},
-            "LocalTiles":[{},{"x":-1,"y":-2},{"y":-1},{"x":-1,"y":-1}]
+            "Position_LC": {"x": 31, "y": 30},
+            "LocalTiles": [{}, {"x": -1, "y": -2}, {"y": -1}, {"x": -1, "y": -1}]
         },
         {
             "Shape": shapes_order[1],
-            "Position_LC":{"x":31,"y":34},
-            "LocalTiles":[{},{"y":1},{"x":-1,"y":1},{"x":-1,"y":2}]
+            "Position_LC": {"x": 31, "y": 34},
+            "LocalTiles": [{}, {"y": 1}, {"x": -1, "y": 1}, {"x": -1, "y": 2}]
         },
         {
             "Shape": shapes_order[2],
-            "Position_LC":{"x":29,"y":32},
-            "LocalTiles":[{},{"x":-1},{"x":-1,"y":-1},{"x":-2}]
+            "Position_LC": {"x": 29, "y": 32},
+            "LocalTiles": [{}, {"x": -1}, {"x": -1, "y": -1}, {"x": -2}]
         },
         {
             "Shape": shapes_order[3],
-            "Position_LC":{"x":33,"y":32},
-            "LocalTiles":[{},{"x":1},{"y":1},{"y":-1}]
+            "Position_LC": {"x": 33, "y": 32},
+            "LocalTiles": [{}, {"x": 1}, {"y": 1}, {"y": -1}]
         }
     ]
 

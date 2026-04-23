@@ -39,6 +39,7 @@ def get_operator_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, 
         shape = container.world.operator_shapes[line]
         line_obj = {
             "Id": f"Random{line + 1}",
+            "RandomizedExtraShapesPer10Level": [],
             "RequiredUpgradeIds": [],
             "RequiredMechanicIds": [f"OperatorLine{line + 1}"] if locked else [],
         }
@@ -71,7 +72,6 @@ def get_operator_rewards(container: "Shapez2ScenarioContainer", mechanics: list[
     from .mechanics import add_other_item
 
     show_other = container.world.options.show_other_players_items.value
-    all_worlds = container.world.multiworld.worlds
 
     def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
         _data = all_items[_item]

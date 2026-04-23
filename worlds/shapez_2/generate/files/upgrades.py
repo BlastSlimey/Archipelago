@@ -12,9 +12,11 @@ tabs: tuple[tuple[tuple[str, str], tuple[dict[str, ItemData], ...]], ...] = (
                                         misc.task_lines, misc.operator_lines)),
 )
 
-milestone_ids: tuple[str, ...] = ("RNStackerLayer2", "RNBlueprints", "RNIslandBuilding", "RNFluids",
-                                  "RNTrains", "RNPinPusher", "RNColorMixing", "RNIslandLayer3",
-                                  "RNCrystals", "RNEndOfGame", "RNWireBasics")
+milestone_ids: tuple[str, ...] = ("Milestone_FluidPainting", "Milestone_ShapeTrains",
+                                  "Milestone_PinPusher", "Milestone_ColorMixing", "Milestone_SpaceFloor3",
+                                  "Milestone_Crystals", "Milestone_VortexDelivery", "Milestone_FinalConverters",
+                                  "Milestone_PostFinal_Tier0", "Milestone_PostFinal_Tier1", "Milestone_PostFinal_Tier2",
+                                  "Milestone_PostFinal_Tier3")
 
 
 def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
@@ -24,8 +26,10 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
     surprise_item, data = container.world.random.choice(tuple(table.items()))
     out = [{
         "Id": "RNSurprise",
-        "PreviewImageId": "Shop_PlatformLayouts4",
+        "PreviewImageId": "CBBelts_Core",
+        "VideoId": "PlaceholderVideoVD",
         "Title": "Surprise out-of-logic item",
+        "IconId": "building.SandboxItemProducerDefaultVariant",
         "Description": "Rewards you with a random building, island platform, or mechanic "
                        "without being taken into account by logic.",
         "Category": "Other",
@@ -40,7 +44,9 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
         out.append({
             "Id": vanilla,
             "PreviewImageId": "",
+            "VideoId": "PlaceholderVideoVD",
             "Title": vanilla,
+            "IconId": "building.SandboxItemProducerDefaultVariant",
             "Description": "",
             "Hidden": True,
             "Category": "Other",
@@ -56,7 +62,9 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
                 out.append({
                     "Id": data.remote_id,
                     "PreviewImageId": "",
+                    "VideoId": "PlaceholderVideoVD",
                     "Title": name,
+                    "IconId": "building.SandboxItemProducerDefaultVariant",
                     "Description": "",
                     "Hidden": True,
                     "Category": "Other",
@@ -72,49 +80,32 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
 
 linear_upgrades: list[dict[str, Any]] = [
     {
-        "Id":"LRUBeltSpeed",
-        "Title":"@research.LRUBeltSpeed.title",
-        "DisplayType":1,
+        "Id":"LRUDummy_Zero",
+        "Title":"@research.LRUDummy.title",
+        "DisplayType":3,
         "Levels":[
-            {"Value":50},
-            {"Value":75,"Cost":{"$type":"ResearchPointsCost","Amount":2}},
-            {"Value":100,"Cost":{"$type":"ResearchPointsCost","Amount":7}},
-            {"Value":125,"Cost":{"$type":"ResearchPointsCost","Amount":20}},
-            {"Value":150,"Cost":{"$type":"ResearchPointsCost","Amount":50}}
+            {}
         ],
+        "Attribute":"@research.LRUDummy.attribute",
+        "Description":"@research.LRUDummy.description",
         "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
-        "Category":"ProcessingSpeeds"
+        "Category":"Hidden"
     },
     {
-        "Id":"LRUCuttingSpeed",
-        "Title":"@research.LRUCuttingSpeed.title",
-        "DisplayType":1,
+        "Id":"LRUGlobalSpeed",
+        "Title":"@research.LRUGlobalSpeed.title",
+        "DisplayType":2,
         "Levels":[
-            {"Value":50},
-            {"Value":75,"Cost":{"$type":"ResearchPointsCost","Amount":2}},
-            {"Value":100,"Cost":{"$type":"ResearchPointsCost","Amount":7}},
-            {"Value":125,"Cost":{"$type":"ResearchPointsCost","Amount":20}},
-            {"Value":150,"Cost":{"$type":"ResearchPointsCost","Amount":50}}
+            {"Value":100},
+            {"Value":125, "Cost":{"$type":"ResearchPointsCost", "Amount":50}},
+            {"Value":150, "Cost":{"$type":"ResearchPointsCost", "Amount":100}}
         ],
+        "Attribute":"@research.LRUGlobalSpeed.attribute",
+        "Description":"@research.LRUGlobalSpeed.description",
         "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
-        "Category":"ProcessingSpeeds"
-    },
-    {
-        "Id":"LRUStackingSpeed",
-        "Title":"@research.LRUStackingSpeed.title",
-        "DisplayType":1,
-        "Levels":[
-            {"Value":50},
-            {"Value":75,"Cost":{"$type":"ResearchPointsCost","Amount":2}},
-            {"Value":100,"Cost":{"$type":"ResearchPointsCost","Amount":7}},
-            {"Value":125,"Cost":{"$type":"ResearchPointsCost","Amount":20}},
-            {"Value":150,"Cost":{"$type":"ResearchPointsCost","Amount":50}}
-        ],
-        "RequiredUpgradeIds":[],
-        "RequiredMechanicIds":[],
-        "Category":"ProcessingSpeeds"
+        "Category":"Upgrades"
     },
     {
         "Id":"LRUHubInputSize",
@@ -122,27 +113,38 @@ linear_upgrades: list[dict[str, Any]] = [
         "DisplayType":3,
         "Levels":[
             {"Value":4},
-            {"Value":6,"Cost":{"$type":"ResearchPointsCost","Amount":3}},
-            {"Value":8,"Cost":{"$type":"ResearchPointsCost","Amount":7}},
+            {"Value":6,"Cost":{"$type":"ResearchPointsCost","Amount":7}},
+            {"Value":8,"Cost":{"$type":"ResearchPointsCost","Amount":10}},
             {"Value":10,"Cost":{"$type":"ResearchPointsCost","Amount":15}},
-            {"Value":12,"Cost":{"$type":"ResearchPointsCost","Amount":30}}
+            {"Value":12,"Cost":{"$type":"ResearchPointsCost","Amount":40}}
         ],
+        "Attribute":"@research.LRUHubInputSize.attribute",
+        "Description":"@research.LRUHubInputSize.description",
         "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
-        "Category":"Other"
+        "Category":"Upgrades"
     },
     {
-        "Id":"LRUPaintingSpeed",
-        "Title":"@research.LRUPaintingSpeed.title",
-        "DisplayType":1,
+        "Id":"LRUChunkLimitAdd",
+        "Title":"@research.LRUChunkLimitAdd.title",
+        "DisplayType":5,
         "Levels":[
-            {"Value":100},
-            {"Value":125,"Cost":{"$type":"ResearchPointsCost","Amount":12}},
-            {"Value":150,"Cost":{"$type":"ResearchPointsCost","Amount":30}}
+            {},
+            {"Value":2000,"Cost":{"$type":"ResearchPointsCost","Amount":1}},
+            {"Value":3000,"Cost":{"$type":"ResearchPointsCost","Amount":4}},
+            {"Value":5000,"Cost":{"$type":"ResearchPointsCost","Amount":8}},
+            {"Value":8000,"Cost":{"$type":"ResearchPointsCost","Amount":20}},
+            {"Value":16000,"Cost":{"$type":"ResearchPointsCost","Amount":50}},
+            {"Value":32000,"Cost":{"$type":"ResearchPointsCost","Amount":100}},
+            {"Value":100000,"Cost":{"$type":"ResearchPointsCost","Amount":500}},
+            {"Value":200000,"Cost":{"$type":"ResearchPointsCost","Amount":1200}},
+            {"Value":500000,"Cost":{"$type":"ResearchPointsCost","Amount":2500}}
         ],
+        "Attribute":"@research.LRUChunkLimitAdd.attribute",
+        "Description":"@research.LRUChunkLimitAdd.description",
         "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
-        "Category":"ProcessingSpeeds"
+        "Category":"Upgrades"
     },
     {
         "Id":"LRUTrainSpeed",
@@ -154,9 +156,11 @@ linear_upgrades: list[dict[str, Any]] = [
             {"Value":180,"Cost":{"$type":"ResearchPointsCost","Amount":12}},
             {"Value":200,"Cost":{"$type":"ResearchPointsCost","Amount":30}}
         ],
+        "Attribute":"@research.LRUTrainSpeed.attribute",
+        "Description":"@research.LRUTrainSpeed.description",
         "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
-        "Category":"Trains"
+        "Category":"Upgrades"
     },
     {
         "Id":"LRUTrainCapacity",
@@ -170,9 +174,11 @@ linear_upgrades: list[dict[str, Any]] = [
             {"Value":500,"Cost":{"$type":"ResearchPointsCost","Amount":30}},
             {"Value":600,"Cost":{"$type":"ResearchPointsCost","Amount":50}}
         ],
+        "Attribute":"@research.LRUTrainCapacity.attribute",
+        "Description":"@research.LRUTrainCapacity.description",
         "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
-        "Category":"Trains"
+        "Category":"Upgrades"
     },
     {
         "Id":"LRUShapeQuantity",
@@ -192,8 +198,10 @@ linear_upgrades: list[dict[str, Any]] = [
             {"Value":11,"Cost":{"$type":"ResearchPointsCost","Amount":6000}},
             {"Value":12,"Cost":{"$type":"ResearchPointsCost","Amount":9999}}
         ],
+        "Attribute":"@research.LRUShapeQuantity.attribute",
+        "Description":"@research.LRUShapeQuantity.description",
         "RequiredUpgradeIds":[],
         "RequiredMechanicIds":[],
-        "Category":"Other"
+        "Category":"Upgrades"
     }
 ]

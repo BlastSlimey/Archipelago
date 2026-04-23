@@ -67,6 +67,12 @@ def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict
             "IconId": "PlayerLevel"
         },
         {
+            "Id": "RUSandbox",
+            "Title": "@research.RUSandbox.title",
+            "Description": "@research.RUSandbox.description",
+            "IconId": "SandboxCategory"
+        },
+        {
             "Id": "RUSideUpgrades",
             "Title": "@research.RUSideUpgrades.title",
             "Description": "@research.RUSideUpgrades.description",
@@ -100,7 +106,7 @@ def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict
             "Id": "RUTrains",
             "Title": "@research.RUTrains.title",
             "Description": "@research.RUTrains.description",
-            "IconId": "Trains"
+            "IconId": "TrainsCategory"
         },
         {
             "Id": "RUFluids",
@@ -108,12 +114,12 @@ def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict
             "Description": "@research.RUFluids.description",
             "IconId": "Fluids"
         },
-        {
-            "Id": "RUWires",
-            "Title": "@research.RUWires.title",
-            "Description": "@research.RUWires.description",
-            "IconId": "Wires"
-        },
+        # {
+        #     "Id": "RUWires",
+        #     "Title": "@research.RUWires.title",
+        #     "Description": "@research.RUWires.description",
+        #     "IconId": "Wires"
+        # },
         {
             "Id": "RUPlayerLevel",
             "Title": "@research.RUPlayerLevel.title",
@@ -130,7 +136,7 @@ def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict
             "Id": "RUInfiniteGoals",
             "Title": "@research.RUInfiniteGoals.title",
             "Description": "@research.RUInfiniteGoals.description",
-            "IconId": "Infinite"
+            "IconId":"InfiniteGoals"
         },
         {
             "Id": "RUIslandLayer2",
@@ -143,5 +149,108 @@ def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict
             "Title": "@research.RUIslandLayer3.title",
             "Description": "@research.RUIslandLayer3.description",
             "IconId": "GenericLayerUnlock"
+        },
+        {
+            "Id": "RUOperatorBadge",
+            "Title": "@research.RUOperatorBadge.title",
+            "Description": "@research.RUOperatorBadge.description",
+            "IconId": "PlayerLevel"
+        },
+        {
+            "Id": "RUTradeStations",
+            "Title": "@research.RUTradeStations.title",
+            "Description": "@research.RUTradeStations.description",
+            "IconId": "ConverterStation"
+        },
+        {
+            "Id": "RUClassicTier1CMY",
+            "Title": "@research.RUClassicTier1CMY.title",
+            "Description": "@research.RUClassicTier1CMY.description",
+            "IconId": "ConverterShape_CMY"
+        },
+        {
+            "Id": "RUClassicTier2WK",
+            "Title": "@research.RUClassicTier2WK.title",
+            "Description": "@research.RUClassicTier2WK.description",
+            "IconId": "ConverterShape_WK"
+        },
+        {
+            "Id": "RUClassicTier3VGA",
+            "Title": "@research.RUClassicTier3VGA.title",
+            "Description": "@research.RUClassicTier3VGA.description",
+            "IconId": "ConverterVortex",
+            "HideReward": True
+        },
+        {
+            "Id": "RUPinPushing",
+            "Title": "@research.RUPinPushing.title",
+            "Description": "@research.RUPinPushing.description",
+            "IconId": "building.PinPusherDefaultVariant"
+        },
+        {
+            "Id": "RUColorMixing",
+            "Title": "@research.RUColorMixing.title",
+            "Description": "@research.RUColorMixing.description",
+            "IconId": "building.MixerDefaultVariant"
+        },
+        {
+            "Id": "RUCrystals",
+            "Title": "@research.RUCrystals.title",
+            "Description": "@research.RUCrystals.description",
+            "IconId": "building.CrystalGeneratorDefaultVariant"
+        },
+        {
+            "Id": "RUTier1Ruby",
+            "Title": "@research.RUTier1Ruby.title",
+            "Description": "@research.RUTier1Ruby.description",
+            "IconId": "ConverterShape_tier1"
+        },
+        {
+            "Id": "RUTier2Sapphire",
+            "Title": "@research.RUTier2Sapphire.title",
+            "Description": "@research.RUTier2Sapphire.description",
+            "IconId": "ConverterShape_tier2"
+        },
+        {
+            "Id": "RUTier3Emerald",
+            "Title": "@research.RUTier3Emerald.title",
+            "Description": "@research.RUTier3Emerald.description",
+            "IconId": "ConverterShape_tier3"
+        },
+        {
+            "Id": "RUTier4Gold",
+            "Title": "@research.RUTier4Gold.title",
+            "Description": "@research.RUTier4Gold.description",
+            "IconId": "ConverterShape_tier4"
+        },
+        {
+            "Id": "RUTier5Aquamarine",
+            "Title": "@research.RUTier5Aquamarine.title",
+            "Description": "@research.RUTier5Aquamarine.description",
+            "IconId": "ConverterShape_tier5"
+        },
+        {
+            "Id": "RUTier6Amethyst",
+            "Title": "@research.RUTier6Amethyst.title",
+            "Description": "@research.RUTier6Amethyst.description",
+            "IconId": "ConverterShape_tier6"
+        },
+        {
+            "Id": "RUTier7Diamonds",
+            "Title": "@research.RUTier7Diamonds.title",
+            "Description": "@research.RUTier7Diamonds.description",
+            "IconId": "ConverterShape_tier7"
+        },
+        {
+            "Id": "RUTier8Painite",
+            "Title": "@research.RUTier8Painite.title",
+            "Description": "@research.RUTier8Painite.description",
+            "IconId": "ConverterShape_tier8"
+        },
+        {
+            "Id": "RUTier9VortexTrader",
+            "Title": "@research.RUTier9VortexTrader.title",
+            "Description": "@research.RUTier9VortexTrader.description",
+            "IconId": "ConverterShape_tier9"
         }
     ]

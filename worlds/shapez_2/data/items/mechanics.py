@@ -14,7 +14,7 @@ always: dict[str, ItemData] = {
 starting: dict[str, ItemData] = {
     "Space Platforms": ItemData(2100, always_progression, "RemoteSpacePlatforms", ("RUIslandPlacement", ), 2),
     "2nd Platform Floor": ItemData(2101, always_progression, "Remote2ndPlatformFloor", ("RUIslandLayer2", ), 2),
-    "Wires (Category)": ItemData(2102, always_useful, "RemoteWiresCategory", ("RUWires", ), 2),
+    # "Wires (Category)": ItemData(2102, always_useful, "RemoteWiresCategory", ("RUWires", ), 2),
     "Trains": ItemData(2103, always_useful, "RemoteTrains", ("RUTrains", ), 2),
     "Fluids": ItemData(2104, always_progression, "RemoteFluids", ("RUFluids", ), 2),
     "Upgrades": ItemData(2105, always_progression, "RemoteUpgrades", ("RUSideUpgrades", ), 2),

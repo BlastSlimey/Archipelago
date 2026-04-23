@@ -359,7 +359,7 @@ class ShowOtherPlayersItems(Choice):
     - **Item** - Shows the name of each of those items.
     - **Player** - Additionally appends the player's name to the item's name.
     - **Classification** - Additionally appends the item's classification (progression, filler, ...) to its name.
-    - **Item** - Appends bot the player's name and the classification to the item's name.
+    - **Player & Classification** - Appends both the player's name and the classification to the item's name.
     """
     display_name = "Show other players' items"
     option_no = 0

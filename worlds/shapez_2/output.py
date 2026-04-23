@@ -25,14 +25,14 @@ class Shapez2ScenarioContainer(APPlayerContainer):
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         from .generate.files import (example_shapes, blueprint, milestones, tasks, upgrades, operator_lines,
-                                     mechanics, starting_location, debug, preset)
+                                     mechanics, starting_location, debug, wiki)
         super().write_contents(opened_zipfile)
 
         scenario_id = self.world.multiworld.get_out_file_name_base(self.player)
         mechanic_definitions = mechanics.get_mechanic_definitions(self)
         other_players_items: set[str] = set()  # ONLY FOR LOOKUP!!!
         scenario: dict[str, Any] = {
-            "FormatVersion": 2,
+            "FormatVersion": 3,
             "GameVersion": 1058,
             "UniqueId": scenario_id,
             "SupportedGameModes": ["RegularGameMode"],
@@ -41,7 +41,11 @@ class Shapez2ScenarioContainer(APPlayerContainer):
             "Title": f"Archipelago ({self.player_name})",
             "Description": f"Scenario for player {self.player_name} from the multiworld "
                            f"with seed {self.world.multiworld.seed_name}.",
-            "PreviewImageId": "Scenario_Regular",
+            "PreviewImageId": "ScenarioBackground_Classic_Regular",
+            "PlayerBadge": {
+                "Title": f"AP: {self.player_name} ({self.world.multiworld.seed_name})",
+                "ImageId": "OperatorBadgeClassicRegular"
+            },
             "ResearchConfig": {
                 "BaseChunkLimitMultiplier": 200,
                 "BaseBlueprintRewardMultiplier": 500,
@@ -52,31 +56,36 @@ class Shapez2ScenarioContainer(APPlayerContainer):
                 "ColorSchemeConfigurationId": "DefaultColorSchemeRGBFlex",
                 "ResearchLevelsAreProgressive": True,
                 "BlueprintCurrencyShapes": blueprint.get_blueprint_shapes(self),
-                "IntroductionWikiEntryId": "WKWelcome",
-                "InitiallyUnlockedUpgrades": ["RNInitial", *upgrades.milestone_ids],
+                "IntroductionWikiEntryId": "WKClassicRegularWelcome",
+                "InitiallyUnlockedUpgrades": ["Milestone_Initial", *upgrades.milestone_ids],
                 "TutorialConfig": "TCNoTutorial"
             },
             "Progression": {
                 "Levels": {"Levels": milestones.get_milestones(self, mechanic_definitions, other_players_items)},
                 "SideQuestGroups": {"SideQuestGroups": tasks.get_task_lines(self, mechanic_definitions,
                                                                             other_players_items)},
-                "SideUpgrades": {
-                    "UpgradeCategories": ["ProcessingSpeeds","Buildings","Platforms","Trains","Wires",
+                "ScenarioContent": {
+                    "UpgradeCategories": ["Upgrades","Buildings","Platforms","Trains","Wires",
                                           "Decorations","Other"],
-                    "SideUpgrades": upgrades.get_remote_upgrades(self)
+                    "ContentBundles": [{"ContentBundle": upgrades.get_remote_upgrades(self)}]
                 },
                 "LinearUpgrades": {
                     "HubInputSizeUpgradeId": "LRUHubInputSize",
                     "ShapeQuantityUpgradeId": "LRUShapeQuantity",
+                    "ChunkLimitAddUpgradeId": "LRUChunkLimitAdd",
                     "SpeedsToLinearUpgradeMappings": {
-                        "BeltSpeed": "LRUBeltSpeed",
-                        "CutterSpeed": "LRUCuttingSpeed",
-                        "StackerSpeed": "LRUStackingSpeed",
-                        "PainterSpeed": "LRUPaintingSpeed",
+                        "BeltSpeed": "LRUGlobalSpeed",
+                        "CutterSpeed": "LRUGlobalSpeed",
+                        "StackerSpeed": "LRUGlobalSpeed",
+                        "PainterSpeed": "LRUGlobalSpeed",
                         "TrainSpeed": "LRUTrainSpeed",
                         "TrainCapacity": "LRUTrainCapacity"
                     },
                     "LinearUpgrades": upgrades.linear_upgrades
+                },
+                "WikiConfiguration": {
+                    "Categories": wiki.categories,
+                    "WikiEntries": wiki.wiki_entries,
                 }
             },
             "StartingLocation": {
@@ -87,13 +96,20 @@ class Shapez2ScenarioContainer(APPlayerContainer):
                     "ShowAllBuildingLayers": True,
                     "ShowAllIslandLayers": True
                 },
+                "CentralElementCoordinate": {
+                    "x": -1
+                },
                 "InitialIslands": {"InitialIslands": [{"Position_GC": {"x": -1}, "LayoutId": "Layout_HUB"}]},
                 "FixedPatches": {"FixedPatches": starting_location.get_fixed_patches(self)},
-                "StartingChunks": {"StartingChunks": []}
+                "StartingChunks": {"StartingChunks": [{
+                    "GuaranteedShapePatches": [],
+                    "GuaranteedColorPatches": ["r", "b", "g"]
+                }]}
             },
             "PlayerLevelConfig": {
                 "IconicLevelShapes": {"LevelShapes": example_shapes.get_iconic_shapes(self)},
                 "IconicLevelShapeInterval": 1,
+                "RankDifficultyMultiplier": 1.0,
                 "GoalLines": operator_lines.get_operator_lines(self),
                 "Rewards": operator_lines.get_operator_rewards(self, mechanic_definitions, other_players_items)
             },
@@ -101,14 +117,16 @@ class Shapez2ScenarioContainer(APPlayerContainer):
                 "Mechanics": mechanic_definitions,
                 "BuildingLayerMechanicIds": ["RULayer2", "RULayer3"],
                 "IslandLayerMechanicIds": ["RUIslandLayer2", "RUIslandLayer3"],
-                "IslandLayersUnlockOrder": [-1, 1],
+                "IslandLayersUnlockOrder": [1, 2],
                 "BlueprintsMechanicId": "RUBlueprints",
                 "RailsMechanicId": "RUTrains",
                 "IslandManagementMechanicId": "RUIslandPlacement",
                 "PlayerLevelMechanicId": "RUPlayerLevel",
-                "TrainHubDeliveryMechanicId": "RUTrainHubDelivery"
+                "TrainHubDeliveryMechanicId": "RUTrainHubDelivery",
+                "SideUpgradeMechanicId": "RUSideUpgrades",
+                "TradeStationsMechanicId": "RUTradeStations"
             },
-            "ConvertersConfig": {"Configs": {}},
+            "ConvertersConfig": {"RocketGroups": [], "Configs": {}},
             "ResearchStationConfig": {"Recipes": {}},
             "RailColorsConfig": {
                 "RailColors": [
@@ -121,7 +139,7 @@ class Shapez2ScenarioContainer(APPlayerContainer):
                     {"Id": {"RailColorId": "Yellow"}, "Tint": "EAEA19"}
                 ]
             },
-            "ToolbarConfig": "#include_raw:Scenarios/Shared/Toolbar/ToolbarConfig"
+            "ToolbarConfig": "#include_raw:Scenarios/Classic/DefaultData/Toolbar/ToolbarConfig"
         }
         scenario_preset: dict[str, Any] = {
           "Version": "1",
@@ -130,14 +148,14 @@ class Shapez2ScenarioContainer(APPlayerContainer):
           "Description": "@scenario-preset.default.description",
           "Parameters": {
             "ScenarioId": scenario_id,
-            "MapGenerationParameters": preset.map_generation_params,
+            "MapGenerationParameters": "#include:Scenarios/SharedData/BaseMapGenerationParameters",
             "GameRuleParameters": {"RuleIds": []}
           }
         }
         scenario_json: bytes = orjson.dumps(scenario)
-        position = scenario_json.find(b"\"FormatVersion\":2,")
+        position = scenario_json.find(b"\"FormatVersion\":3,")
         if position != -1:
-            scenario_json = scenario_json[:position] + b"\"FormatVersion\": 2," + scenario_json[position+18:]
+            scenario_json = scenario_json[:position] + b"\"FormatVersion\": 3," + scenario_json[position+18:]
         opened_zipfile.writestr("scenario_" + scenario_id + ".json", scenario_json)
         opened_zipfile.writestr("preset_" + scenario_id + ".json", orjson.dumps(scenario_preset))
         opened_zipfile.writestr("shapes_debug.txt", debug.write_shapes_debug(self))

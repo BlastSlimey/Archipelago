@@ -6,9 +6,9 @@ from ...data import PointsItemData
 from ...data.required_amounts import milestones as shape_amounts
 
 
-wiki_entry_rewards = ["WKWelcome", "WKShapes", "WKCameraControls", "WKBasicControls", "WKBeltPlacement", "WKCutting",
-                      "WKRotating", "WKStacking", "WKResearch", "WKBlueprints", "WKPlatforms", "WKExpanding",
-                      "WKFluids", "WKOperatorLevel", "WKTrains", "WKPinPusher", "WKMixing", "WKCrystals", "WKWires"]
+wiki_entry_rewards = ["WKVortexLTD_Handbook", "WKFluids_Intro", "WKTrains_Intro", "WKProcessing_PinPusher",
+                      "WKFluids_Mixing", "WKIslands_Floors", "WKFluids_CrystalGenerator", "WKTrains_VortexDelivery",
+                      "WKWires_MaM"]
 
 reward_types = {
     RewardType.building: ("BuildingReward", "BuildingDefinitionGroupId"),
@@ -19,12 +19,15 @@ reward_types = {
     RewardType.research_points: ("ResearchPointsReward", "Amount"),
 }
 
-milestone_graphics = [("Milestone_StackerLayer2VD", "RNStacker"), ("Milestone_BlueprintsVD", "RNBlueprints"),
-                      ("Milestone_SpacePlatformsVD", "RNIslandBuilding"), ("Milestone_FluidsVD", "RNFluids"),
-                      ("Milestone_TrainsVD", "RNTrains"), ("Milestone_PinPusherVD", "RNPinPusher"),
-                      ("Milestone_MixerVD", "RNColorMixing"), ("Milestone_IslandLayer3VD", "RNIslandLayer3"),
-                      ("Milestone_CrystalsVD", "RNCrystals"), ("Milestone_TrainHubDeliveryVD", "RNTrainHubDelivery"),
-                      ("Milestone_FinalVD", "RNFinal")]
+milestone_graphics = [("MilestoneClassicInitialVD", "building.BeltDefaultVariant"),
+                      ("MilestoneClassicPainterVD", "building.PainterDefaultVariant"),
+                      ("MilestoneClassicTrainsVD", "Trains"),
+                      ("MilestoneClassicPinPusherVD", "building.PinPusherDefaultVariant"),
+                      ("MilestoneClassicMixerVD", "building.MixerDefaultVariant"),
+                      ("MilestoneClassicSpaceLayer3VD", "GenericLayerUnlock"),
+                      ("MilestoneClassicCrystalsVD", "building.CrystalGeneratorDefaultVariant"),
+                      ("MilestoneClassicVortexDeliveryVD", "Trains"),
+                      ("MilestoneClassicFinalVD", "ConverterVortex")]
 
 
 def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[str, str]],
@@ -35,7 +38,6 @@ def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
     research_points = container.world.options.location_adjustments["Starting research points"]
     blueprint_points = container.world.options.location_adjustments["Starting blueprint points"]
     show_other = container.world.options.show_other_players_items.current_key
-    all_worlds = container.world.multiworld.worlds
 
     def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
         if _item[0] != "[":  # event item
@@ -47,9 +49,8 @@ def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
                 for _rew in _data.reward_ids:
                     yield {"$type": _type, _key: _rew}
 
-    video, image = container.world.random.choice(milestone_graphics)
+    video, icon = container.world.random.choice(milestone_graphics)
     rewards = [
-        *({"$type": "WikiEntryReward", "EntryId": entry} for entry in wiki_entry_rewards),
         {"$type": "ChunkLimitReward",
          "Amount": container.world.options.location_adjustments["Starting platform points"]},
         *(reward for item in container.world.starting_items for reward in get_rewards(item)),
@@ -60,20 +61,21 @@ def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
         rewards.append({"$type": "BlueprintCurrencyReward", "Amount": blueprint_points})
     out = [{
         "Definition": {
-            "Id": "RNInitial",
+            "Id": "Milestone_Initial",
             "VideoId": video,
-            "PreviewImageId": image,
+            "PreviewImageId": "Placeholder",
             "Title": "Starting inventory",
             "Description": "Everything that's unlocked right from the beginning, including the player-defined "
                            "starting inventory.",
-            "WikiEntryId": "WKWelcome",
+            "WikiEntryId": "WKVortexLTD_Handbook",
+            "IconId": icon,
         },
         "Lines": {"Lines": []},
         "Rewards": {"Rewards": rewards}
     }]
 
     for milestone_num in range(container.world.options.location_adjustments["Milestones"]):
-        video, image = container.world.random.choice(milestone_graphics)
+        video, icon = container.world.random.choice(milestone_graphics)
         checks_count = container.world.milestone_checks_counts[milestone_num]
         shapes_1, shapes_2 = container.world.milestone_shapes[milestone_num]
         amounts = shape_amounts[milestone_num]
@@ -93,10 +95,11 @@ def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
             "Definition": {
                 "Id": f"LocMilestone_{milestone_num + 1}",
                 "VideoId": video,
-                "PreviewImageId": image,
+                "PreviewImageId": "Placeholder",
                 "Title": f"Milestone #{milestone_num + 1}",
                 "Description": f"Another Milestone containing {checks_count} items",
                 "WikiEntryId": container.world.random.choice(wiki_entry_rewards),
+                "IconId": icon,
             },
             "Lines": {"Lines": [
                 {"ReusedForPlayerLevel": milestone_num in container.world.operator_shapes,
