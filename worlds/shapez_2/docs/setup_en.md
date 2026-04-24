@@ -26,6 +26,7 @@ If you generated a single shapez 2 world, then you can just start playing the cu
 If there are multiple worlds in the generated multiworld, you will need to connect to the multiworld using the 
 2hapezipelago mod. To do that, create/open the save file, press F1 to open the debug console, and type in 
 `2hapezipelago.connect playername@address:port` (if your room has a password, then type in 
-`2hapezipelago.connect playername:password@address:port` instead). If you reopen your save file at a later point, 
+`2hapezipelago.connect playername:password@address:port` instead, also if your playername contains spaces, 
+then put the connection details into quotes). If you reopen your save file at a later point, 
 you can simply type `2hapezipelago.reconnect` into the console, since your connection details are stored 
 in the save file. To change the port, type in the full connection details again.
