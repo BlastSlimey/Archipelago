@@ -96,10 +96,11 @@ class Shapez2World(World):
                     if opt is not None:
                         setattr(self.options, key, opt.from_any(value))
                 self.seed = re_gen_slot_data["seed"]
-                loaded_ut_version = re_gen_slot_data.get("ut_compatibility", (0, 99, 0))
+                loaded_ut_version = tuple(re_gen_slot_data.get("ut_compatibility", (0, 99, 0)))
                 if version.ut_compatibility() != loaded_ut_version:
-                    raise Exception("The slot you're trying to track is entirely incompatible with this apworld "
-                                    "version. Please update your apworld.")
+                    raise Exception(f"The slot you're trying to track is entirely incompatible with this apworld "
+                                    f"version ({version.ut_compatibility()} != {loaded_ut_version}). "
+                                    f"Please update your apworld.")
                 if version.ut_accuracy() != loaded_ut_version:
                     logging.warning("UT accuracy mismatch detected. You can continue tracking with this "
                                     "apworld version, but tracking might not be entirely accurate.")
