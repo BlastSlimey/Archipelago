@@ -19,6 +19,9 @@ or on the website), there will be download link next to the name of your slot on
 file will contain a `scenario_[...].json` file and a `preset_[...].json` file. Put those files into the
 `scenarios` and `scenario-presets` subfolders (respectively) in the mod's folder (create those if they don't exist yet). 
 If you don't know where that is, then open the game, click `Mods`, and click the folder icon next to the mod's name.
+- If the scenario doesn't show up, then put the files into the `custom-scenarios` and `custom-scenario-parameter-presets`
+  subfolders (respectively) in the game's data folder instead. If you don't know where that is, then open the game,
+  click `Play` (and **not** `Continue`!), click `Show folder` (which will open your file browser), and go one folder up.
 
 ## Playing your slot
 
