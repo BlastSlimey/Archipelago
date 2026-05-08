@@ -1,6 +1,9 @@
 
 ### Important
 
+> locked tasks are considered in logic in universal tracker with the setting "Lock task lines"
+
+> similarly, operator levels are all considered sphere 1 in the spoiler log, but none of them appear in UT
 
 ### Features
 

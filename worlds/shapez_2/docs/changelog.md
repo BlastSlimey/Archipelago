@@ -5,7 +5,7 @@ Versions are sorted in ascending order, i.e. the most recent changes are at the 
 
 - Fixed UT rejecting any slot
 
-## Is this version compatible with older multiworld slots?
+### Is this version compatible with older multiworld slots?
 Manual-like client yes, back to 0.99.0 (will be deprecated soon though)
 <br>UT will probably be inaccurate for worlds generated prior to 1.0.0
 
@@ -18,7 +18,7 @@ Client:
 - First public version
 - Will be updated independently
 
-## Is this version compatible with older multiworld slots?
+### Is this version compatible with older multiworld slots?
 Manual-like client yes, back to 0.99.0 (will be deprecated soon though)
 <br>First release of the client mod, so no backwards compatibility with that
 <br>UT will probably be inaccurate for worlds generated prior to 1.0.0
@@ -27,7 +27,7 @@ Manual-like client yes, back to 0.99.0 (will be deprecated soon though)
 
 - Fixed generation failures on AP 0.6.7
 
-## Is this version compatible with older multiworld slots?
+### Is this version compatible with older multiworld slots?
 Manual-like client yes, back to 0.99.0
 <br>UT will probably be inaccurate for worlds generated prior to 0.99.5
 
