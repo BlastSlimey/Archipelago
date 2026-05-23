@@ -78,14 +78,17 @@ class Plugin:
         tepig = seed.choice(possible_fire)
         oshawott = seed.choice(possible_water)
 
-        narc = NARC(rom.getFileByName("a/0/5/7"))  # a057 are the script files
+        narc = NARC(rom.getFileByName("a/0/5/7"))
         script = bytearray(narc.files[782])
-        script = script.replace(b'\xef\x01', snivy.dex_number.to_bytes(2, "little"))
-        script = script.replace(b'\xf2\x01', tepig.dex_number.to_bytes(2, "little"))
-        oshaw_id_last = script.find(b'\xf5\x01')
-        for i in range(4):
-            oshaw_id_last = script.find(b'\xf5\x01', oshaw_id_last + 1)
-            script[oshaw_id_last:oshaw_id_last+2] = oshawott.dex_number.to_bytes(2, "little")
+        script = script.replace(b'\x28\x00\x21\x80\xEF\x01',
+                                b'\x28\x00\x21\x80' + snivy.dex_number.to_bytes(2, "little"))
+        script = script.replace(b'\x57\x00\x01\xEF\x01', b'\x57\x00\x01' + snivy.dex_number.to_bytes(2, "little"))
+        script = script.replace(b'\x28\x00\x21\x80\xEF\x01',
+                                b'\x28\x00\x21\x80' + tepig.dex_number.to_bytes(2, "little"))
+        script = script.replace(b'\x57\x00\x01\xEF\x01', b'\x57\x00\x01' + tepig.dex_number.to_bytes(2, "little"))
+        script = script.replace(b'\x28\x00\x21\x80\xEF\x01',
+                                b'\x28\x00\x21\x80' + oshawott.dex_number.to_bytes(2, "little"))
+        script = script.replace(b'\x57\x00\x01\xEF\x01', b'\x57\x00\x01' + oshawott.dex_number.to_bytes(2, "little"))
         narc.files[782] = bytes(script)
         files_dump[f"a057/782"] = narc.files[782]
         rom.setFileByName("a/0/5/7", narc.save())
