@@ -12,8 +12,8 @@ Nintendo DS in both acts and bosses to visualize the altitude of the player.
 
 ## Where is the options page?
 
-The [player options page for this game](../player-options) contains all the options you need to configure
-and export a config file.
+As this game is not (yet) merged into main, you will have to either use template yamls or the Options Creator in the launcher.
+Type `&options` into the ⁠#aginahbot-spam channel on the Discord server for more info.
 
 ## What does randomization do to this game?
 
