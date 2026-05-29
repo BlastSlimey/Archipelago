@@ -28,6 +28,7 @@ To give an example: Sonic's Zone 5 will be...
 - accessible if you have `Huge Crisis`.
 - accessible if you have 5 `Progressive Level Select (Sonic)` and at least one of `Leaf Storm`, `Water Palace`, 
   `Mirage Road`, or `Night Carnival` (zones 1-4).
+- accessible if you have `Altitude Limit`/`Dead Line` and 6/7 `Progressive Level Select (Sonic)`
 - not accessible if you neither have `Huge Crisis` nor 5x `Progressive Level Select (Sonic)`.
 - not accessible if you do not have `Leaf Storm`, `Water Palace`, `Mirage Road`, or `Night Carnival`, even if you 
   have 5 `Progressive Level Select (Sonic)`.
