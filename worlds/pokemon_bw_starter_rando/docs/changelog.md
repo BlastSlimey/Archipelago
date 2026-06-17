@@ -1,6 +1,15 @@
 # Changelog
 Versions are sorted in ascending order, i.e. the most recent changes are at the top.
 
+## 1.1.0
+
+- Fix compatibility with main 0.3.31
+- Added weighting to all options
+
+### Compatibility
+Compatible with main v0.3.31 (latest as of writing), future versions will probably be compatible as well
+until starter rando is implemented in main.
+
 ## 1.0.0
 
 - First version
@@ -8,5 +17,5 @@ Versions are sorted in ascending order, i.e. the most recent changes are at the 
 - Fallback to using `randomize_wild_pokemon` from main apworld
 
 ### Compatibility
-Compatible with main v0.3.29-v0.3.30 (latest as of writing), future versions will probably be compatible as well
-until starter rando is implemented in main.
+Compatible with main v0.3.29-v0.3.30 (latest as of writing), ~~future versions will probably be compatible as well
+until starter rando is implemented in main~~.
