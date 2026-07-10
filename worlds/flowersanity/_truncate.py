@@ -1,18 +1,18 @@
 
 options = {
-    "min_votes": 100,
+    "min_votes": 9,
 }
 
 
 def default():
-    with open("temp/colornames.txt", "rt") as infile, open("data/colornames_trunc.py", "wt") as outfile:
+    with open("data/colornames_trunc.txt", "rt") as infile, open("data/colornames_trunc.py", "wt") as outfile:
         outfile.write("\n")
         for key, val in options.items():
             outfile.write(f"{key} = {val}\n")
         outfile.write("\ncolors: dict[int, tuple[str, int]] = {\n")
         lines = infile.readlines()
         names = set()
-        for i in range(1, len(lines)):
+        for i in range(len(lines)):
             parts = lines[i][:-1].split(",")
             value = tuple(int(parts[0][j:j+2], 16) for j in (0, 2, 4))
             votes = int(parts[2])

@@ -20,7 +20,7 @@ You can choose between (currently) 2 goals:
 
 ## Which items can be in another player's world?
 
-- Flower colors (~8300 currently)
+- Flower colors (~7800 currently)
 - Merging calculations (6 currently)
 
 ## What is considered a location check?
@@ -34,4 +34,4 @@ You can choose between (currently) 2 goals:
 All the color's names were taken from https://colornames.org/, 
 where they're published under the CCO 1.0 license and downloadable as a zipped `.csv` file.
 From all the names included in the download, all names with less than 9 votes as of March 17th 2026 
-(and a few hand-selected ones) were removed in order to get a final list of ~8300 color names.
+(and a few hundred hand-selected ones) were removed in order to get a final list of ~7800 color names.
