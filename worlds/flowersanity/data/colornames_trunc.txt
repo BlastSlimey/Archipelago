@@ -3,19 +3,14 @@
 000002,Still Black,234
 000003,So Close To Black It Hurts,309
 00000f,OOF,417
-000069,Nice Blue,234
 000080,Navy,131
 0000ff,Blue,2891
 000100,The Darkest Green,265
 0004ff,Sans,140
-000666,Devilishly Dark Blue,135
-000da0,Lyran Dasz,101
 000fff,Bloof,104
 001134,Upside-Down Calculator Hello,29
 001337,Leet Navy,93
 0014a8,Zaffre,25
-001945,Victory Day Blue,26
-001984,Totalitarian Blue,45
 002020,2020 Vision,33
 002763,Yoyle Blue,110
 002fa7,International Klein Blue,31
@@ -28,12 +23,8 @@
 0047ab,Cobalt Blue,39
 0048ba,Absolute Zero,34
 005682,Arachnid's Grip Cerulean,68
-006341,Revolutionary Mexico Green,33
-006660,Devils Teal,26
 006666,Attmay Green,49
-006900,Nice Green,109
 006911,Loki,30
-006969,Nice Cyan,70
 007007,James Bond Green,114
 007355,Cytrynbaum Green,40
 007474,Skobeloff,43
@@ -55,7 +46,6 @@
 00a4a0,Larry Stylinson,33
 00a86b,Jade,42
 00abba,Waterloo Teal,31
-00acab,Police Cyan,26
 00acdc,Back In Blue,32
 00ace6,Weezer,138
 00aeef,Harablue,64
@@ -69,7 +59,6 @@
 00d1b2,Name A Color,94
 00ddc0,Hatsune Miku,139
 00dead,Lifeless Light,80
-00deaf,Deaf Teal,28
 00e25b,Enigma Evergreen,30
 00e621,Notices Your Lime,41
 00ee8a,That One Guy On Discord,51
@@ -88,16 +77,13 @@
 011235,Fibonacci Navy,78
 012082,Wallamaybungya Evening,28
 012345,Zero-Indexed Blue,157
-012e57,E621,37
 013370,Hacker Blue,35
 015687,Turkish Stream Blue,41
 018081,Wilbur Soot Starting Soon,31
 01823e,Chromakopia,74
 018fd0,Origin Pulse,25
-019283,Smartass Again,30
 01aedf,AnniPaul,78
 020302,Its Not A Phase Mom,204
-024024,Backwards Weed,35
 024680,Even Blue,35
 027630,Yoyle Turquoise,33
 030000,Technically Red,194
@@ -110,20 +96,14 @@
 057721,Euler-Mascheroni Green,32
 0595db,Mendix Blue,79
 0678be,Drupal Blue,192
-069420,Epic Koosh Green,96
 0715cd,John Egbert Blue,96
 072069,Lunar Tranquility,29
-078b40,Racist Green,46
-082200,Geese Shat Green,217
 082217,The Unmade Podcast,85
-091021,Stupid Black,34
-091101,Never Forgetti,114
 09204c,Official Grayfruit Shadow,37
 098765,Reverse Password,72
 0a0006,Still Brighter Than My Future,149
 0abab5,Tiffany Blue,25
 0bb052,Unfunniest Color In Existence,33
-0cd0cd,OCD Blue,27
 0d00ff,IKEA,162
 0dd0dd,Sea Of Weirdness,27
 0dead0,Spectral Glow,44
@@ -131,7 +111,6 @@
 0decaf,Zero Decaf Turquoise,27
 0dff00,Nickelodeon Slime,138
 0e6210,Furry Dark Green,34
-0ed145,Sig Green,38
 0f0f0f,Chaos Black,139
 100000,Hundred Thousand,392
 101010,Binary Gray,318
@@ -144,7 +123,6 @@
 101f47,Sparkling Midnight,10
 102030,Deca Navy,45
 102042,Deeply Moonlit Ocean,9
-102938,Smartass,46
 102c43,Redemptive Blue,9
 10331d,Witch Forest Green,12
 10334d,Fairy Tale Twilight,9
@@ -161,7 +139,6 @@
 107f8d,Mermaid Tail,10
 108070,Malachite,12
 108645,777 Jackpot Lucky Shamrock Green,10
-10873e,Female General,15
 108745,Lucky Shamrock Leprechaun Green,11
 109876,Downwards Green,55
 10987d,Vine Rip,10
@@ -181,8 +158,6 @@
 111037,Danganronpa Spoilers,20
 1110e7,Condos,11
 111111,We Are Number One,444
-111112,The Queen Is Dead,21
-111118,War's End,17
 111212,When I Turn My Light Off At 3am,10
 111213,Look At The RGB Scale,9
 111920,Midnight Zone Dark,9
@@ -195,11 +170,8 @@
 113110,Ten Tones Of Wisdom,11
 113377,Deep Leet Sea,10
 113867,Grady Mountain Blue,14
-113d10,Ultra Dark Jamal Green,9
 11407b,Roughneck Raven,9
 114114,Flerovian Green,9
-114273,Female Doctor,9
-114514,Iiyokoiyo,26
 114ace,Jay Andrews,13
 115e81,Mermaid Lucid Dreams,9
 116358,Maxine,10
@@ -218,7 +190,6 @@
 11a9db,Finally The Perfect Blue,10
 11cfa8,Secret Mermaid Coral,11
 11ff00,Green Screen,109
-120617,Death,40
 121111,Black Glow,9
 121212,12 Black,40
 121234,And-a-1 And-a-2 And-a-1234,15
@@ -265,7 +236,6 @@
 125690,2 Keys Skipped,10
 125740,Gotham Green,14
 126277,Dancing Sea,9
-127817,Goddess Of The Hunt,9
 12872b,Dekuta,10
 12943b,GOT7,11
 1295cd,Blue Raincoat,9
@@ -301,7 +271,6 @@
 133337,Elite Teal,71
 133700,Elite Green,98
 133769,Internet Artifact,72
-133d74,Female Football Fan,14
 133f4c,Deep Waters Hide Big Fish,10
 134340,Provisional Pluto,19
 134567,2-Skip,12
@@ -322,7 +291,6 @@
 13a6f0,Not So Dark Owo Blue,9
 13aa95,We Ratioed Wumbo,9
 13c312,Gilibert,9
-13d8e2,Crystal Meth,11
 13eac9,Aqua,28
 13edab,Adamantite Mint,12
 140036,Midnight,38
@@ -331,7 +299,6 @@
 141414,A Distinctive Lack Of Hue,81
 141421,The Square Root Of Blue,78
 14151a,Very Very Very Very Dark Gray,9
-14181b,Networked Death,12
 14184a,Midnight Pearls,11
 141dda,Sans Undertale,23
 142462,Royal Blueberry,9
@@ -340,21 +307,16 @@
 142ad7,Scott's Awesome 2,9
 142ad8,Bromance Blue,10
 143143,I Love Blu,21
-143159,Female Maths Teacher,16
 143eba,Leviathan Sapphire,12
 143f55,Fity Shades Of Blue,9
-143f78,Female Football,15
 14422d,Forest Sages,13
 1442b6,Neptune,14
 144f26,Girls Are Adventurers,21
-145059,Female Physician,13
 1453ad,Byzantium Blue,23
 146a91,Deep Chat Blue,22
 146e3e,Crickle Pickle,9
 146e4f,Obedient Evergreen,9
 147d91,Waterfall,9
-148800,Failed Artist's Green,30
-148888,A Future For Teal Children,9
 1492ad,Columbus Teal,13
 14997c,Leaves Of Narnia,12
 14afb2,Teenage Kicks,9
@@ -362,12 +324,10 @@
 14c4c7,Tequila Mockingbird,10
 14d3f0,Affectionate Bright Blue,11
 14e74c,Gamers Unite,11
-14ffa5,Tyrannical Aquamarine,26
 151313,Moonlight Black,10
 151321,Dark In There,13
 151515,Black Lung,17
 151ca8,Midnight Lady Garden,10
-151f1b,Its Not A Phase Karen,9
 153045,Counting By Fifteens,10
 153282,MacAttackBlue,10
 15372d,Velveteen Moss,12
@@ -391,12 +351,10 @@
 15b8b3,Hawaii Shimmer,9
 15bddc,Aqua Angel,9
 15c1ef,The Sky With No Pollution,9
-161222,My Sleep Paralysis Demon,44
 161616,Bittersweet Sixteen,17
 16161d,Eigengrau,153
 16161e,Somberly,9
 16167a,Permanent Marker Blot,9
-161717,End My Misery,11
 161803,Golden Mean Green,65
 162534,Approaching,10
 162ce5,Blistering Rage Upon A Laptop,9
@@ -426,7 +384,6 @@
 171318,Getaway Car,11
 17147b,Top Right Minecraft Water Pixel,20
 171617,School Chromebook,9
-17166a,African American Blue,10
 171717,Cynical Black,54
 171917,Well We Are Screwed,15
 17191f,Could Be Black If You Squint,9
@@ -437,12 +394,8 @@
 17447d,Nueva Pacifica,18
 175e7b,Dark Turquoise Depths,9
 176bea,G In Google,12
-177013,Emergence,90
 177147,Three To The Eleventh Power,10
-1776ad,Declaration Blue,19
-177776,Declaration Of Cyandependence,11
 178e2d,An Irish Shamrock,10
-178f55,Breath Of Death Mints,12
 1793d0,Arch Linux,9
 17c0c0,Gakblue,30
 17e06b,I Mint To Do That,12
@@ -480,27 +433,20 @@
 19223b,Existential Crisis,11
 192837,Adding Up To 10,15
 19284e,Doomsday Blues,31
-1939ad,World War Blue,15
-1945ad,Atomic Bomb Blue,12
 194a1f,Witchy Garden,9
 1958b0,Fighting Blue,10
-1958c7,Stan Loona,11
 196196,Rule,20
 196620,6620's Grave,14
 1967d2,Blue Stickfigure,9
 1969ad,We Went To The Moon,13
 198270,Turquoise Murmur,9
 198389,Deftly,10
-198400,Totalitarian Green,31
-1984ad,Orwellian Turquoise,16
 1985ad,Blue To The Future,9
 198700,Was That The Bite Of 87,29
-198964,Censored Viridian,26
 198990,Shady Oasis,10
 1991ad,Our Cyan,9
 1999ad,Millennium Blue,14
 199c28,Fresh Spring Verdure,9
-19a057,Tyrannical Fern,11
 19b3aa,Noble Aqua,9
 19b9e1,Wax Crayon Sky,11
 19bd4d,Taking An Ell,10
@@ -556,7 +502,6 @@
 1b5620,Stockholm Spruce,15
 1b6917,Dark Moss Green Swamp,9
 1b7b2e,Basil Grass,11
-1b7eb4,Standard Humiliations,10
 1b94b5,Marina,11
 1ba061,Consi,12
 1baba0,Fortuneteller Teal,11
@@ -597,19 +542,15 @@
 1cbcbc,Weezer Teal,10
 1cbdaa,Tropical Vacation,9
 1cbe99,Icy Seaweed,10
-1ccfe6,Tyrannical Azure,14
 1cd8c2,Gaehive Teal,16
 1ce1ce,Baby Alright Stop,35
 1cebcc,Aqua Rain Crystal,10
-1d1075,Idiot's Blue,18
 1d122a,Shadows On The Grapevine,10
 1d14e6,Stereo Madness,10
-1d1cb3,Book Of Mormon,11
 1d1cc0,Mario Kart Blue,9
 1d1cc9,Boykisser Blue,31
 1d1d1d,Just A Line,19
 1d2430,Charcoal Night,9
-1d252c,Hopeless Nightmares Of Horror,20
 1d2737,Fear,10
 1d2d3d,Increasing Dimensions,25
 1d3031,Midnight Mint,17
@@ -617,7 +558,6 @@
 1d3c72,MicroWiki Blue,13
 1d4d22,The Deep Woods Of Germany,14
 1d4ed8,SpaceHey Blue,13
-1d532a,Female Philosopher,9
 1d532b,Cottage In A Forest,10
 1d6310,Poison Ivy,9
 1d768e,Sleeping Dodo,10
@@ -676,7 +616,6 @@
 1f2621,Abyssal Fate,10
 1f293b,Hexagonal Pi Blue,9
 1f2f4a,Hecate's Rest,9
-1f331c,Dark Jamal Green,10
 1f3a6a,Push Pin Blue,10
 1f401a,Evil Leaf,19
 1f4051,Shipwreck Filled Ocean,9
@@ -685,9 +624,7 @@
 1f4b77,Despicable Deep,10
 1f4f7c,Mice On Venus,9
 1f52c2,Warm Blueberry Muffins,9
-1f575c,Goddess Of The Deep Sea,9
 1f5f6f,Frank Faucet,14
-1f6480,WTF Is Masculinity Anyways,14
 1f6e4a,Forest Grass,9
 1f725b,Water Trench Green,9
 1fa49f,Perry The Platypus Official,21
@@ -703,11 +640,8 @@
 20172c,Watching On The Edge Of Space,9
 201d78,Blueberry Souls,9
 20200b,If 2020 Was A Colour,25
-202020,Coronavirus Black,132
 202021,The Dark Years,9
 2020ad,Crisis Blues,35
-2020c0,Covid 2020,10
-2020ce,Pandemic Blue,19
 202121,Mayhaps The Shadows Mean No Harm,9
 202124,Google Dark Mode,11
 202222,Happy New Year,9
@@ -734,10 +668,8 @@
 20d1ac,Aqueous Aquarius,19
 211413,When You Rub Your Eyes Too Hard,12
 211556,Before The Clock Struck Midnight,11
-211715,Z 365 ''Pandemonium'',26
 21201e,Charcoal BBQ Dust,10
 212028,Nocturney,9
-21211e,Heavy Smoker Lungs,12
 212121,Nine Plus Ten,130
 21214f,Night,14
 212226,AOTY Black,10
@@ -747,21 +679,16 @@
 213769,Papa Blue,25
 21416d,Private School Uniform Blue,11
 214365,Semi Backwards Blue,10
-214366,Depression Blue,17
-2145e6,Fanny Blue,9
 21468b,Dutch Flag Blue,10
-214737,Tyrannical Swamp Green,12
 214748,32Bit Blue,12
 214c26,Katniss Everdeen,16
 2161bd,Startled Cobalt,9
 2164f4,Bright Blue,56
-216ddb,Depressed Sky,9
 21703f,Dark Fir Campfire,10
 217438,Cucumber Green,12
 2196f3,Housecall,63
 21a0b1,Hawaii,14
 21a2d3,Aurora Rain,10
-21aa77,Destroy Patriarchy Not Planet,14
 21af4b,Crayola Shamrock Green,9
 21b075,Star Of The County Down,9
 21c4c2,Perry The Platypus,18
@@ -799,7 +726,6 @@
 228b70,Timely Decision,12
 229e1e,Hulk,11
 22b14c,Nirmoll,36
-22b7db,The Nice Pretty Blue,21
 22c5ad,Sea Fairy,12
 22d966,First Spring,9
 22d9ba,Next Beach Over,11
@@ -849,12 +775,10 @@
 24264f,Capinal,10
 2429e6,Digitulia,10
 243017,Certainly Persistent,10
-24302f,Female Mechanist,14
 243251,Color En Un Dia Muy Troste,14
 243653,Girls Are Mechanists,21
 243f6a,Pi Marine,9
 2446df,Skittle Blue Jordans,10
-244e92,Lloyd For President,9
 24555e,Midnight At The Dock,11
 245a29,Trashbag Green,9
 245c2a,Sunlit Spring Evergreens,9
@@ -885,7 +809,6 @@
 252475,Midnight Dreams,10
 252525,Funnier Than 24,61
 253645,Harry Potter Order Of Phoenix,10
-253a4c,Female Mathematician,14
 253a53,Twilight Forest Blue,12
 253c1e,Smoky Forest,9
 254254,Bummer Man,22
@@ -896,10 +819,8 @@
 255547,Vintage Bicycle Green,10
 256256,Minecraft Height Limit,17
 256658,Palace Garden,13
-256a5f,Slutty Seaweed,9
 256d8d,Value Of Blue Teamwork,17
 257961,Emerald's Envy,11
-258069,The Root Of All Evil,10
 258092,Pascalian Blue,10
 258336,Goblin Green,10
 259095,RAR3,12
@@ -915,7 +836,6 @@
 261e1e,Sirius Black,10
 26213c,Night Cityscape,9
 262144,Purple To The Eighteenth,30
-26228e,Tyrannical Navy Blue,15
 262626,Midnight Black,16
 262b93,Udurian Blue,9
 262f3b,Astronomy For Amateurs,9
@@ -927,7 +847,6 @@
 264897,Jeans But More Interesting,9
 264eee,Sonic Prime Blue,13
 265358,Pi Continued Green,25
-26546a,Female Surgeon,9
 2665d3,Super Junior,10
 26696b,Lethargic Lagoon,9
 266d44,Fred,11
@@ -944,7 +863,6 @@
 26ceaa,Achillean Aquamarine,11
 26dde0,Talk Of The Teal,10
 26ded5,Seychelles Swim,16
-26e663,Chernobyl Infected Milkshake,10
 26ee26,Plastic Acid,9
 271461,Dark Whale,9
 271828,Euler's Aubergine,156
@@ -955,14 +873,12 @@
 27355c,Midnight Seeker,12
 2735cc,Head And Shoulders Cap Blue,9
 273d10,Haunted Forest,9
-274159,Female Science Genius,13
 2746ae,Bad Wolf,9
 275119,Witches Toad Stew,10
 275f16,I Saw This Color At Ikea,11
 276300,Yoyle Green,106
 276327,BFDI With An Extra 27,21
 276333,BFDI Darkness,31
-276369,BFDNice,24
 2763aa,Four's Color,14
 2763bf,How Many Miles Away,19
 276400,Dissapointment To Bfdi Fans,27
@@ -971,14 +887,11 @@
 276dad,Ado Blue,16
 276de8,Word,9
 276f32,Picked Clover,9
-277353,Hentai,9
 27746d,Twilight Opal,10
-27892d,Depressed Spotify,10
 279084,Turquoise Of The Rich,10
 27963f,Bright Wallamaybungya Seaweed,11
 27a135,The Greener Grass Over The Fence,14
 27a6e2,Neptune Aqua,9
-27c06f,Beware The Leprechauns,10
 27c790,April Daze,9
 27cbb5,Tropical Trip,9
 27d0c8,Salty Marine Green,13
@@ -995,7 +908,6 @@
 285486,Shadows Of A Rainy Window,10
 28578d,Lonely Blueberry Pancakes,10
 2859e5,Sad Archive,15
-285ad0,The Color Of Hate,17
 2862a8,Delicate Porcelain Blue,10
 286d9f,Magic Waterfall,10
 286f15,No Tree Is Really This Color,9
@@ -1012,9 +924,7 @@
 28c54c,Rhugreen,9
 28caa4,Amity Blight,13
 28d7ee,Berdly,9
-292476,Tyrannical Royal Blue,21
 292626,Biggie Reaching For Food Gray,10
-292929,Devils Bed,11
 29293e,The Void Will Consume You,12
 292944,Ophelia,10
 292a2b,Melancholy Evening Gray,9
@@ -1034,14 +944,11 @@
 299d3c,Wildseed Green,9
 299dd5,Blue Ocean Sky,18
 299de1,Gunther Blue,14
-29a000,Annihilationist Green,25
 29a5bb,Sea Salt Sprinkle,9
 29a847,Before The Forest Fire,12
 29ab87,Jungle Green,15
 29b033,The Sour Taste Of Social Anxiety,12
-29ba89,Tyrannical Mint,10
 29be7c,They Can't All Be Called Mint,13
-29c336,Luigi's Rectal Fluid,10
 29c89b,Radioactive Seafoam,10
 29d4e6,Skyline Sublime,9
 29de8f,Shamrock Shake,13
@@ -1052,7 +959,6 @@
 2a2a2a,The Answer To RBG,25
 2a2e29,We Really Need To Talk,9
 2a3439,Gunmetal,11
-2a352d,Female Plumber,13
 2a3945,Rusted Navy Blue,18
 2a3a5d,I Miss Tumblr,11
 2a3a8a,Approximately Navy,9
@@ -1084,14 +990,12 @@
 2b2f25,Kapta,10
 2b4075,Garages In Seattle,9
 2b428f,Vloo Guy,12
-2b4747,Female Airplane Pilot,15
 2b4e1a,Harry Potter Slytherin Green,14
 2b612a,Emerald Envy,9
 2b6b1d,Turtle,9
 2b6d77,Dark Twilight Dreams,9
 2b6fa0,Storming Sea Water,9
 2b7398,Evening Oceanfall,11
-2b85ed,Smurf Booty,11
 2b868c,Emotionless Eyes,13
 2b9ada,Summery Blueberry,9
 2ba115,Runaway Reptile,11
@@ -1112,7 +1016,6 @@
 2c2f33,Discord Gray,38
 2c3ae6,Windows Error Blue,16
 2c49bd,Happy Tears From An Unhappy Guy,9
-2c4e26,That Dank Holy Kush,9
 2c6859,Lush Summer Meadows,9
 2c7a5a,Empire Jade,10
 2c814f,Kiwi-harry Styles,9
@@ -1156,7 +1059,6 @@
 2e2787,Picotee Blue,11
 2e2d88,Cosmic Cobalt,17
 2e2e2e,Carbon Fiber,38
-2e3033,Ashes Of The Witches,10
 2e3945,A Forecast Of Thunder,11
 2e4c70,Melancholy,13
 2e5090,YInMn Blue,35
@@ -1164,7 +1066,6 @@
 2e5894,B'dazzled Blue,10
 2e5e45,Forest,19
 2e5f55,The Weird Kids Dining Room Color,11
-2e633b,Sexy Avocado,9
 2e7254,Siren's Claws,9
 2e7dd0,Four Blue,12
 2e82e2,Betty White Blue,11
@@ -1178,7 +1079,6 @@
 2eb7d7,Todoroki's Right Eye,9
 2ec2a5,Mintlodica,32
 2ed2ed,Hold On This Isn't Red,14
-2ed73a,Cherubim,35
 2f1613,Coffee,24
 2f1c5c,Sirens On Neptune,10
 2f2417,Chewy Brownie,10
@@ -1186,7 +1086,6 @@
 2f2d6e,10 Minutes Before Pitch Dark,10
 2f2e1c,Dried Out Mehendi,9
 2f2f2f,Starting To Be Dark Mode,17
-2f3f3e,Female Engineer,14
 2f4f4f,A Color Similar To Slate,38
 2f5069,Tumblr,17
 2f582f,Scouts,9
@@ -1212,12 +1111,10 @@
 30184c,Domolique Purlple,33
 302168,Wablueigi,13
 302820,Burned Coffee Bean,11
-302947,Reaper Of The Blackened Souls,9
 303030,Darker Gunpowder Gray,29
 3036b1,Sonic But Less Saturated,9
 303770,Michigan,20
 303810,Are You Are You Coming To Da Tre,9
-303a53,Fight Gods Gray Blue,29
 304050,Dehydrated Squid,10
 304820,Mossy Stone After Rain,13
 304d1b,Mossy Walkway,9
@@ -1237,22 +1134,18 @@
 311425,Also Not The Answer Sadly,11
 311543,Black Magic,10
 3115bf,Her Indigo Eyes,10
-312727,Jeff The Killer,9
 312cbe,Cosmic Catt,23
 312d5f,King Of Prussia,13
-313131,Otzbir,9
 313338,Discord Dark Mode,33
 31396e,Unspeakable Blue,10
 314158,Near Pi,13
 314159,Blueberry Pi,685
 314160,Rounded Pie,11
 314315,Experienced Hunter,10
-314f45,Flatulence Green,33
 3158ad,Ben,14
 316064,Minecraft Warden Boss,13
 3161bc,Whale Energy,10
 316a5e,Night By A Lake,10
-318008,Calculator Joke Green,60
 31858d,Wallamaybungya Sea Bule,13
 318660,Amazonian Moss Carpet,9
 318ce7,Bleu De France,18
@@ -1275,7 +1168,6 @@
 322b4d,Hawaii Part II,9
 322f49,Goth Punks,12
 323232,Graphite,73
-323441,Great Female Investigator,12
 323967,Squidward's Ink,10
 324018,Nonfiction,9
 324369,DenkfabrikBlau,38
@@ -1307,12 +1199,10 @@
 33553f,Gray Midnight Forest,10
 3355e0,Every Whale Mascot Ever,11
 335edb,Matthew,13
-335fce,Democratic Advocate,12
 336699,MetaFilter Blue,141
 3366cc,Wikipedia Link Blue,9
 336791,Postgres,10
 3367cd,Kaito Vocaloid,14
-3373d4,Rayleigh Scattering,9
 337ccf,BFB Four Blue,46
 338327,Spinach Pi,16
 338352,Earthy Evergreen,9
@@ -1354,7 +1244,6 @@
 347fb7,Azure Mirror,9
 348799,Haapsalu Blue,9
 348a7c,Witchy Evergreen,24
-348ec7,Ike Eveland,13
 349382,Bibblybeebly Blue,10
 34a7a7,Asya Teal,11
 34a853,Google Green,43
@@ -1365,7 +1254,6 @@
 34cd27,Dreamnotfound,12
 34dd9a,Sharp Tongued And Unsociable,24
 34dfea,Trumpet Blueberries,12
-34e471,Hey There Demons,9
 34e88c,Minty Moment,9
 34ebc9,Look At My Diamond Sword,9
 351c15,Ups Brown,9
@@ -1374,11 +1262,9 @@
 351f49,Violet Baudelaire,10
 352452,Lochtuple,10
 352828,Warm Chocolate Espresso,11
-352842,Pashtun Purple,9
 3533a5,Award Winning Blueberry Pie,16
 353622,Amazon River Mud,10
 353ee3,TV Girl,11
-35484a,Tyrannical Silver,12
 354882,The Moon Is Out Tonight,10
 355190,Umbrella,9
 355726,Slytherin Pride,17
@@ -1423,7 +1309,6 @@
 36d954,Leprechaun Limeade,9
 36da41,Leafy From BFDI Green,21
 36e711,Cartoon Toxic Chemical,9
-36edd3,Psychotic Mint,9
 36ee1a,Poltruskis,14
 3716d7,2010 Deviantart Blue,12
 371b38,Farewell Gaze,14
@@ -1457,7 +1342,6 @@
 37e657,Meetup,10
 37e8c8,Sokeefe Not Sofitz,10
 37e912,Slime,20
-380e59,Tyrannical Violet,28
 381a74,Lonelieta,10
 382211,Uhh I Gotta Wash My Feet I Think,15
 38257c,The Owl House,10
@@ -1467,8 +1351,6 @@
 3842d7,Indigo Nightlight,11
 384445,Quarantine,10
 384710,Rotten Avocados,12
-384d1b,Female Farmer,11
-385697,Childhood Trauma,10
 38571a,Alexander Hamiltons Green,12
 38705e,Ralsei Dark Green,14
 388a63,Gabe,11
@@ -1484,7 +1366,6 @@
 391937,Aaron Burr Sir,9
 392781,Power-of-Three Purple,14
 392b8a,Camp Here And There Will Wood,10
-392e2d,Apocalypse Female Warriors,14
 392eb9,Iffigen,10
 3933e4,Philosophical Daydream,9
 393939,Puro Grey,66
@@ -1495,7 +1376,6 @@
 3955e5,Slightly Darker Owo Blue,11
 395f8a,Oops I'm Drowning,9
 396285,Stormy Sea,9
-396538,Tyrannical Moss,12
 397949,The Witch's Cottage,10
 3979d9,VVN Blue,12
 398588,Depths Of Teal,65
@@ -1525,7 +1405,6 @@
 3a4028,Too Much Algae Not Enough Pond,14
 3a4534,Jungle Fastness,10
 3a48b5,Witch's Sky,9
-3a5580,Tyrannical Cobalt,13
 3a5ca1,Elderly Smurf,10
 3a684b,Minecrafts Dark Oak Leaves,11
 3aa2c6,Blue Raspberry Seed,44
@@ -1538,7 +1417,6 @@
 3abc80,Evernmint,11
 3ad6b2,Phosphophyllite,9
 3ae3e8,Vinking,22
-3b0712,Blood Of My Enemies,29
 3b10dd,Soaking Elements,10
 3b1b1b,Dazai,18
 3b1c1a,Midnight Moonrise Maroon,10
@@ -1570,7 +1448,6 @@
 3c2016,Warm Hot Chocolate,10
 3c2738,Pitch Black Plum,10
 3c2a30,Deadly Eggplants,13
-3c3b6e,American Flag Blue,19
 3c3be7,Sam Denby Blue,23
 3c4997,Unfocused Denim,9
 3c5344,Weeping Willow Tree,11
@@ -1595,7 +1472,6 @@
 3d21b5,Ultraviolet Light,9
 3d2b1f,Bistre,16
 3d3073,Controversial Purple,9
-3d3134,Viking Funeral,12
 3d3a82,Dahlia Violet,9
 3d3d3d,3D Black,74
 3d4049,Emo Eyeliner,10
@@ -1624,7 +1500,6 @@
 3e3669,The Anchor's Cheap Suit,17
 3e3749,Criminal Intent,9
 3e3e3e,Batakapa,12
-3e3e45,Female American Rap Stars,11
 3e4f9c,Whale Spotting,10
 3e5c37,BN Cascade Green,10
 3e6081,Lancer,9
@@ -1648,7 +1523,6 @@
 3f4796,Shpiloumbam,9
 3f48cc,Trigonometry Blue,15
 3f4db9,Aquafoc,10
-3f5717,Jamal Green,11
 3f5e8c,Calming Blue Whale,10
 3f749e,Focus Group Blue,11
 3f8cc1,Randaddy,14
@@ -1658,15 +1532,12 @@
 3fab8b,Just A Little Sea Cucumber,13
 3faced,Triangle,10
 3fad1a,Grass At Sunrise,11
-3fb2dc,Transgender Blue,10
 3fb98e,Pine Mermaid,9
 3fb9a4,Seaside Mansion,12
 3fd4d7,Tropical Fluid,10
 401056,Felted Plum,16
-40172d,Karen's Wine,9
 401b6a,Dark Iris Flower,9
 40213d,Disney Villains,9
-402824,Kaitlin Bennett,11
 402b99,Royal Purple Brocade,9
 402fb7,Wizard Pants,14
 4030d2,Norfluoxetine Blue,10
@@ -1718,7 +1589,6 @@
 4165e4,Azul Golfinho,11
 416600,Arsenic Catnip,118
 416741,Tuff Green,9
-416769,The Funny Number Trilogy,18
 416a76,Frozen Ancient Water,10
 41779d,Lonely Fishes,11
 418418,I'm A Teapot,25
@@ -1731,15 +1601,7 @@
 41d4d4,Beach Towel Blue,9
 41e060,Minecraft Patch 112 Grass Java,12
 41eba5,Grammarly,9
-420069,Virgin Purple,48
-420420,Blaze It Dark Magenta,652
-420666,Demon Weed,96
-420690,Nice Blaze,162
-420696,A Chaotic Discord Server,59
-42069f,Gamer Purple,29
-420911,Blazing Tragedy,25
 420b67,Wallamaybungya,27
-420dab,Certified Funny Color,30
 42131e,Dialect Of The Dark World,9
 421816,Red Wine Chocolate,10
 421b68,Nightwish,11
@@ -1768,21 +1630,17 @@
 42bdb5,Queen Alexandria Blue,10
 42bec8,Mako Magic Blue,14
 431100,Helloo,25
-431645,Six Eared Macaque,127
 431e90,Beau Indigo,9
 432267,Spooky Halloween Night,9
 432d2d,Chocolate Chip Drizzle,13
 432e4a,Winston Purple,9
 432f55,Blackberrie Seed,10
 433590,I'm The Doctor,10
-433a4d,Seasonal Depression,9
 434343,Hidden Six Seven,28
 434443,Burges,12
 43485f,Dusky Meditation,10
-435a66,Female Scientists,10
 435e23,Burnt Olive,11
 4366ae,Dad's Pajamas,9
-436ca4,Toxic Masculinity Blues,9
 436d78,Petroleum Ray,10
 4379e6,Heir Conditioning,9
 43a0f0,The Cool Side Of The Pillow,9
@@ -1797,10 +1655,8 @@
 441177,Magic From The Void,9
 44153f,Drunk On Bordeaux,9
 441c8a,Can We Pretend That Airplanes,9
-442200,Blaze It Brown,32
 4422b6,Klexxy,26
 44311e,75 Cacao Chocolate,13
-443827,Female Paleontologist,14
 4438b5,Is Pepsi Okay,10
 443f72,Contemplating Forgotten Souls,9
 444444,Stuck '4' Key Gray,116
@@ -1818,7 +1674,6 @@
 447e35,Warm Sweater,16
 44813f,Prince Turtle Of The Seawings,11
 4481ac,MaxGGs Blue,11
-449b51,Incest Destroyed Me,12
 44a81f,Tiny Chill Frog,13
 44b34c,Luigi Cap Green,9
 44be18,Sally Forth,9
@@ -1843,7 +1698,6 @@
 456456,Ive Named This Color Before,51
 456654,Stone Greerg,14
 456789,A Hint Of Incremental Blue,71
-456c8f,Sad Boys In Da Patriarchy,17
 4573e0,Misty Blue Raspberry,10
 4580b7,Whale Blue,13
 4582bf,Those Are Cute Jeans,11
@@ -1854,17 +1708,14 @@
 4596ed,Blueberry Muffin Pancake,9
 45a25e,Piper Lilies,9
 45a6db,Kids Club,9
-45a847,Medium Jamal Green,9
 45aab4,Jenny Wakeman Turquoise,9
 45b0d4,Keefe Sencens Eyes,13
-45b39d,Chi Chi Chi Le Le Le,34
 45b5de,Conroedupe,14
 45bf92,Dentist Mask,12
 45c44a,British Number Green,23
 45ed3a,Achromatic Radioactive Green,10
 45fd23,DreamWasTaken,39
 46178f,Official Kahoot Purple,12
-462099,Tyrannical Velour,25
 46291f,Espresso Strained Wood,9
 462c34,Tears Of Wrath,9
 462ca5,That One Blue That Confuses You,10
@@ -1876,21 +1727,17 @@
 466e7d,Girls Are Scientists,21
 4682b4,Steel Blue,19
 468910,Forest Composites,10
-46912d,War Vet Chill Frog,11
 469a20,Minceraft Green,13
 46a3eb,8 Am Zoom Call,10
 46c79c,Freezerburn,12
 46d0da,Eric Cartman Blue,9
 46f085,Alien Cat Named Gleeble,9
-471472,Purple Nightmare,9
 471776,Independence Purple,9
 471f60,Posie Purple,9
 472753,Plumette,9
 472e98,Smuggler Phenom,10
 473625,Someone Wrote,10
-473832,Ellis Brown,13
 47471a,Mossy Giant,9
-47471f,Female Garbage Collector,9
 47473b,Kid Krow,9
 474747,Dark Kettle Black,16
 476291,TF2 Vintage,9
@@ -1923,12 +1770,10 @@
 483f95,Royal Dragon's Scales,9
 484661,Raven's Caw,11
 484848,Pig Iron,15
-484855,Depressed Raccoon Gray,9
 485b2c,Coniferous Forest Moss,16
 485b81,Summer Rainstorms,9
 4865e5,Kinda Tired Blue,10
 486d83,Blue Loneliness,123
-487445,Succulent's Leaf,9
 4874a8,Archetype Of Boredom,9
 487c5d,Green Prismarine,11
 4885a8,Emotional Plateau,11
@@ -1936,11 +1781,9 @@
 488e1b,Leaf,10
 489489,Hhgregg,11
 48a6c1,Cyan Slightly To The Left,9
-48a6e8,Milonov,16
 48a768,Regulators,11
 48bc9e,Cyan Turquoise,15
 48bdc0,Mallorca Sea,9
-48c3c8,Ben I Hate You You Are A Cheater,15
 48c774,Submit,9
 48d786,Crest Toothpaste Mint Green,9
 48da5c,Mildly Radioactive Goop,9
@@ -1953,7 +1796,6 @@
 49464a,Charcoal Pencil,9
 494949,Primacy,24
 495076,Naps On A Rainy Day,12
-495544,Intrauterine Green,10
 495787,Deep Sigh Blue,11
 4968e5,Galax Blue,9
 49867e,Corporate Pastel,9
@@ -1965,9 +1807,6 @@
 4a213c,Kars,14
 4a2563,Night's Breath,10
 4a2638,Asphyxiating Clownfish,14
-4a2d21,Tyrannical Brown,12
-4a312f,Tyrannical Leather,12
-4a371a,Tyrannical Maroon,13
 4a412a,Literally The Worst Colour,261
 4a412b,Second Worst Color,10
 4a4a4a,Gunpowder Gray,14
@@ -1986,7 +1825,6 @@
 4ac2e4,Gumball,15
 4ac925,Harley Green,65
 4ae24d,Homestuck Green,12
-4ae339,Duolingo Death,18
 4aea30,Bright Lime,9
 4aea42,Nct Lightstick,13
 4aec99,Gowon,11
@@ -2025,7 +1863,6 @@
 4c243d,Magenta Gone Evil,9
 4c3415,Ainuf,27
 4c3d29,Witch's Cottage,9
-4c43a0,2am Depression,83
 4c4678,Galactic Wonder,9
 4c4f56,Abbey,13
 4c516d,Independence,11
@@ -2054,7 +1891,6 @@
 4d1a71,Mystic Wizard Robes,12
 4d338a,Moonlit Violet,11
 4d3c5c,Thunderstorm In May,11
-4d403c,Thug Hunter,9
 4d4c6c,New York City,9
 4d4d4d,Time Gray,40
 4d5172,Poststorm Clouds,9
@@ -2085,7 +1921,6 @@
 4e3076,Furious Violet,30
 4e477b,Grape Juice Float,13
 4e506e,Smoke And Blueberries,11
-4e5766,Suicide Museum,22
 4e5946,Where Seasons Meet,10
 4e5d94,Dark Blurple,16
 4e6730,Under The Lilypad,9
@@ -2099,7 +1934,6 @@
 4ec1ec,Emely,10
 4ecdb7,Mermaid Lagoon,16
 4ed4ed,The AntiRed,12
-4ed6a5,Almost Radqueer,13
 4ed965,Elderly Mermaid Cheerleader,22
 4ee932,Unruly Chill Frog,10
 4f1959,Lonely July Evening,9
@@ -2132,13 +1966,9 @@
 5049cc,Achillean Indigo,10
 505050,Fiftieth Shade Of Grey,289
 505453,Casey Martens Grey,10
-505505,Cry For Help,62
-505963,Depression Gray Color,9
-505a77,This Color Is Funny In Russian,14
 505a7c,Whimsical Ash Blue,10
 505b64,Redactaio,9
 506173,Z283 Blitz,12
-50626e,Female Inventor,11
 506c50,Moss At Midnight,11
 50851a,Freshly Mowed Lawn,9
 5087b4,Default Corporate Desktop,20
@@ -2177,19 +2007,16 @@
 51db1f,Monika Green,10
 51ddcd,Oikawa,15
 52164c,Baby Eggplant Flower,10
-52241f,Depressed Kentucky Fried Chicken,9
 522821,Jabez Raj,9
 522a16,Rich Chocolate Cake,11
 522b3d,Justin,9
 524288,Lavander To The 19th,19
 524392,Inverted Gaust,11
-525053,Spooky Zombie Woman Femboy Gray,10
 525747,Smog,10
 525761,Industrial Pride,12
 5259ed,Blurpleberry Flowers,9
 5265d3,Virtual Blueberry Punch,10
 5269c3,The Blood Of Night,12
-5269de,Tyrannical Cornflower,17
 528076,A Poet's Favorite Weather,10
 52808f,Neglected Colored Pencil,10
 528491,Inception,9
@@ -2207,7 +2034,6 @@
 534325,Small Muddy Potatoes,10
 534331,Dry Chocolate,10
 5347e2,Midnight Blue On A Mountain,10
-534939,Female Robin,12
 535353,The Endlessness Of Time,10
 535990,Starry Night Lavender,9
 536393,Mountains Painting,9
@@ -2215,7 +2041,6 @@
 536872,Cadet,9
 536d30,Oliver,11
 5370a1,Jeans,10
-538a3c,Depressed Cucumber,11
 5393e1,Boys Will Be WHAT THEY WANT,19
 539fba,Cloud's Edge,12
 53b6c5,Hawaii Shimmers,9
@@ -2227,7 +2052,6 @@
 543210,Liftoff Brown,172
 5433a0,Fnaf,12
 543d59,Calamity,11
-544146,Thomas's Colour,69
 544174,Smith Amethyst,10
 545aa7,Liberty,9
 54792d,Nepeta,15
@@ -2252,10 +2076,8 @@
 555156,Gunmetal Tarnish,9
 5551e6,Hummingbird Lavender,9
 555555,Stone Cold Gray,98
-5555ba,Anti Babass,11
 555924,Swampy Green,13
 555d50,Ebony,9
-555d58,The Book Of Mormon,10
 55645d,Filing Taxes Grey,9
 556b2f,Dark Olive Green,13
 5573be,Leviathan,9
@@ -2282,7 +2104,6 @@
 565170,Arila,9
 565283,Forgotten Victory,9
 565656,Hidden Cave,10
-565866,Pollution Levels In China,9
 567890,Incremental Slate Grey,36
 567891,Starting The Count Over,11
 56789a,Congrats You Know Hexadecimal,29
@@ -2302,7 +2123,6 @@
 573300,The Finest Men Are This Color,39
 573d5e,Hesitant Gratitude,9
 574a32,SACHI Brown,17
-574b56,A Hint Of Depression,12
 574bce,Phonetic Grape,12
 574bd1,Jelly Feast,9
 574e8c,Kraken Blue,16
@@ -2312,13 +2132,11 @@
 5763b2,Jeans In A Digital Drawing,13
 577b80,Deep Sea Salt,9
 5781a4,I Lost My Dolphin In The Divorce,18
-57873a,Dark Homosexual Green,10
 57958b,Martian Cerulean,36
 579c9d,Wings Of Cosmic,10
 57a7e5,States Of Blue,9
 57ad8f,Mermaids Are Real,9
 57b1a2,Soft Aquarium Lights,14
-57b572,Ancaps Dress,15
 57b9eb,Glomblue,9
 57d491,Coral Green,10
 57d4d0,Analog Aquamarine,9
@@ -2331,18 +2149,15 @@
 581876,Royal Grape,9
 58325a,Expended Gifts,11
 58342a,Texas Roadhouse Bread,14
-58381f,Female Archaeologist,13
 5840e3,Virtual Indigo,9
 58419c,Will Wood Purple,51
 585166,Suffocating Mist,11
 585191,Jin Blue,11
-585370,Depressed Emo Periwinkle,9
 585858,Faded Dark,11
 5865f2,Fake Blurple,74
 587280,Regretful Clam,13
 587944,Gumble Goose Green,18
 587dae,Dusty Blue,14
-588221,Viejo Apestoso,12
 588558,Moldy Bamboo,9
 5885a2,Blue Team Spirit,32
 58865f,Saturated Pine Green,10
@@ -2352,7 +2167,6 @@
 58b675,Kochiya Sanae,83
 58c2c6,Poseidon's Blessing,9
 58d42b,Poisoned Apple,9
-591019,Afterthought Of Murder,12
 591b74,Banner Hulk Shorts,9
 592720,Caput Mortuum,17
 592c73,The Purple Guy From Fnaf,9
@@ -2361,7 +2175,6 @@
 59358e,Poverty Of Imagination,10
 593d4f,Ashy Prune,10
 594015,Smoked Oak Brown,11
-594154,Seasonally Depressed Mauve,9
 595250,Moon Rock,11
 59541a,Squidward's Shirt,14
 595529,Olive Root,9
@@ -2394,15 +2207,12 @@
 5a7b74,Stormy Sea Glass,15
 5a7cf0,Dealmaker's Blue,14
 5a7e56,Forest Moss,15
-5a8677,Clinically Depressed Turquoise,10
 5a88a0,Dusty Caribbean Blue,11
 5a88e0,Blue Ocean Gaze,21
 5a959e,Ocean Fungi,14
 5a9858,Green Elysium,11
 5a99a0,Magical Mist Blue,11
 5aaa1e,March,12
-5aaaad,Teal Misery,13
-5aab8c,Depressed And Repressed Sage,12
 5aafe4,Ocean Crust Blue,9
 5ab7b6,Marina Stardust,9
 5ab8d0,Returning Waves,13
@@ -2430,7 +2240,6 @@
 5b69a9,Cyanosis Sweetie,9
 5b7331,Tea Leaves,10
 5b7a8c,TF2 Blu Color,9
-5b8390,Poseidon's Depression,9
 5b8763,Valerinaism,19
 5b898f,Heavy Skies,9
 5b8bdd,Daydreamer Poison,9
@@ -2442,17 +2251,14 @@
 5be043,My Parents Are Disappointed,9
 5bffde,Naive Cyan,39
 5c1145,Purple Plum,10
-5c1193,Tyrannical Indigo,13
 5c125c,Neprosne,9
 5c1938,Katrina,16
 5c1b1d,I Toilet,11
 5c35e4,Wheatley,9
-5c3819,Kaitlin Bennet's Pants,9
 5c4426,Airy Hfjone,14
 5c4822,G'Dirt,22
 5c5299,Little Lads Berries And Cream,16
 5c5b58,Old Bird Gray,9
-5c5d6b,Mentally Ill Grey,9
 5c5d91,Titanic Sub,9
 5c7426,Greens Of The Irish,10
 5c7915,Pesto Puree,9
@@ -2522,7 +2328,6 @@
 5e7ac0,Cold Southern Sea,11
 5e7e32,Fairy Fern Green,9
 5e87b1,Siesta Go To Sleep,9
-5e8f24,Kakapo,10
 5e9a4f,Drunk Olive,13
 5ea1ed,Sealed Marine,9
 5ea5ea,Sea Blue,41
@@ -2540,8 +2345,6 @@
 5ee104,Leafy,25
 5ee5ee,Seeing Cyan,9
 5eeded,Seeded Blue,12
-5f1172,Tyrannical Royal Purple,22
-5f1d8e,Necrothya Colour,9
 5f1f17,Door Knob,9
 5f2072,Urban Dark,10
 5f234d,Deep Plum,13
@@ -2568,7 +2371,6 @@
 5fb8a9,Hannah,15
 5fc3e1,Glass Bead Blue,9
 5fc8a6,Mermaid Waters,11
-5fc8ab,Covid Scrubs,14
 5fd938,Minecraft Kid,12
 5fe06b,April's Gift,10
 5fe66e,Wallamaybungya Evergreen,17
@@ -2635,7 +2437,6 @@
 61e559,Seaside Chill Frog,13
 621023,Scarlet Remorse,9
 621621,Furry,38
-621666,Tyrannical Plum,13
 621b60,Harvest Of Dionysus,11
 6234e3,Omori,21
 623792,Pertangle,32
@@ -2658,20 +2459,16 @@
 628371,Teal Trumpet,13
 6292e6,Miss You Blues,19
 6294a6,What Price Illusion,22
-62b887,Trauma Teal,9
 62c3ec,Sleepyhead Blue,9
 62c479,Hidden Meadows,9
 62ccbc,Peppermint Sky,9
 62d198,Jadoan Green,10
 62f0b5,Radioactive Peppermint,10
-63121e,BBQ Sauce On My Titties,16
 63191f,Widowed Bulldog,9
-631a2a,Tyrannical Dark Fuchsia,12
 632b18,Doyle Soil,27
 632ea6,Grappe Pure,11
 632f13,Beef Noodle Soup,9
 633295,Interdimensional Portal Purple,10
-634741,Very Depressed Hot Pink,9
 636363,Raiders Of Sunset Pass,34
 636576,Darpish,11
 6366f1,Wasting Money Indigo,48
@@ -2720,7 +2517,6 @@
 651b1c,Velvet Christmas Dress,10
 65301e,Rich Hazelnut Truffle,9
 6532b7,3AM Diner Grape Jelly Purple,14
-653f99,Violet Silk Taffeta,10
 6541ad,Lateral With Tom Scott,81
 654321,Decreasing Brown,497
 654740,An Air Of Debonair,19
@@ -2732,14 +2528,12 @@
 6584e0,Kindred Soul,10
 659173,Forest Moss Green,10
 65989b,Hour Before It Rains,10
-65a1ae,Ocean Side Suicide,11
 65a358,Light Jamal Green,10
 65b1df,Heisenberg,9
 65c2cb,Tranquility,10
 65c73f,Slightly Radioactive Pickle,9
 65cd48,Meltdown Expected,12
 65d675,Limeade Ocean,11
-65de49,Tyrannical Kiwi,12
 66023c,Tyrian Purple,25
 66126d,Fortified Grape Juice,10
 66143c,Burberry Grape,15
@@ -2752,23 +2546,14 @@
 664f8c,Empurple,66
 665134,Wild Chocolate,85
 6654b7,Queen Never Cry,12
-666000,Devilishly Yellow,51
 666191,Jin Blue Shine,9
-666420,The Devil's Grass,117
 666665,Hallelujah,19
 666666,Cursed Grey,983
-666667,Almost Devilish,30
-666669,Devil 69,22
 666769,Agl,12
 66676a,Lego Series 1 Spooky Zombie Gray,12
 666777,Heaven And Hell,67
 6667ab,Very Peri,12
 6667bb,Asymmetrical Purple,10
-666911,Devil's Emergency,10
-666999,Triple Decker Nice,89
-666aaa,Blue That Is Scared Of Demons,24
-666bad,Devil's Advocate,23
-666dad,Father Satan,9
 667176,Cloudy Sky Over The Ocean,11
 667430,Newton's Green,9
 667894,London Storm,9
@@ -2778,7 +2563,6 @@
 668c8e,Cave Swamp Puddles,10
 668d55,Faded Old Bottles,11
 668fb3,Lunas Blue,9
-669969,Double Decker Single Decker Nice,14
 66aabd,Negative Steel,16
 66bfa3,JOAN,269
 66cc9a,Middle School Mermaid Tail,9
@@ -2804,7 +2588,6 @@
 676767,Six Seven,455
 676768,One Past Tuffness,10
 676769,2v1,13
-676869,Tuff To Nice,35
 676941,Tuff Olive,10
 676967,Mixed Memes,16
 67696b,Spooky Zombie Cheerleader Gray,11
@@ -2833,7 +2616,6 @@
 685395,Dead Lavender Bush,9
 68577a,Lilac Dreaming,11
 686578,Hex Gray,11
-686868,Not Quite Nice,71
 68686d,Minecraft World Grey,39
 686969,This Grey Is A Disappointment,12
 687c9a,Repressed Memories,9
@@ -2845,9 +2627,6 @@
 68b151,Spring Grass,11
 68d0b8,Peacock's Attitude,9
 68eb10,Electric Dollar Tree,9
-690000,Nice Red,155
-690069,Nice Magenta,39
-690420,Nice Dank Red,48
 691337,Hibiscus Teabag,13
 691518,Uterus Clot,11
 691e1c,Blood Of A Butterfly,13
@@ -2856,19 +2635,14 @@
 693c73,Leviathan Purple,12
 694200,Heck Yeah,294
 694206,A 12 Year Olds Sense Of Humor,38
-69420a,Nice Weed HaHa,25
 69420f,Haha Funny Numbers,29
 694c6f,Shady Dusty Lavender,10
 694d3a,Radigan Conagher Brown,21
 694f57,Rose Mud,9
 696420,Weed Barf,23
-696468,Tyrannical Grey,19
 696769,Cornered In,11
 696867,Funny Unfunny Funny Gray,15
-696900,Nice Yellow,38
-696966,Nice But You Mispelled It,9
 696968,We Were This Close,118
-696969,Nice,2959
 696970,One Past Greatness,42
 696c6d,Spooky Zombie Tourist Gray,9
 697c8e,Blue Whale Spirit,9
@@ -2878,7 +2652,6 @@
 6984b2,Neptune Dust,9
 6993a5,Aquarius Eyes,11
 699410,Sea Grass Meadow,9
-699669,Nice-ish Mint,15
 699999,Hilarious Blue,13
 69a420,Four Twenty Sixty Nine,15
 69a693,Old Time Sake Mint,9
@@ -2902,7 +2675,6 @@
 6a2a64,Concerned Eggplant,10
 6a2bb9,Yoylecake,12
 6a348c,Royalty,13
-6a3999,Down With The Monarchy Purple,17
 6a3c3d,Spicy Chocolate Milk,9
 6a3d3d,Meaty Red,12
 6a4222,I Poopied In My Pants,15
@@ -2925,16 +2697,12 @@
 6ac51c,Grass Green,11
 6acbaf,Vintage Beach,9
 6ae3b5,Phos,136
-6ae6ae,Twink's Cyan,12
 6b0091,Uzay Patlicani Moru,31
 6b10a1,Effrontery,10
 6b19a8,Inspirational Purple,11
 6b277e,Grape Guts On The Sidewalk,10
-6b2c74,Skat Er Tyveri,16
-6b4849,Warmth Before Death,13
 6b4d89,Bonnie,13
 6b5479,Dark Lilac,11
-6b55a1,Fuq The Patriarchy,14
 6b6621,Sludge,12
 6b6963,Wolf,9
 6b696c,Spooky Zombie Woman Gray,9
@@ -2955,7 +2723,6 @@
 6c19cb,BTS,16
 6c1f1f,Mad Uterus,13
 6c22bf,Little Plummer Boy,11
-6c2829,Demon On Your Shoulder,9
 6c3082,Eminence,11
 6c39b3,Sweet Dominion,14
 6c3d4a,Tannins,11
@@ -2972,7 +2739,6 @@
 6c8110,American Bullfrog,9
 6c84d4,Blueberry Daydreams,10
 6c8919,Its The Sea Sickness For Me,12
-6c9124,I Don't Want A New Stepdad Karen,12
 6cb3ec,The Great And Powerful Trixie,9
 6cb4ee,Argentinian Blue,10
 6cc92b,Spring Breeze Leaves Light Green,10
@@ -2992,7 +2758,6 @@
 6d6d6d,School Of Horror,9
 6d71c8,Periwinkle Lilacs,12
 6d7291,Car Parts,9
-6d72b3,Depressed Lilac,12
 6d7310,Italian Olive,11
 6d7825,Swamp,16
 6d8225,Ogre,11
@@ -3006,14 +2771,12 @@
 6e42e1,Deltarune,23
 6e43a3,Ace Purple,19
 6e5ad4,Midnight Shower,10
-6e6481,Purple But With Depression,12
 6e64ae,Fallen Lavender,9
 6e6b26,Olive Ochre Fence,12
 6e6d6b,Epikical,10
 6e6e6e,Smokestack,26
 6e7882,The City Our Text,12
 6e788a,Three Days Of Rain,10
-6e8110,Female Economist,9
 6e8156,Edgy Military Dude,9
 6e8447,Series 14 Monster Rocker Green,9
 6e8744,Minecraft Tall Grass,9
@@ -3038,12 +2801,10 @@
 6f443f,Beans,10
 6f4614,Wallamaybungya Bark,14
 6f4a95,Peepaw Purple,41
-6f4b95,Slaughter Purple,15
 6f4f2c,Hershey's Milk Chocolate Brown,9
 6f5079,Moonlight,10
 6f5d30,Umbraster,10
 6f6678,Way Too Insult The Color Purple,14
-6f6c26,The Friendzone Is A Sexist Myth,14
 6f858f,Depresso,10
 6f8dd9,Twitter For Android,9
 6f8f49,See You Next Thyme,10
@@ -3062,7 +2823,6 @@
 70503d,Love Coffee,9
 70548b,Faded Grandeur,9
 705893,Muted Grape Vine,11
-705938,Female Mediterranean Monk Seal,11
 705f11,Baby Peepeepoopoo,11
 706173,Decaying Prune,11
 706f76,Walmart Rug,10
@@ -3078,7 +2838,6 @@
 70b52b,Golf Course Grass Shavings,9
 70ce1e,I'm Grassy,10
 70d827,Xbox Power Button,9
-70ed21,Tyrannical Green,18
 711266,Blackberry Juice,13
 711711,Red Slurpee,15
 711e62,Royalty Eggplant Purple,9
@@ -3087,8 +2846,6 @@
 714212,The Brown Of Seven,9
 716e74,Transylvania Spooky Zombie Gray,10
 71757e,Lunar Spectre,9
-717713,Tittie,46
-71771e,Tittie Green,12
 718d57,Vilethorn Green,9
 7191b0,Divorce Blues,9
 719ba2,Squidward Blue,9
@@ -3114,7 +2871,6 @@
 727a26,Mustagoan,10
 727a77,Rat,17
 727ada,Jordan River,13
-728579,Lesbian Witches,16
 72866a,Nature's Jade,10
 7289da,Discord Blurple,312
 728a51,Bright Forest,27
@@ -3123,11 +2879,9 @@
 729e42,Indubitably Green,23
 729ec1,Lonely Winter Day,9
 72a0c1,Air Superiority Blue,18
-72b3b0,Depressed Perry The Platypus,10
 72b676,Oh No I Ate Moss,12
 72bb69,That Tshirt From 3rd Grade,13
 72bbe8,Seattle Grace Hospital Scrubs,11
-72c0a4,Teal But Depressed Right Now,9
 72c57f,Rejected Mint Leaf,10
 72c6a2,Faded Cactus,12
 72d8c4,Caribbean Funk,12
@@ -3165,7 +2919,6 @@
 73e033,Emerald On Acid,9
 73e549,Lime Oversupply,13
 73f598,Kinderdacat Green,25
-741111,Gerard Way,21
 74153f,Blood Stained Wool,11
 741776,Patriotic Purple,40
 741919,Red Velvet Cake,14
@@ -3185,7 +2938,6 @@
 747474,Like Antennas To Heaven,22
 747747,Boeing Beige,11
 747f43,The Witch's Swamp,11
-748d96,Depressed British Sky,11
 74a1cf,Ohio Winter,11
 74a597,Recorded Dialogue,10
 74aa7f,Calm Lush,10
@@ -3198,7 +2950,6 @@
 751130,Wine,22
 751b75,Faded Royal Heart,10
 752816,90's Lipstick Brick,10
-754543,Mocha Cinnamon,9
 75532f,Chocolate Mousse Cake,20
 7559a0,Shadowy Wisteria,9
 755a22,Mikester,9
@@ -3207,7 +2958,6 @@
 757779,Spooky Zombie Skateboarder Gray,11
 7594a4,Feral Pigeon,15
 75953e,Olive Garden Pasta,10
-759c7a,Queer Coded Green,19
 75a8ca,Winter Blue,13
 75b049,Minecraft,92
 75b995,Animal Crossing Switch Lite,10
@@ -3252,7 +3002,6 @@
 7759c2,GitLab Purple,9
 7764af,Shining Lavenders,9
 7766be,Lavender Amethyst,9
-777666,Picnic Of Death,24
 777776,I Almost Got That Jackpot,26
 777777,Lucky Grey,484
 777778,We Have Lucky Grey At Home,21
@@ -3313,7 +3062,6 @@
 78efdf,Bubbles From The Sea,9
 791a3d,Cherry Crush,13
 792e59,Professor Plum,9
-79362a,Guirivilo Red,10
 794475,Hailey,9
 794986,Waluigi Purple,10
 796878,Old Lavender,10
@@ -3353,7 +3101,6 @@
 7a744b,The Colour Of Ohio,10
 7a7a7a,Submarine Grey,15
 7a7c6f,Wet Concrete,12
-7a7c78,Depression With A Tad Of Anxiety,10
 7a7d6a,Wet Concrete On A Drab Day,9
 7a8584,Is It Spelled Grey Or Gray,14
 7a87ba,Newborn Blue Whale,9
@@ -3362,7 +3109,6 @@
 7a9fa3,Are You Bored Yet,10
 7ab398,Sage Crystals,13
 7ab480,Dried Basil,10
-7ab7b6,Joe Biden In The Sea,9
 7abbb1,Captain Viridian,12
 7adccb,Aoba Johsai,13
 7aeec6,Radical Mint,9
@@ -3373,7 +3119,6 @@
 7b2b8f,Delphy,13
 7b2d43,Incremental Red,11
 7b5d92,Ghostly Purple,30
-7b6867,Deathly Howl,9
 7b68ee,Medium Slate Blue,14
 7b7183,Crushed Lavender,9
 7b767a,Pusheen,11
@@ -3421,7 +3166,6 @@
 7cdda8,Inverted PJiggles Pink,71
 7ce0ef,Data And API 2,26
 7d1a7f,Susie From Deltarunes Hair,10
-7d2113,Lesbian Vampire,10
 7d21a4,Addictive Purple,22
 7d223a,Burgundy Belt,10
 7d2f3d,Maropolo,11
@@ -3433,7 +3177,6 @@
 7d464b,Liminal Rust,13
 7d48e0,The Timotainment Discord Purple,10
 7d4c85,Pickled Plums,9
-7d4d1e,Tyrannical Bronze,11
 7d5e84,Midnight Lavender,9
 7d6855,Stone Forge,10
 7d7b83,Pigeon Plush,9
@@ -3459,7 +3202,6 @@
 7e27a1,Aging Fad,14
 7e289b,Grape Jelly,14
 7e305e,Twilight Turnip,10
-7e3518,Female Construction Worker,15
 7e379a,Goobery Grape,9
 7e4eac,Winning Dragon,9
 7e552f,Cheap Chocolate Pudding,13
@@ -3479,7 +3221,6 @@
 7ed146,Light Pea Khaki,19
 7ed47d,Kids Books,10
 7ed992,Boba Frog,9
-7eeccc,Majinoid Mint,10
 7f00ff,Violet,114
 7f11ba,Aristocratic Grape,11
 7f1391,Unstable Fluid,13
@@ -3501,7 +3242,6 @@
 7f912c,Tabby Cat Eyes,15
 7f94b6,Cloudy Night On The Coast,9
 7f9c54,Lichen Trail,11
-7f9ea3,My Depression During Covid-19,14
 7fa4cb,Serenity,17
 7fa575,Not Yet Desert,10
 7fa8d6,Vanumian Blue,9
@@ -3515,8 +3255,6 @@
 800020,Burgundy,51
 800813,The Legendary Calculator Code,263
 800815,Immature Red,26
-80081e,Red Boobie,29
-800850,Booba,34
 800855,You Searched This Up,27
 800869,The Funniest Color,59
 801315,Velvet Crush,9
@@ -3538,7 +3276,6 @@
 805abe,Shinso,9
 806874,Min Mauve,17
 80776e,School,10
-807a5d,Tyrannical Beigeoline,14
 808000,Olive,159
 808040,Misali Mud,11
 808053,Moldy Bread,13
@@ -3566,7 +3303,6 @@
 80efa0,Mint Green Converse,15
 80ff80,Light Green,28
 810081,Ace Pride Purple,37
-8100cd,Radqueer Purple,25
 81104f,Mom's Nightly Glass Of Wine,9
 81117f,Nine Track Mind,10
 811244,I Murdered Somebody,11
@@ -3595,7 +3331,6 @@
 826445,Girl Scout Brownie Vest,12
 826d8f,Catboy Talasy Purple,12
 826e5e,Coffeehouse In The Woods,9
-827537,Ugly,20
 828282,Nintendo Switch - Grey Joy-Con,29
 828575,Concrete Dust That I Choked On,13
 829186,Roof Elevator,10
@@ -3770,7 +3505,6 @@
 87b8e8,Bottled Up Sky,9
 87d0d2,Zesty Winter Sky,10
 881549,Raspberry Wine,11
-881719,Bloody Mary Candle,10
 88176a,Mean Girl Maroon,11
 882e5a,Raspberry Syrup,11
 88332b,Brick Red,9
@@ -3839,7 +3573,6 @@
 8a80ce,Periwinkle Jam,14
 8a84a7,Smoke Of Lilac,11
 8a8a8a,Border Hotel,16
-8a9417,The One Baby Food Everyone Hates,10
 8aa2d9,Teardrops On My Guitar,9
 8aa529,Tame Chill Frog,12
 8aa6a5,Scent Of Old Books,11
@@ -3868,9 +3601,7 @@
 8b887f,Geodude,9
 8b9225,Undermined Ratio,11
 8b9c15,Immature Green,31
-8b9c84,Lesbian Indie Film,15
 8b9e3a,Green Tea Olive,13
-8b9f83,Magalis,14
 8ba488,Dried Sagebrush,13
 8ba4b1,Old Glass Of Water,11
 8ba860,Cabbage,10
@@ -3925,7 +3656,6 @@
 8cd02b,Milibilify,14
 8ce12b,Idio,13
 8ce2b3,Zozo Mint,12
-8d159b,Tyrannical Tyrian,13
 8d1c61,Burgundy Cherry Road,9
 8d257a,Black Women Are So Powerful,38
 8d37a1,William,9
@@ -4063,7 +3793,6 @@
 915131,Girl Scout Cookies,9
 91539a,Lovely Hallucinations,9
 915863,Dead Rose,10
-915d2f,Frango Assado,36
 91668f,Wilting Wisteria Flowers,10
 917296,Purple Dusk Blush,19
 917ad9,Soft Dried Lavender,11
@@ -4100,7 +3829,6 @@
 928d75,Bulletproof Cryptid,11
 929292,Uranium,46
 929b83,Greenish Gray,9
-92a5e8,Slanted Lavula,12
 92a6d2,Lavender Smoke Out,9
 92aab3,Clean Pigeon,15
 92add7,Frigid Wastelands,10
@@ -4122,7 +3850,6 @@
 932ed1,Escape To Grape,10
 933320,A Surprisingly Bricky Brick,11
 9334e3,Pg Purple,9
-93352e,Razzledazzle Scarlet,19
 934314,Chestnuts Over An Open Fire,9
 937096,Dried Out Violet,11
 937c57,Coffee Date On A Rainy Day,10
@@ -4149,7 +3876,6 @@
 941a73,Dark Candied Plum,9
 942477,Tri Pi,12
 942dc0,Desunian Purple,12
-943318,Female Felony,9
 943445,CrimsonMagenta,11
 944184,Victorian Style,10
 944a9b,Mermaid Locks,9
@@ -4172,16 +3898,13 @@
 94becd,February Pensacola Skies,9
 94c84c,Lone Hunter Green,36
 94cfac,Weathered Copper,9
-94db9f,Absinthe Cocktail,10
 94e66b,Vibrant Wasabi,9
 94ef3e,Neil Cicierega,13
-951066,Prostitute's Lampshade,12
 951413,Cherry Pi,35
 952a8e,Obsidianic Purple,9
 95364d,Musky Rose Garden,10
 953d29,Uh Oh I Cut My Finger With A Saw,10
 953f1d,Nutty Squirrel,10
-955940,Kaitlyn Bennett Hershey Squirts,13
 955c87,Mottled Purple,9
 956b18,Coffee And Waffles,10
 956d4f,Hot Chocolate In The Morning,15
@@ -4196,7 +3919,6 @@
 95a247,Occasionally Olive,9
 95bde2,Lovely Water,12
 95be95,Sage Green,19
-95bfb0,Voldemort's Heart,10
 95c48f,Pastel Sagebrush,9
 95cae7,Sky Prom Dress,9
 95d2d3,Classic Miku Blue,16
@@ -4265,17 +3987,13 @@
 982a54,Swamp Roses,9
 983872,Witchcrafting,10
 983bda,JellyBean Purple,13
-9849b2,Trumpet Blood,11
 984c7c,The Grapes Will Rise,11
 9850f8,TV Purple,30
-986745,Female Fugitive,12
 9870ce,Timothee Chalamet,13
 987654,Decreasing Beige,178
 987987,The Revenge Of 9 Against 7,12
 987d1a,Whisker Wars,11
 98817b,Cinereous,11
-98874e,Vomit,19
-98889d,My Mental Health,11
 9890b5,Covid 19 Boredom,10
 9893ae,A Bit Later,11
 989680,Tan Of Ten Million,16
@@ -4299,20 +4017,15 @@
 98ed12,Gaming With An Alien Bestie,11
 98f032,WOW Now That's Green,10
 990a6c,Deep Purple Wine,27
-990c1a,Harry Potter,29
 991026,Winter Pomegranate,12
 991032,Macbeth Red,9
 991111,Blood Child,10
 99152b,Centennial Maroon,9
-991a16,Women Are Strong,19
 991a27,Red Winter Apple,10
 99244f,Rebellious Rose,11
 99274b,Yves,11
-992a90,Thanos' Chinsack,9
-992f1a,Philosopher's Red,13
 9942dc,Williamafton,12
 994db6,Purple Fizzy Drink,10
-995a6f,Troon,12
 996468,Dusty Toadstool,12
 996666,Copper Rose,13
 9966cc,Amethyst,44
@@ -4324,7 +4037,6 @@
 99839e,Relaxing At Dusk,11
 998500,Boith,32
 99934c,Raccoons Horrid House Of Garbage,11
-999666,Reverse Triple Decker Nice,13
 999911,Emergency Yellow,12
 999983,Optimus Prime,25
 999998,Unsatisfying Grey,57
@@ -4358,7 +4070,6 @@
 9a4fcc,Glorious Grape Jam,12
 9a642d,Overcooked Caramel,10
 9a662e,Jubob,15
-9a6bde,Thanos Unibrow,9
 9a73df,Waluigi Violet,10
 9a7bc8,Lolly Adverb,13
 9a7d3b,Soggy Toast,10
@@ -4379,9 +4090,7 @@
 9acac1,Light Icy Morning,11
 9acc5f,Early Spring Grass,19
 9acd32,Yellow-Green,14
-9acfd6,Luna Cottagecore Lovegood,12
 9ad462,Lima Be Green,9
-9ae795,FrE-shaVocdo,9
 9aeede,Beautiful Active Idol,11
 9b014d,Lana Del Rey,28
 9b1414,Bleeding Crimson,28
@@ -4390,8 +4099,6 @@
 9b3b91,Welcome To Night Vale Purple,36
 9b3f5c,Luxury Grape,10
 9b4eab,Lost Hunter's Lavender,9
-9b4f96,Bi Rilliant Purple,27
-9b6569,OldNoseBleed On FreshWhiteSheets,9
 9b6b57,Unwillowed Brown,10
 9b6d6b,Starfish Lips,9
 9b6edd,Zacronium Purple,10
@@ -4401,11 +4108,9 @@
 9b95ba,Boring Office Carpet,9
 9b9b9b,The 50th Shade Of Gray,13
 9b9ec6,Obscurest Rickroll,12
-9ba2a9,Pandemic Depression Gray,9
 9ba2d4,Shy Whale,12
 9ba6bf,Fulfillment,13
 9bb49f,Forbidden Lake Of Something,10
-9bb91c,Asparagus Pee,10
 9bba2b,Avocado Toast,10
 9bc5c4,Strange Clouds In Strange Skies,10
 9bce7e,Pretty Green,9
@@ -4413,14 +4118,12 @@
 9bdb66,Translucent Frog Green,9
 9be28d,Baby Yoda,12
 9be9bd,Alien Altoids,9
-9c1000,Bloody Hell,32
 9c1bc5,Amethyst Eruption,11
 9c2670,Generic Smoothie,10
 9c3bd1,Repeated Duplication,11
 9c3c2b,Natalia Clay,11
 9c4dad,Infuriated,10
 9c4e61,Dirty Subway Bubble Gum,10
-9c59d1,Genderless Purple,16
 9c5a55,Old Rose Perfumes,9
 9c5bb4,Stooge Pink,12
 9c7e67,Morning Coffee,9
@@ -4430,7 +4133,6 @@
 9c9c46,Polispol Mareado,65
 9ca0c9,Dull Duck Egg Blue,10
 9ca738,Troll Treasure,10
-9caaae,Depressing Failure,14
 9cb5ae,Wallflower Energy,11
 9cbcdc,Where Ice Meets The Sky,10
 9cbfe6,Whysk,11
@@ -4457,29 +4159,24 @@
 9d92db,Unsaturated Royal Purple,9
 9d9bb9,Graceful Tears,9
 9d9c8a,Old Man Carpet,11
-9d9d9d,Asexual Grey,15
 9d9db9,Softly Through The Shadows,12
 9d9fcf,Lost Memories,9
 9db1a0,Complaints Department,9
 9dbc76,Forest Sage,9
 9dbc9a,Almost Olive Green,24
-9dbf57,Peel The Avocado Guacamole,9
 9dbf99,Seasick,10
 9dced7,Cold Sugar,9
 9dd0c1,Eggpop,9
-9dd99b,Depressed Moonlobster,9
 9de6ee,Septime,10
 9deab1,Mellowing Mint,9
 9e08be,Purple Guy,67
 9e1138,Raspberry Pie,9
 9e1a1d,Vampire Red,10
 9e1e1e,Pain,18
-9e2219,Female Lion's Prey,9
 9e3616,Real Canadian Maple,9
 9e4375,Sara,9
 9e443a,Redwood Velvet,9
 9e4f37,Iron-rich Soil,9
-9e5060,Poob Red,11
 9e5a41,Cowboy Like Me,9
 9e7ced,Galactic Pastel,9
 9e7ebc,Lilac's Distant Cousin,10
@@ -4494,7 +4191,6 @@
 9ea7b6,Foggy Day,10
 9eb2ef,Calming Lilacs,9
 9ebccd,Grandma's Ocean Themed Bathroom,26
-9ebed9,Mental Hospital Gown,11
 9ebfef,Norwegian Eyes,9
 9ec8bf,Petrified Cyan,9
 9ec978,Mossfoot,11
@@ -4505,7 +4201,6 @@
 9ee8c4,Sea Crystal,10
 9ee9bc,Mint Alloy,10
 9f1a30,Burnt Out Passion,9
-9f2a41,The Blood Clot In My Uterus,15
 9f3349,Yesterdays Wine,10
 9f3835,FL Studio Brown,70
 9f3b11,Autumn Candle,9
@@ -4519,9 +4214,7 @@
 9f836e,Dusty Chocolate,14
 9f8fbc,Calm Tea Purple,9
 9f9369,Chapter,9
-9f97bf,Purple If Purple Had Depression,12
 9f987b,Extra Spicy Gray,11
-9f9d31,Fart,14
 9f9da6,Roofless Ruin,11
 9f9f9f,Uppermost Grey,9
 9fa35d,Kound,10
@@ -4544,7 +4237,6 @@ a01a65,Miles Edgeworth,25
 a028e1,ARMYs,14
 a0522d,Sienna,11
 a05646,Minecraft Terracotta,11
-a05817,Kaitlin Bennet,13
 a06677,Expired Uncooked Salmon,14
 a06acc,Noteur,9
 a06cac,Twilight Abyss,10
@@ -4552,7 +4244,6 @@ a07971,The One Crayon No One Ever Uses,11
 a07a92,She Loved Me,12
 a095b5,Lilac Soul,10
 a0a0a0,River Lady,36
-a0a9ca,Blue But If It Had Depression,9
 a0aae6,Snow Lilac,10
 a0ac78,Forgotten Succulent,10
 a0acad,Grey Eyes Ive Grown To Love,9
@@ -4566,13 +4257,11 @@ a0d427,I Shouldn't Have Ate Glowsticks,9
 a0d7b8,Aesthetically Mint,13
 a0e8de,Copper Carbonate,12
 a0efb9,Lukewarm Lime Juice,10
-a10000,Megido Red,120
 a1101a,Holiday Christmas Elf Red,14
 a11145,Cherryish Maroon,11
 a11300,Pixar Red,35
 a116e5,Laurenzside,12
 a11b26,Ohio,23
-a13713,Female Firefighter,14
 a146e4,Waluigi,18
 a14b38,Dried Out Eraser Red,11
 a15000,Adios Toreador,56
@@ -4610,7 +4299,6 @@ a1d2ae,Frog's Lilypads,20
 a1d4dc,Frozen Darling,10
 a1d9bb,The Lost Tsunami,10
 a1da1d,Life Saving Lime,11
-a1ea1e,Alcoholic Green,9
 a200d4,Speak Now,29
 a2019f,Twitch Cuando Esta Pol En Direct,34
 a21033,Nekoma,9
@@ -4618,7 +4306,6 @@ a21438,Klarkel Moment,32
 a22178,Sweet Lollipop Dreams,10
 a2481c,Forgotten Goldenrod,9
 a25203,Tavros,34
-a27f38,Female Architect,13
 a2a2a2,Elder Gray,12
 a2b2c2,Pythagorian Grey,32
 a2b3c5,Kilpatrick's Sadness,88
@@ -4643,7 +4330,6 @@ a31223,Scarlet Witch,9
 a3148f,Heard It Through The Grapevine,12
 a31b4f,Warm Raspberry Strudel,11
 a31d48,Romancing Moon,9
-a32340,Devil's Grin,12
 a32d4d,My Childhood Trauma,9
 a3331e,Brick,21
 a33b4e,Dulled Heart,10
@@ -4666,27 +4352,22 @@ a3b9ae,Storybook Fog,10
 a3bed6,Old Ice Blue,9
 a3c38f,Cottagecore Extreme,9
 a3cbda,Frozen Gateway To The South Pole,9
-a3cdef,Down With The Patriarchy,11
 a3d4a5,Pastel Mint And Sage,10
 a3d4d6,Victorian Summer,10
 a3ec79,Mint City,9
 a3ef22,Third Green In A Row,10
-a42069,Blazin Hot Pink,11
 a42128,Normal Name From Sane Person,13
 a42f5a,Drunken Kiss,9
-a43ab9,I Hate My Bridesmaids Pink,25
 a43ec5,Press F To Pay Respects,15
 a44610,Wood,12
 a44f4f,Hot Tomato,13
 a45188,Blueberry Filling Pie,9
-a457c2,Preradqueer Purple,12
 a45a52,Redwood,9
 a45a62,Poll Mandame Un Saludo A Mi Juan,9
 a45cce,Purple's Got A Punk Haircut,13
 a46642,I Have The High Ground,13
 a46925,Numberphile Brown,15
 a471de,Hyliack Purple,9
-a4798c,Old Lady Smell Colourized,13
 a47eb4,Proud Lilac,10
 a48e9e,Mouldy Mauve,10
 a492ce,January Love,10
@@ -4718,12 +4399,9 @@ a51e1e,Queen Of Hearts,10
 a52a2a,Yo This Isnt Brown,24
 a54551,Fallacious Pathos,10
 a54a38,Daniel,10
-a55420,Rear Weed,15
 a55431,Nostalgic Coffee Shop,10
-a55555,I Can't Say That Word,20
 a55a55,Cheek Red,126
 a55e55,Assess,19
-a55ea7,The Bi's Purple,26
 a57545,Muskelmannbraun,28
 a58cc8,Lavender Field By The Sea,22
 a5949d,Tom Scott Hoodie,10
@@ -4802,7 +4480,6 @@ a7b99f,Sage Mists,9
 a7c369,WikiHow Green,17
 a7c37e,Matcha Green,13
 a7d1e8,Nae Nae Color,18
-a7d379,Aromantic Light Green,9
 a7d6bd,Old Robins Egg,18
 a7dce9,Niall Horan,10
 a7e0e1,Chaenmerald,16
@@ -4837,7 +4514,6 @@ a8abed,Lush Lively Lavender,10
 a8ad18,LepLep,20
 a8b4d5,London Dusk,10
 a8b714,Garlic Bread Dipped In Olive Oil,9
-a8b9a9,Dylan Is So Weird,25
 a8bd99,Foggy Seastone,14
 a8bdd4,Rainy Baby Blue,10
 a8c4f0,Pastel Blue,21
@@ -4862,7 +4538,6 @@ a989d5,Virgo,9
 a990b2,Dusty Lavender Blooming,10
 a99110,Central Valley Gold,9
 a9978f,Minecraft Dog,17
-a9a7a3,Karens Living Room Walls,15
 a9a9a9,River Stone Grey,12
 a9afa8,Sterling Grey,9
 a9b23c,The Backrooms,9
@@ -4897,7 +4572,6 @@ aaa0c5,Meadow Azalea,9
 aaa2ca,The Saddest Lavender,13
 aaa2db,Periwinkle Purple,10
 aaa5ee,Flying Above Lavender Fields,9
-aaa666,Devilish Scream,15
 aaaaa1,Blueish Screaming Ghostly Gray,9
 aaaaaa,Screaming Grey,1572
 aaaaab,Report Card,32
@@ -4923,17 +4597,10 @@ aac0be,Apathy,10
 aaccee,Ace Blue,9
 aaddb3,Seafoam Ballet Slippers,9
 aadead,Screaming Zombie Teal,11
-aae5a3,Rule34 Green,53
-aae5a4,Rule 34,643
 aaf0d1,Magic Mint,15
-aaf895,The Gayest Of The Frogs,62
-ab0a10,Gryffindor,29
 ab1333,Cherry Biscotti,17
-ab1de5,Abides Purple,10
-ab1e11,Poliscarpio Te AMAMOS,40
 ab242f,If Blood Were A Candy,17
 ab274f,Amaranth Purple,11
-ab343f,CEO Of Hell,10
 ab3abf,Im A Fun Mom I Swear,10
 ab4e2f,Terracotta Teapot,10
 ab561e,Barbecue Potato Chip,10
@@ -4948,11 +4615,9 @@ ab8dd1,Shlumbo,10
 ab90de,Lovely Lilac Forest,11
 ab9451,Gold Blobby,9
 ab9c63,Oldy But Goldy,10
-ab9ce3,Lavender Lesbian,10
 aba7aa,Essence Of Concrete,14
 abaac8,Lavender Waterfall,16
 ababab,3-Pack Abs,76
-abacab,Abacaba Grey,54
 abacad,Abracadabra,14
 abacba,Charter Gray,10
 abb9cf,Sorrowed Gloom,9
@@ -5003,9 +4668,6 @@ ac9a76,Cardboard Box,11
 ac9bba,Gothic Lavender,9
 ac9f92,Lonely Beach Pebble,9
 acaaea,Blueberry Ballet,11
-acab11,Non Political,14
-acab69,Police Reform,23
-acabbb,Political Opinion,17
 acac1a,Acacia Mustard,33
 acacac,Mr Krabs Laugh,59
 acaf9f,Thunderstorm Cotton Clouds,10
@@ -5026,7 +4688,6 @@ acdcac,AC-DC,10
 acdcae,Soft Blanket Mint,16
 ace1af,Celadon,34
 ace1c4,Drowsy Peppermint,9
-ace4a3,R34 Green,10
 ace71c,Dehydrated Fake Pickle,10
 aceace,Snake Eyes,104
 acebee,Bee Lawyer Barry Bee Benson,9
@@ -5035,20 +4696,14 @@ aceeee,Of Spades,12
 ad0920,Girl In Red,40
 ad1342,Crimson Cherry Bloom Hue,9
 ad1453,Constantinopolis,9
-ad15ba,Male Fantasy,11
 ad1a7f,Raspberry Or Blackberry,10
 ad1da5,Adidas Pink,14
-ad2020,The Blood Of The Bad Years,9
-ad2134,Autism,20
 ad232c,Grian,30
-ad2641,Lesbian Cherry Chap Stick,9
-ad3068,Karen's Lips,9
 ad331d,Internet Chimera,11
 ad3325,Aged Wax Seal,9
 ad3544,Half Rotten Roses,13
 ad4452,Strawberry Apple Pie,11
 ad547f,Raspberry Jelly Bean,9
-ad5ad5,I Hate Ads,10
 ad6a8e,Blushing Lillies,13
 ad6fc6,Cotton Candy Grapes,10
 ad719d,Purlinkle,10
@@ -5063,7 +4718,6 @@ ada910,Adagio Olive,9
 ada9c0,Manta Ray's Belly,10
 adaada,Lovelace Lavender,17
 adacde,Roadside Lilac,10
-adad15,Female Goldfinch,10
 adad4e,Slightly Burnt Banana,11
 adadad,Advertisements,149
 adb9ba,Rain Rain Go Away Gray,9
@@ -5092,14 +4746,11 @@ ade9b2,Dainty Mint Leaf,9
 adecaf,Coffe Please,9
 ae1000,Aeiou,30
 ae10ae,Missin U,12
-ae1c11,Girls Are Damn Tough,21
 ae1c28,Dutch Red,10
 ae2246,Cheerful Cherry Tree,9
 ae2969,Deep Raspberry Kiss,9
 ae3624,Valentine Wound,9
 ae3b15,Early Autumn Warmth,12
-ae3b99,Real Men Are Feminists,46
-ae417a,Dewy Dionysus,20
 ae4fd5,Qindio,11
 ae5a7b,Plummingbird,9
 ae65cc,Babetter,12
@@ -5113,21 +4764,17 @@ ae9fb6,Lilac Thunder,12
 aeaab8,Lavender Fog,10
 aeaaea,Lavender Sea,9
 aeacba,Folkpop Aoty Gray,9
-aeaeae,Angry Mexican Mom,100
 aebcc1,Pale Eyes,10
 aec9eb,Blue Pearl Seas,9
 aed173,Fre Sh A Vaca Do Toast,9
 aed7b6,Lazy Jade,12
 aee5e3,Snugget Snuggetine,25
 aee6b9,Mint Chocolate,11
-aeec69,Hawk Tuah,12
 aeeeee,AYYE,24
 aefac6,Mint,93
 af1822,We Met At The Cherry Farm,11
 af1e23,Hashrocket Red,10
 af2ed0,Grape Flavored Medicine,9
-af3451,Tyrannical Rose,15
-af3b5d,Karens Lipstick,14
 af3bd6,Flowering Foxglove,9
 af4fe7,Vintage Violet Venue,12
 af67af,Susie's Purple,17
@@ -5159,23 +4806,13 @@ aff0e8,Robin Egg,12
 b00000,Boo Red,184
 b0000b,Melon Red,118
 b000b5,Milky Chance,51
-b00b00,Booboo,259
-b00b13,Abreast,199
-b00b1e,Lust,193
-b00b55,I'll Tell You When You Get Older,63
-b00b69,The Funniest Color In Existence,967
-b00ba5,Awooga,52
-b00baa,Awooga Hochi Mama,27
-b00bee,Scary Breasts,41
 b01111,Boi Red,14
 b01c36,Sanguine Scarlet,9
 b01c37,Inferno Red,19
-b02010,Girls Are Strong,22
 b02222,JBMod Deathmatch Red,11
 b0343d,Disappointed Carpet,9
 b0771e,Bottled Cider,15
 b09bbc,Dusty Lilac,11
-b09dad,Depressingly Lilac,11
 b0a12b,Golden Brass Trumpet,11
 b0a171,Cinnamon And Oats,10
 b0a383,Long Forgotten Cheesecake,14
@@ -5205,12 +4842,10 @@ b0d4a6,Hushed Sage,9
 b0d694,Wallamaybungya Himbo,13
 b0dac0,Hospital,15
 b0e0e6,Powder Blue,28
-b0e4a4,Rule 34 Green,15
 b0e8ee,Frosty Water Blue,10
 b0ed42,Oppositional Disorder,11
 b0efce,Seafoam Splashes,9
 b11262,Imperious Condescension,9
-b11278,Dionysis's Cup,12
 b118cc,Laron October,10
 b11d68,Marvelous Mixed Berry,9
 b123af,Not Green,15
@@ -5231,10 +4866,8 @@ b193ed,Bluish Lilac,9
 b1a13c,Alvin,16
 b1a2ed,Blazed Purple,9
 b1a5ed,Biased Purple,43
-b1a94a,Puke Green,13
 b1ab1a,Yapping Yellow,15
 b1abc9,Ghosted Violet,10
-b1accc,This Isn't Black Wtf,13
 b1ade5,Blades,23
 b1aded,Sword Purple,14
 b1b1b1,Guys I Think This Grey Is Bi,31
@@ -5243,7 +4876,6 @@ b1c292,Gecko Jungle,10
 b1dec5,Merileva Fern,10
 b1eb1e,Bye Green,9
 b1eed5,Bleeding Alien,12
-b2141a,Bloodbath,11
 b22222,Firebrick,44
 b22234,American Flag Red,32
 b2228c,Pink'o,22
@@ -5258,8 +4890,6 @@ b26db8,Lilac's Evil Cousin,11
 b2716c,Vitagio,11
 b27b7c,Vintage Pink Dress,11
 b284be,African Violet,21
-b29215,Uh Oh Stinky,9
-b29e34,Earwax,9
 b2a5bc,Soft Lavender Ash,10
 b2aabf,Smokey Lavender,9
 b2b0e4,Peaceful Lavender Meadow,10
@@ -5279,8 +4909,6 @@ b2edc3,Pretty Toothpaste,9
 b3039e,Patti's Mane,96
 b31514,Udurian Red,11
 b31942,Old Glory Red,11
-b31d11,Girls Are Warriors,22
-b32a77,Dionysus Wine,9
 b32af0,Ablazing Neon Purple,13
 b3325f,Antique Raspberry,9
 b33b33,Buzzing Red,19
@@ -5303,13 +4931,11 @@ b384d6,Purple Diamond,12
 b38581,Bubblegum Mixed With Dirt,9
 b39bb1,Wanderer's Wisteria,11
 b39cac,Fallen Hyacinth,10
-b3a042,Puke,22
 b3a07e,Sad Beige,10
 b3a369,Georgia Tech Gold,9
 b3a57b,Coffee At Midnight,10
 b3a768,Dedbes,11
 b3b3b3,Historian Gray,31
-b3bdee,Violet Hypnosis,12
 b3c0ee,Ok Im Wrong But Is This Bfb Liy,9
 b3c665,Cat Eye Olive,14
 b3c6ef,Blue Cloudy Mist,12
@@ -5341,9 +4967,7 @@ b4bee6,Aura Of Lavender,13
 b4c163,Mossy River Water,10
 b4cede,Cloud Milk,10
 b4d2b3,Spring Sage,9
-b4d455,Badass Watermelon Green,58
 b4d9ec,Daydream,12
-b4da55,Badass,76
 b517d5,Illuminated Jellybean,9
 b52141,Cranberry Harvest,9
 b53389,Fandango,16
@@ -5352,12 +4976,9 @@ b536da,Rose Lalonde Purple,69
 b54135,Pastel Mushroom Red,13
 b54522,Valkyrie Hair,10
 b54d28,Copper Blossom,9
-b55154,Crying For Attention,11
 b55167,Soft Dried Rose,11
-b55690,Cloudy Lesbians,9
 b56627,Fall Foliage,9
 b56770,Fiberglass Insulation Pink,9
-b56e67,Harry Styles Nipple,11
 b57223,Oven Roasted Acorn Squash,9
 b57a28,Caramel Macchiato,12
 b57c2c,Gold Rush,12
@@ -5403,7 +5024,6 @@ b6b6b6,Soft And Cozy,12
 b6b9b4,Piles Of Asriels Dust,14
 b6baaf,Stone Block,9
 b6bcee,Music Notes In The Sky,9
-b6be36,Pee After Eating Asparagus,9
 b6c9ad,Bored Grandad Fishing,11
 b6cf77,Matcha Powder,9
 b6d079,Matcha Ice Cream,13
@@ -5412,10 +5032,8 @@ b6dcab,Aesthetically Pleasing Mold,12
 b6e06f,The Grass From Animal Crossing,10
 b6e8a0,Nostalgic Frog Stuffed Animal,11
 b6ef97,Soft Snowy Mint,10
-b6ffba,Pleasuring Yourself Green,52
 b71e35,Crimson Beryl,12
 b72670,Essence Of Wallamaybungya,13
-b72e16,Tyrannical Anarchy Red,12
 b75394,Bohemian Raspberries,9
 b768a2,Pearly Purple,9
 b76ecb,Twitch Mareao,78
@@ -5440,7 +5058,6 @@ b7d0ab,Moss Stone Grey,9
 b7d3e9,Nabuki Sky,18
 b7e671,Froget Thesaurus,10
 b8121e,Holiday Christmas Reindeer Red,14
-b81c45,Red Terror,10
 b8285a,Emergenn,10
 b82a27,Rough Immediacy,14
 b8306c,Raspberry Fever,10
@@ -5490,18 +5107,14 @@ b8e993,Springtime Fantasy,11
 b91740,Klarkel OFFICIAL,35
 b91919,Mumbo Jumbo,9
 b91c12,Marilyn Monroe's Lipstick,10
-b92318,Blood For The Blood God,23
 b92d5d,Raspberry Rose Water,10
 b933ad,7 Train,9
 b9422b,Lava Cookie,10
 b94b4b,Dessert Clay,9
 b94f50,Rhubarb Sauce,17
-b958ff,PostRadqueer Purple,25
 b96523,Pumpkin Cinnamon Americano,10
-b967ff,Pepega Clap,46
 b96d8e,Pinky Pickle,20
 b98496,Daydreaming Pig,11
-b9a895,Depressed But Slightly Vibin,10
 b9bac7,Seal,11
 b9c0c9,Baby Rhino Gray,14
 b9c55f,Swamp Waltz,10
@@ -5517,8 +5130,6 @@ b9e1e1,Febreeze Commerical,9
 b9eef0,Arise Atlantis,12
 ba0bab,Purple Baobab,42
 ba1016,Blood Bond,9
-ba1150,Balls Pink,10
-ba1155,Magesticles,16
 ba11ad,Bards Purple,9
 ba11e7,Violet Ballerina,13
 ba11ed,Kobe's Purple,15
@@ -5558,22 +5169,18 @@ baa11a,Slightly Aged Banana,11
 baa468,DFENS 15yo Anniversary,39
 baaaaa,Sheep Gray,251
 baaaab,Mirrored Sheep,21
-baaaad,Bad Sheep Grey,43
 baaabe,Coze Mauve,11
 baabaa,White Sheep,131
 baaea5,Morning Sandstone,10
 bab0b0,Ariana Grande At The Grammys,11
-bab1a1,Fashionably Depressed,9
 bab1e5,Babies Toys,35
 bab1ed,Babied Purple,10
 bab37e,Khaki,15
-bab52f,If Ugly Was A Color,11
 bab8a2,Foggy Streetlight,10
 baba00,Baba Is You,50
 baba15,Baba Is Yellow,74
 babab0,Close To Bababooey,18
 bababa,Baby Talk,256
-babaca,Portuguese Curse,20
 babae1,Actually It's Zamsiez's Colour,17
 babb1e,Babbling Color,10
 babbab,Bab Is You,30
@@ -5583,37 +5190,20 @@ babeee,I Am A Baby,37
 bac98d,Fragrant Green Tea,10
 bacaba,Bacaba,9
 bacbac,Guess Whos Bac,50
-bad1ad,Bad Lad,9
 bad1e3,A Tear I Once Cried,9
-bad420,Don't Do Weed Kids,31
 bad585,Matcha Cream,10
-bad666,The Devil,18
 bad6db,Misty Gardens,10
-bada55,Badass Green,234
 badace,The One Of Shovels,12
-badadd,Bad Addition,14
 badb01,What'cha Gonna Do,39
-badbac,Scoliosis Green,12
-badbad,Naughty Boy,306
-badbae,Bad Bae,11
 badbed,Cheap Mattress,2760
-badbee,Hornet Cerulean,23
 badc91,Apple Scented Bubbles,9
 badca4,Sage Gage,9
-badca7,Bad Cat,19
 badcab,Disappointing Taxi,119
 badcad,Insufficient Autodesk,17
 badd13,BADD13 Green,17
 badd1e,Baddie Green,80
 baddab,No Dabbing Green,79
-baddad,Bad Dad,177
-badddd,Bad To The Bone,28
-badded,Baby Bad Blue,12
-baddee,Villain Blue,9
 baded6,Ghostly Aqua Wind,9
-badfad,Bad Fad,49
-badfae,Malicious Faery,9
-badfed,Corrupt Blue,14
 bae5e8,Iceburg Float,15
 bae685,Embezzled Jello,11
 baeba4,Retrospective Nostalgia Green,14
@@ -5631,16 +5221,13 @@ bb652b,Hazelnut Cream Coffee,12
 bb6588,Loved By Music,17
 bb6688,Kanade Background Color,16
 bb6854,Soft Gingerbread,12
-bb702f,The Bad Cheez It,17
 bb79ef,Homestuck Purple,9
 bb8569,Chocolate Frosty,9
 bb87d9,Purble Place,10
 bb88ed,Rui Ourple,76
 bb88ee,Showtime Planner,15
 bb8bb8,Bb-8,23
-bb92e3,Choking On Lavender,10
 bb9643,Wet Sand,13
-bb9712,Tyrannical Amber,11
 bb9cc8,Dreams Of Freedom,10
 bba974,Old Book Pages,12
 bbaaaa,Stuttering Sheep,9
@@ -5648,11 +5235,8 @@ bbaadd,Lazy Programmer Purple,15
 bbb0dc,Embroidered Starlight,33
 bbb65e,Spahn,14
 bbbaee,Quiet Winter's Walk,10
-bbbbbb,Blyatful,179
-bbbfda,Depressed Pidgeon,12
 bbc536,Italian Virgin Olive Oil,9
 bbcbbc,BBC News,55
-bbcff0,Frostbite Death,9
 bbd1c4,Sylvooh Sage,12
 bbd644,Am I Just Thin Air,11
 bbdcd4,Saltwater Brine,10
@@ -5668,7 +5252,6 @@ bc262f,Disorted Ketchup,10
 bc2c18,Rank Amateurism,10
 bc2d56,Sour Cherry Pie Filling,12
 bc4a4a,Dried Scab Hazel,12
-bc54a8,Girls Are Powerful,13
 bc582a,Rusty Nail Thrown At A Sunset,11
 bc5841,Tigtag,11
 bc614e,Bored Programmer Red,11
@@ -5678,12 +5261,10 @@ bc877f,Brick Dust,13
 bc88d1,SOUR,9
 bc8f8f,Rosy Brown,9
 bc904f,Fortes Uniti Gold,12
-bc98a9,Depressed Flamingo,15
 bc99bb,Dripping Wisteria,12
 bc9ad3,Lilac Lily,10
 bc9b5d,Cork,15
 bc9dc2,Chancellor Of Roses,9
-bc9f14,Morning After A Curry,10
 bca378,The Crayon You Never Use,9
 bca6bb,Enchanting Violet,9
 bca774,Old Dusty Sweater,12
@@ -5691,7 +5272,6 @@ bcbbbd,Teardrop Silver,9
 bcbcbc,Before Christ,52
 bcbfcd,My Report Card,12
 bcc0ef,Rickroll Blue,35
-bcc443,Snot,14
 bcc4c6,Highlights Of A Sink,9
 bcc698,Oliver Gray,9
 bcc7cc,Kiss Of Moonlight,12
@@ -5717,7 +5297,6 @@ bd7117,Spiced Carrots,12
 bd738a,Lipstick Stains On A Coffee Mug,9
 bd8529,Penny For Your Thoughts,10
 bd94e8,Fragrant Magnolia,12
-bda1a1,Depressed Pink,13
 bda4b1,Moon Dried Lilac,9
 bda9c0,Elegant Intentions,11
 bdb3c3,Elsewhere Not Here,18
@@ -5733,7 +5312,6 @@ bdee11,Not Purple That's For Sure,10
 be1715,Clown Nose,9
 be1a1a,Chinese Dragon Red,9
 be2014,Ben Doyle Overalls,18
-be2113,Ardent Patriotism,11
 be3021,1940s Lipstick,10
 be4eb0,Cybernetic Magenta,10
 be5555,Strawberry Juice,9
@@ -5775,7 +5353,6 @@ bedcab,Bed Cab,9
 beddad,Bed Dad,9
 bedddd,Long Bed Blue,10
 bedded,Cozy Comforter,75
-bedead,Be Dead,77
 bedeaf,Mute Green,18
 bedf33,Frog Honey Green,9
 bedfad,Mattress Obsession,12
@@ -5796,10 +5373,8 @@ beeeee,Bee Blue,152
 beeeef,BEEF,111
 beef00,Rotten Beef,54
 beef1e,Beefy Lime,14
-beef69,Sexy Beef,22
 beefbe,Beef Be Like,12
 beefd1,Beefy Die,9
-beefed,PETA,48
 beefee,Beefy Blue,39
 bf132a,Spicy Sweet Chili,9
 bf1531,Passion Or Revenge,10
@@ -5816,7 +5391,6 @@ bf571b,Scholastic Bookfair 2004,9
 bf576e,Red Velvet Macaron,9
 bf5c13,Foxfur,10
 bf5c3b,70s Turtleneck,9
-bf6682,Transfeminism,22
 bf68d4,Violent Ballet Dancing,9
 bf7015,Against Jars,11
 bf7cb5,Good Lavender Dreams,10
@@ -5846,7 +5420,6 @@ bfbfd1,Dream Island Grey,22
 bfbfee,Soft,11
 bfc0ba,Foggy Creek,9
 bfc16e,Moral Nausea,11
-bfc199,Depressing Hospital Gray,11
 bfc5d2,Frosted Silver,18
 bfd100,Dream Island Chartreuse,73
 bfd110,Crybaby Chartreuse,9
@@ -5879,22 +5452,18 @@ c00c20,Tedious Red,36
 c01025,Colors,22
 c01045,Colorful Red,15
 c011ab,Collaboration Magenta,9
-c01a21,Spite The Devil,10
 c01d19,Health Warning,15
 c02c38,Tom Scott Red,436
-c02c3b,Killing Harmony,9
 c02d31,Valentine Day's Roses,10
 c02f5f,Prosecutor,9
 c03d55,Supernova Scarlet,9
 c03e1c,Spartan Martian Red,10
-c04011,Girls Are Brave,22
 c04040,Misali Mars,9
 c04e4e,Hot Dog On A Summers Day,10
 c0534f,Velvety Flesh,9
 c0562c,Chocolate Orange,9
 c06712,Old Lasagna Cat,9
 c06e8b,Dusty Date Night,9
-c06fcf,Non Fragile Masculinity,10
 c07180,Childhood,12
 c0749a,Under Your Tongue,9
 c07e2e,Golden Cinnamon Latte,11
@@ -5912,7 +5481,6 @@ c0ada1,Cinnamon Sugar Dustings,13
 c0b1d3,Muted Lavender,9
 c0b447,Olive Oil,16
 c0ba17,Unfortunately Isn't Blue,11
-c0ba6b,I Hate Sand It's Dry,10
 c0baa0,Pale Milky Tea,9
 c0c0a5,Cocoas,13
 c0c0aa,Cocoa Wheat,15
@@ -5921,7 +5489,6 @@ c0c441,Dirty Dandelion Yellow,9
 c0c4c4,Folklore,16
 c0c6e8,Winter's Embrace,10
 c0cac0,Coca Cola Grey,19
-c0cba1,Coc And Bal,9
 c0cc0c,Two Roosters,57
 c0cc69,Immature Salad,13
 c0ce01,NCT Green,58
@@ -5932,7 +5499,6 @@ c0d9ef,Aesthetically Satisfying,10
 c0dc0d,Call Of Duty Green,26
 c0dce0,Antarctic Foam,9
 c0de00,Code Lemon,25
-c0de69,Code 69,14
 c0ded1,Coded Teal,9
 c0deee,Coding Cloud Blue,10
 c0e0b1,Effortless Nostalgia,12
@@ -5955,15 +5521,12 @@ c19a37,Mustard Corduroy,12
 c19c14,My Name Is Alexander Hamilton,10
 c19edf,Lilac Frosting,9
 c1aac0,Sundried Lilac,16
-c1ac1a,CIA Gold,25
 c1afa7,Funny Peeling,11
 c1b2e2,Lavender Jellybean,11
 c1b331,Camel Cult,10
-c1b681,The Divine Wrath Of God,11
 c1b7ee,Soft French Violet,15
 c1c0bb,Orion Gray,11
 c1c1eb,Enchanted Swan,10
-c1caaa,Tyrannical Beige,12
 c1cada,Cicada Silver,37
 c1cccf,Nuclear Snowfall,9
 c1cdc5,Elephant Pants,11
@@ -5986,23 +5549,18 @@ c27d7d,Kennedy,9
 c28427,Chicken Tikka Masala,14
 c2886a,Woodland Terracotta,10
 c2967e,Spilled Tea All Over You,9
-c2972c,Cheese That Was Under The Couch,9
 c29821,Expired Mustard,17
 c2a07c,Dog Biscuit Brown,10
 c2a26e,Scattered Seashells,9
 c2a83e,Sidelined Gelding,10
-c2b216,Doesn't Deserve A Name,9
 c2b47e,Edinburgh Limestone,9
 c2ba4a,Vasteridium,26
 c2bad5,Soft Pillow Feathers,9
 c2c0ba,Straight Tik Tok,13
-c2c2c2,Granddaddy's Ashes,31
-c2d2c6,Depressing School Tiles,11
 c2d3bc,A Slice Of The Moon,9
 c2dd6d,Summer Sunset Meadow,9
 c314c3,Aphmau,9
 c31d79,Number Cheat,11
-c3201b,Red Rocket Knot,81
 c32148,Crayola Maroon,10
 c321e3,Ourple,23
 c32457,Tyrant's Cape,9
@@ -6031,8 +5589,6 @@ c3bcb0,If Tan And Grey Had A Kid,12
 c3c3c3,Grey Of The Moon,13
 c3c8ef,Light Lilac Sky,10
 c3c9a4,Wall,12
-c3ca67,My Dog Pooped Up A Crayon,10
-c3d7dc,Modern Depression Blue,17
 c3d9d3,Calming Mountain Mist,15
 c3e18c,Pearly Pear,9
 c3e1e8,Empire Of The Clouds,17
@@ -6044,16 +5600,12 @@ c3edb1,Sun Stained Sage,9
 c41013,Scoliosis Pain,17
 c41800,Minecraft Music Nostalgia Blood,41
 c41888,Minecraft Nostalgia,11
-c41b1e,Screw Jake Gyllenhaal Red,10
 c41e3a,Cardinal,13
-c42477,Bertish,17
-c42b76,Karen,31
 c43412,Bodacious Brick,10
 c43513,Cirqular,11
 c43ce1,Cyrce Cristinne,136
 c43d56,Talking To My Crush And Blushing,17
 c44a55,Cherry Chapstick,17
-c4581d,Van Tassel Orange,14
 c45c61,The Colour Of Dying Sun,11
 c46210,Alloy Orange,16
 c46f87,Undecided Pink,10
@@ -6069,7 +5621,6 @@ c4866f,Powdered Clay,10
 c48da3,Rose Water Haze,10
 c49349,My Perfectly Cooked Dino Nuggets,14
 c4964b,Baguette Crumbs,10
-c49d27,Bad Eggyolk,9
 c49e96,Rose And Clay,15
 c4a3f0,Vibrant Lilac Petals,10
 c4a484,The Base,16
@@ -6121,7 +5672,6 @@ c5a849,Deep Fried Yellow,9
 c5ac8b,Moth Powder,10
 c5ad97,Mocha Cashmere,12
 c5af91,A Peculiarly Drab Tincture,19
-c5b1a3,Dentist's Depressed Wallpaper,11
 c5b254,GimboLark Gold,11
 c5b398,Cow In A Wheat Field,10
 c5b8a6,Dead Wallamaybungya,11
@@ -6137,7 +5687,6 @@ c5d83e,DontBeALimed,9
 c5dde1,Iced Diamonds,10
 c5deb1,Dairy Queen Mint Milkshake,10
 c5e1e6,Hospital Socks,9
-c5e523,Not Pissed In A Year Yellow,10
 c5e6cf,Delta Mint,10
 c5e98e,Gentle Froggy,16
 c5ede2,Icy Chills,9
@@ -6179,8 +5728,6 @@ c71585,Medium Violet Red,18
 c72588,Your Rich Neighbours Fluffy Rug,10
 c73a36,Rose Blush,12
 c73d2e,Chanax,56
-c74e74,Sirens Bloodshed,9
-c758b4,Demoniacal Feverish Pink,11
 c76826,Pumpkin Spice Bread Loaf,10
 c76d85,Raspberry Sorbet Ice Cream,11
 c7701c,Ransac,10
@@ -6191,7 +5738,6 @@ c7919c,Saturn's Dust,9
 c79a45,Oldie But Goldie,9
 c79c84,Sandstone Beach,9
 c7a1d9,Lilac Dreams,13
-c7a3aa,Depressed Birthday,9
 c7a44c,Heated Desert Sands,13
 c7a467,Caramel Cream Brownie,9
 c7a7de,Pale Grape Vine,9
@@ -6199,7 +5745,6 @@ c7a9b3,Cotton Candy Dust,10
 c7aa72,Budan,11
 c7b634,Sesame Oil,9
 c7b7b7,Sorrowful Room,10
-c7ba20,Very Dehyrdated Pee,11
 c7ba97,If West Virginia Was A Color,14
 c7c0e9,Alexa,12
 c7c42e,Trumpet Yellow,18
@@ -6210,12 +5755,7 @@ c7daed,Arctic Rain,10
 c7ded2,Puzzled Gray,12
 c7e0ed,Sea Breeze,12
 c7e2db,Chasing The Tide,9
-c8102e,Empire Of The British Isles Red,36
 c8103b,Pomegranate,10
-c830db,Thanos Asscheeks,11
-c8348a,Lesbian Chapstick,9
-c85ab6,Female Products Made By Men,14
-c85e49,Blyadski,12
 c8674b,Terracotta Trim,9
 c88164,Medium Bland,11
 c88237,Burnt Out Pumpkin Field,9
@@ -6225,7 +5765,6 @@ c8916b,Stain On The Coffee Table,17
 c898a2,Dusty Rosy Tan,13
 c89b5d,Bread,14
 c89e1f,Candlelit Walls,9
-c8a620,Court Ordered Urine Sample,11
 c8a754,Dijon Mustard,10
 c8ac7a,Hamster,11
 c8c8c8,Grey Snow,23
@@ -6242,12 +5781,9 @@ c8f0eb,Frosted Seaglass,9
 c9221a,Toasted Tomato,12
 c92435,Cherry Sangria,9
 c92b66,Plastic Flamingo In Dad's Garage,10
-c94160,Sopa Di Maccaco,27
 c94172,Digital Lipstick,10
-c94539,Kneecap Blood,13
 c94f43,Arroy,10
 c96e8d,Lavender Rose Haze,9
-c971b8,Undiscovered Bisexual Awakening,17
 c97473,Toasted Roses,9
 c97990,Grade School Eraser,10
 c97b69,Vintage Rose Perfume,9
@@ -6280,7 +5816,6 @@ c9f5ea,Seafoam,27
 ca1221,Misa Red,13
 ca27a1,Slugberry,10
 ca285d,Peluca De La Suerte De Geoguessr,25
-ca289a,Male Spy's Lipstick,12
 ca3426,Kahoot Wrong Answer,11
 ca3949,Irvan Red,13
 ca541f,We Fell In Love In October,16
@@ -6312,14 +5847,12 @@ cab1ed,Light Purple Cable,11
 cabb1e,Taxi Driver,36
 cabba6,Cabeige,19
 cabba9,Cabbeige,20
-cabbad,Bad Taxi,11
 cabbae,Cream Of Cabbage,20
 cabbed,Expensive Fare,33
 cabbee,Cabby,11
 cabcab,Cabs Are Not Beige,159
 cabdad,Taxi Father,19
 cac8e5,Beauty,10
-cacaaa,My Doodoo But Lighter,10
 cacaca,Almost There Moon,49
 cad365,Pis De Don Gato,13
 cad797,Ellet,10
@@ -6331,20 +5864,17 @@ cae680,Light Savannah Limeade,15
 caffee,Caffee,38
 cb11e2,Wallamaybungya POP,11
 cb133b,Pomegranate Candy,10
-cb204d,Menstruation Maroon,9
 cb2f3c,Tom Scott Brand,124
 cb2f3d,Capitan Tom,11
 cb4c1b,Dirty Dorito,12
 cb5010,Atomic Traffic Cone,12
 cb5f17,Seventies Pantsuit,9
 cb6364,Iced Watermelon Smoothie,11
-cb708a,Girls Don't Wanna Be ''Pretty'',10
 cb745b,Terrazet,13
 cb8088,English Rose,10
 cb8254,Bearded Dragon Brown,20
 cb86a3,A Salmon Going Through A Divorce,10
 cb949c,Smudged Rose Gold,9
-cb9f93,Mia Khalifa's Areola,9
 cba1d6,Lavender Fields,19
 cba321,Reverse Orange,13
 cba3dc,Lilac Summer Day,12
@@ -6357,7 +5887,6 @@ cbac7c,Jake From State Farm Khakis,9
 cbacba,Pink Battle Advanced,67
 cbad12,Extremely Ancient Mustard Yellow,9
 cbada9,Warm Wooden Beige,9
-cbbc9a,Depressed Oreo Creme Filling,13
 cbc0e0,Aimsey Purple,65
 cbc4d1,Bridal Tears,9
 cbc894,Cinnamon Pistachio,10
@@ -6377,7 +5906,6 @@ cbeebc,Chayin,10
 cbf0c7,Sweet Lime Cake,9
 cc1013,Coca Cola Cherry,9
 cc1776,Dragonfruit Pink,9
-cc1b00,We're All Gonna Die One Day,39
 cc1d10,Rich Paprika,11
 cc2525,Hawks Feathers,13
 cc2f55,Glozetta,11
@@ -6403,19 +5931,16 @@ cc94ad,Discolored Strawberry,9
 cc9837,Wallamaybungya Tan,26
 cc9839,Honey Butter Waffle,9
 cc9cdf,Twilight Sparkle,30
-cca0ef,Lesbian Menace,11
 cca3a7,French Tip Nails,10
 cca478,Chai Latte With Sugar,9
 cca49b,Temmy Tan,12
 ccaa87,Social Media Obsessed Artist,25
 ccaa88,Shinonome Brown,15
-ccac4e,Paramilitary Group,10
 ccac87,Warm Island Sand,9
 ccad2f,Marigold Amber,10
 ccadd0,Meow,12
 ccadd6,Sleepy Lavender Moon,10
 ccafb3,Dusty Ballerinas,13
-ccb4be,Nail Polish Of A Karen,11
 ccb4db,Ditto,10
 ccb6b9,Is It Pink Or Is It Grey,9
 ccb8e2,Lovesick Lavender,10
@@ -6431,7 +5956,6 @@ cccac0,Cotton Lint,9
 cccccc,Cerebral Grey,253
 ccccff,Periwinkle,174
 cccddc,3am Blanket,10
-ccd5de,Jurassic Shark,11
 ccd8eb,Winter Sky,23
 ccd8f0,Babytears,9
 ccd9e5,Winter's Morning,16
@@ -6440,11 +5964,7 @@ ccf0e0,Parisian Peppermint,9
 ccff00,Antonio Kam,204
 cd212a,Italian Red,9
 cd2337,Ballerina Lipstick,11
-cd2574,Male Blush,14
-cd2de4,Karen Purple,10
 cd2edb,Happy Birthday Shiro,20
-cd3e94,Please Stop Calling This Girly,9
-cd4910,Female Site Manager,10
 cd4b5a,Candy Ribbon Red,9
 cd5c5c,Indian Red,36
 cd6060,Not Mazuat Red,13
@@ -6506,7 +6026,6 @@ ced14d,Bar Fish,10
 ced8f0,Grayson Sky,9
 cedace,Subway Wall,9
 ceded1,Moonlit Moss,10
-cee3e8,Iceberg That Hit The Titanic,21
 cee5d5,Chaemmu,14
 ceebbe,This Green Is Shy,11
 ceebee,ScratchTeam,14
@@ -6519,17 +6038,12 @@ cf1f3e,Cherry Pie,9
 cf2280,Artificial Strawberry,27
 cf25eb,Abeaming Bright Lavender,15
 cf2759,Raspberry Revolution,10
-cf2d71,Barnaby Munted Beetroot,50
 cf2f30,Doomsday's Raincoat,9
 cf3636,Bottompostor Red,13
-cf3aae,Boys Are Classy,13
 cf4006,The Crayon You Mistook For Red,25
 cf486d,Watermelon Lemonade,12
 cf4a29,Blitzo Red,10
 cf4e28,Stonemaier Orange,11
-cf5043,Bye Bye Uterus,13
-cf53e4,Your Mom,9
-cf597e,Borderline Insane,9
 cf5e27,Bell Coral,10
 cf684d,Copper Dune,9
 cf6987,Faded Fall Roses,9
@@ -6560,7 +6074,6 @@ cfc499,Simple Thoughts,9
 cfc7be,Lonely Pearl,11
 cfc9df,Dust Of The Moon,18
 cfcb9c,Standard Suburban House Paint,11
-cfcbdd,The Nice Lady At The Supermarket,11
 cfcfc0,Grizzled Wallpaper,11
 cfcfcf,American Silver,28
 cfd0ab,Affluenza By Conan Gray,9
@@ -6569,9 +6082,7 @@ cfdbf0,Fluffy Pastel Blue,9
 cfe0d5,Mossy Bone,10
 cfe880,Unripe Apple,11
 cff0e8,Squidward's Fragrance,43
-d00d00,Doodoo,156
 d00d1e,Doodle Red,60
-d0101f,Blood Of The Innocent Souls,10
 d01e19,Once Upon A Broken Heart,13
 d02418,Ramblomatic Red,18
 d02fc3,Lemme Check My Agenda Magenta,9
@@ -6579,7 +6090,6 @@ d04141,Dragon Red,9
 d0416b,Raspberry Flavoured Sweets,9
 d05340,Jasper,9
 d05884,Japanese Strawberry,9
-d08294,Thanos's Mother,15
 d08439,Cat,51
 d086d4,Orchid Butterfly,9
 d0871b,Vintage Vsco Grl,10
@@ -6602,7 +6112,6 @@ d0bfe0,The Forbidden Book,12
 d0bfee,Gentle Lavender's Sway,9
 d0c74c,Frozen Sunflower,10
 d0c8df,Apology Accepted,9
-d0cccc,I Hate My Wife,9
 d0d010,Thenamesh Yellow,10
 d0d0d0,Ancestral Water,44
 d0d34f,Im Not Like The Other Names,34
@@ -6613,17 +6122,13 @@ d0ded6,Thunderstorm In Spring,9
 d0e0d4,Creamed Sage,12
 d0e8ec,Hope,21
 d0f0c0,Tea Green,10
-d1106e,Karen's Essential Oil Case,9
 d12432,Atlantic Red,10
-d125a8,Testosterone Girl,17
 d12c79,Obtruse,9
 d12d79,Lip Gloss Smudge On A Napkin,13
 d13536,Phoenix's Rebirth,13
 d13652,Cherry Pink,25
-d13d13,Murderous Red,16
 d14ba2,Dark Miodan Pink,9
 d14d5d,Ateris Technologies Red,9
-d1503c,Surgeons Mistake,10
 d15a76,Nearly Kissed,9
 d1611e,Cheese Dust,10
 d1666c,Misbehaved Ham,11
@@ -6642,7 +6147,6 @@ d1a999,Chocolate Fog,10
 d1aa85,Toasted Whipped Cream Mocha,10
 d1b16d,Wheatier,11
 d1b1de,Violet Blizzard,12
-d1b7c4,Lesbian Fairy Pink,20
 d1be97,Midline,10
 d1c0cc,Stippled Mauve,19
 d1c497,Aged Treasure Map,10
@@ -6657,9 +6161,7 @@ d1d0d2,Vanilla Steel,10
 d1d1a3,Dad's New Shorts,13
 d1d1cf,Go Go Gadget Grey,9
 d1d1d1,Toaster,17
-d1dd13,Diddys Wasabi,10
 d1dd1d,Productive Yellow,11
-d1dd1e,Diddle,15
 d1dd6c,Bright Snail Slime,10
 d1e1e8,Winter Lace,12
 d1e231,Pear,14
@@ -6667,7 +6169,6 @@ d1e28e,Citrus By Nature,10
 d1ead0,Seafoam Sundae Deluxe,15
 d1ebd8,Baby Mint,15
 d1ece4,International Icing,9
-d1ed1e,Murderous Blunge,63
 d1eeee,Ghostly Ice,11
 d2001b,Cinepol,49
 d20d20,Roll For Advantage,39
@@ -6676,10 +6177,8 @@ d21e14,Malevolent Crowds,13
 d230c2,Fluoxetine Magenta,12
 d2505c,First Kiss,11
 d25621,Quichan,10
-d25823,Female Lion,9
 d25a17,Core Mechanics,10
 d26434,Sunburned Clay,10
-d268bb,Stereotypical Girly Pink,11
 d2711f,Dried Pumpkin,9
 d27c21,Toasty Tangerine,9
 d28454,Teddy Graham,10
@@ -6702,14 +6201,11 @@ d2bfff,Vanilla Lavender Dream,31
 d2c661,Doge Fur Gold,22
 d2ca32,That Old Lady's Couch From 1925,21
 d2caa4,Desert Prickly Pear,9
-d2d2d4,Girthy Nut,10
 d2d5db,Polystyrene,9
 d2e28a,Pale Sublime Green,9
 d2e9eb,Late Morning Daydream,9
 d2ede0,Pale Mint,9
-d32814,Im Pissing Blood,9
 d33529,Superficial Burn,39
-d35483,Nymphadora,10
 d3582b,Mangrove Swamp Wood,10
 d36179,Cottage Core Roses,9
 d364dd,Hit Me With A Frying Pan Purple,9
@@ -6789,7 +6285,6 @@ d54d5d,Juniper Berry Rouge,10
 d55470,Silk Rosewater,9
 d55e4e,In Distress,10
 d572a6,Regina George Gettinghitby A Bus,12
-d57458,A Robust Spanking,9
 d58c1e,Aged Honeycomb,11
 d58e9f,Grandma Pink,19
 d59435,Cider Leaves,9
@@ -6803,7 +6298,6 @@ d5b7d2,Frozen Cherry Yogurt,9
 d5cbc8,Old Ham,10
 d5cf3d,Dusty Lemon Peel,14
 d5d5d5,Radio Static,13
-d60270,Bi-rilliant Pink,40
 d6111d,Remember To Donate Your Blood,9
 d61280,Hanina,10
 d63689,Barbie Made Me Do It,12
@@ -6815,11 +6309,9 @@ d66f8c,Winter Raspberry Bush,14
 d67614,Burning Saffron,9
 d67629,Flaming Tiger Princess,10
 d67c8a,Bunny Ribbons,10
-d685c0,Testosterone Pink,12
 d68b95,Wet Uncooked Hotdog,9
 d68c20,Pumpernickel Loaf,9
 d69847,Orageous,9
-d699de,Tyrannical Lavender,15
 d6a127,Golden Hibiscus,11
 d6a43e,Toffee Gold,11
 d6a52a,Let That Mango,9
@@ -6904,7 +6396,6 @@ d91023,Peruvian Red,10
 d91156,Hawaiian Punch,9
 d91237,Gaslighter Red,14
 d914a0,Peptone Abysmal,9
-d91d54,Karen Lipstick Pink,18
 d91f1f,Apple,22
 d9248b,Dark Roset,11
 d92655,Light Jaq,10
@@ -6968,8 +6459,6 @@ da7da6,Barbies Cousin Darbie,14
 da807a,Dusk Rose,9
 da8488,Savory Salmon,43
 da924c,Gingerbrave,11
-da93ad,Male Pink,11
-daa16e,Harry Styles 4th Nipple,14
 daa1c4,Candy Coated Lavender,14
 daa520,Goldenrod,20
 daa796,Daniala,10
@@ -7041,7 +6530,6 @@ db3272,Fine Line,11
 db3424,Horacios,15
 db36c9,Slathery,10
 db382a,Certified Fresh Tomato,9
-db3ca3,Male Raspberry Pink,9
 db4437,Google Red,19
 db4c99,Dietrogia,12
 db5e1c,Ca Ira,10
@@ -7054,7 +6542,6 @@ db8144,Prurienteer,10
 db841a,Texas,13
 db86c2,Melanie Martinez,14
 db99a6,Dying Roses In Grandmas House,10
-dba1e4,Male Gouldian Finch Breast,9
 dba638,Mysterious Fridge Liquid,9
 dba6a2,Sand And Roses,11
 dbb2de,Light Procedure,11
@@ -7064,7 +6551,6 @@ dbcaa0,Very Heavily Creamed Coffee,11
 dbcc86,Sandstorm,9
 dbccb7,Champagne With Breakfast,9
 dbcd8d,French Bread Beige,11
-dbcdba,Karen's Bob Cut,13
 dbd1e1,Silvery Dust,9
 dbd26d,Pearly Chartreuse,10
 dbd276,Underwater Sandstorm,9
@@ -7076,7 +6562,6 @@ dbdf88,Nyamo Yellow,47
 dbf0ed,Iced Sandy Shores,9
 dc1371,Spring Rose,9
 dc143c,Crimson,45
-dc1874,Furcia Fucsia,10
 dc1ded,Decidably Purple,9
 dc241a,Nikocado Red,15
 dc2ac1,King Cupid,15
@@ -7090,7 +6575,6 @@ dc867d,Nonchalant Salmon,10
 dc8aa1,Feeling Rosy,9
 dc8ba2,Mauviest,10
 dc8e30,Orange You Sad,9
-dc8fdc,Men Are Empathetic,18
 dc9944,Smooth Honey,11
 dca423,Northern Cornbread,12
 dcada5,Old House Wallpaper,29
@@ -7138,7 +6622,6 @@ dd9d76,Baracyc,10
 dda33d,Boots With The Fur With The Fur,12
 dda451,Guitar,9
 dda6a4,Questionable Processed Meat,13
-dda8a8,Lesbian,9
 ddaabb,Lazy Programmer Pink,16
 ddaacc,Ominous Bell Pink,26
 ddaec6,Softie,11
@@ -7151,7 +6634,6 @@ ddbbaa,Lazy Programmer Orange,9
 ddbbdd,Toni Lavender,9
 ddbd8d,Almond Cappuccino,9
 ddc094,Butter Pecan Milkshake,10
-ddc0f0,Boys Are Lovely,23
 ddc6bd,Remembering Ghosts Of The Past,10
 ddccae,Sand In My Shoes,9
 ddd0b0,Old Sand,9
@@ -7178,7 +6660,6 @@ de3465,Raspberry Witch,11
 de3ab9,Baby Dress Pink,9
 de4937,Paprika Palace,40
 de4d67,Kratcy Pink,11
-de4e4b,Tyrannical Lipstick,14
 de55a9,Orion,16
 de6356,Fresh Watermelon Slices,10
 de6459,Overly Aggressive Blush,9
@@ -7190,7 +6671,6 @@ de8c8c,Flustered Rose,13
 de8da3,Sad Flamingos,9
 de8e1f,Cheems,52
 de9292,Indecisive Peonies,12
-de97ce,Masculinity At Its Finest,11
 de981f,Divorced Pumpkin,9
 de9e28,Mystery Color,10
 de9e3e,Rusty Oatmeal,11
@@ -7202,7 +6682,6 @@ dead11,The Reaper's Yellow,11
 dead12,12 Is Dead,11
 dead13,Undead And Unlucky,11
 dead1e,Deadie,11
-dead69,Necrophilic Brown,71
 dead99,Dead Pink,16
 deadaa,OuchOuch,22
 deadad,Dead Dad,32
@@ -7216,7 +6695,6 @@ deadea,Drug Enforcement Lavender,25
 deaded,Unliving Pink,97
 deadee,Funeral Mauve,17
 deaf00,Deaf Orange,53
-deaf69,Silent Sexy,16
 deafed,The Color That Could Once Hear,30
 deafff,Deaf Lavender,32
 deb2ab,Strawberry Cream Cow,9
@@ -7234,17 +6712,13 @@ dec63a,The Bee Movie,10
 dec773,Lion's Fairytale,11
 dec7c8,Dehydrated Pink,11
 dec7ec,Frosted Lavender Sky,10
-dec8a5,Kid Who Asks For The N Word Pass,12
 decade,10 Years' Color,227
 decaf0,Zero Decaf Lilac,45
 decaff,Decaf Lavender,81
 decdec,December Pink,25
 ded37c,Seasonal Depression In April,9
-ded420,Lung Cancer Yellow,14
 ded4c5,Sad Beige Mom,12
 ded649,Sickly Suns,10
-ded666,Dead Devil,15
-deda55,Deadass Yellow,19
 dedbe5,DeadBees,79
 dedbed,Deathbed,40
 dedbef,DeadBeef,16
@@ -7287,7 +6761,6 @@ dfa542,Survivor Yoyleland Cork,22
 dfab46,Mango Peanut Butter,9
 dfab90,Thor's Skin,14
 dfba90,Milky Morning Coffee,13
-dfbaad,Karens Are Everywere,13
 dfbbc4,Sign Of The Times-Harry Styles,9
 dfcbd1,Gum With Absolutely No Flavor,9
 dfcfbe,Sand Dollar,10
@@ -7295,7 +6768,6 @@ dfd0f0,Lilac Berry Candles,11
 dfd1f0,Icicle Lilac,10
 dfdfdf,Light Storm,16
 dfe0d5,90s White Computer,9
-dfe0dc,Voldemort,12
 dfe1da,Pearly Milk,10
 dfebf0,Gloomy Winter Skies,9
 e00707,Strider Red,108
@@ -7303,7 +6775,6 @@ e0115f,Ruby,30
 e01fcc,Bright Magenta,10
 e02500,Tom Scott,1381
 e02632,Reimu,10
-e02be0,Barbie Testicles,10
 e05b9e,Bubblecake,9
 e06666,Gaming Interactive Red,12
 e06b86,Subtropical Flamingo Sunset,12
@@ -7334,14 +6805,12 @@ e0dce8,Transparent But Not Really,9
 e0dfa4,I Like Bread,9
 e0e0e0,Family Size Condensed Soup,41
 e0e2e0,White Noise,16
-e0e37f,Tyrannical Banana,12
 e0e4dd,Vibranium,10
 e0ebb9,Chrysanthemum Tea,9
 e0ef20,Accidentally Ate A Glow Stick,13
 e11639,On The Shoulder,10
 e1503d,Salmon Tango,9
 e151c0,Machida,10
-e158ba,Birth Is The Gender Reveal,11
 e15cb0,Benjamin Yam,13
 e15f64,Soft Rosy Blush,11
 e1643e,Oven-Softened Carrot,9
@@ -7373,7 +6842,6 @@ e1ebf0,Permafrost Ice,17
 e1f0c7,Pale Desert Limestone,9
 e2152e,Tickle Me Elmo,9
 e21a99,Rhododen,10
-e21b1b,Capitalism Red,56
 e21c35,Cranapple Strawberry,9
 e21e1e,Nyrito,15
 e2231a,Roblox Red,9
@@ -7390,10 +6858,8 @@ e271cd,Bilateral Brain Function,12
 e27f78,Salmon Spam,9
 e288ea,He's A Flower,21
 e28eaa,Raspberry Fade,11
-e29750,Tyrannical Tan,14
 e299ed,Muted Purple Bubblegum,9
 e29e1c,Swordsmachine Yellow,320
-e2a2e2,Men Are Sweet,18
 e2a636,Marigold Honey Yellow,9
 e2a7a3,Aesthetic Vsco Pink,12
 e2a9c1,Vintage Cotton Candy,11
@@ -7406,7 +6872,6 @@ e2b84b,Color McColorface,9
 e2bec4,Strawberry Coconut Sundae,10
 e2c3e5,Depressed Violet Gray,9
 e2c4ca,Blushing Sky,10
-e2c62f,Old Female Honeybee,12
 e2cbb2,Classic Bubble Tea,14
 e2cc90,Shy Duck,9
 e2ccc2,Champagne Fluff,9
@@ -7423,20 +6888,15 @@ e3106b,Cybernetic Heartbreak,10
 e31f2f,Error,10
 e32020,Trending Red,21
 e32200,Bomb Rush Red,69
-e3256b,Razzmatazz,40
 e32636,Alizarin Crimson,25
-e32818,Fury Of Hell,11
 e329e3,Artificial Berry Blast,12
 e32fd2,StyleCircuit Pink,36
 e3351e,Red Lips Always Lie,11
 e34234,Vermilion,31
 e3497c,Barely Stringing,12
-e35bd8,Free Speech Magenta,10
 e36924,Muted Dragon Flame,11
 e36d42,King Of The Thread,10
 e371e6,Hypocrite Smiles,9
-e372a5,Very Masculine Manly Pink,17
-e3759a,Nice Legs Patrick,10
 e37679,Tongue Tied,13
 e37e46,Terracotta Stairs,11
 e38947,Old African Savannah,12
@@ -7474,13 +6934,11 @@ e3de9d,Week Old Egg,11
 e3dee3,Granny's Kitchen Sink,9
 e3e1d5,Ancient Chalk,12
 e3e2cf,Leftover Rice,9
-e3e3de,Pochocho,11
 e3e3e3,Electronic Entertainment Expo,76
 e3e7e8,Moon Mirage,9
 e3ec9a,Lemony Dreams,10
 e3eeee,Briblank,10
 e3efe4,Just Barely Mint,9
-e42069,Sexy Weed Pink,10
 e42418,Goularte,9
 e42728,Nintendo,9
 e42b73,Watermelon Sugar,50
@@ -7532,7 +6990,6 @@ e559bf,Plastic Petunia,10
 e5623c,Passa,14
 e563e2,Not A Critical Success,10
 e56a54,Robotito Orange,10
-e575e3,She Is Not Playing Dolls,13
 e57b9d,May,9
 e58c94,I Just Saw My Crush,9
 e58eae,Delightful Tea Party,11
@@ -7570,11 +7027,6 @@ e5f0dc,Lemonade Lime Popsicle,9
 e61412,Major Warning,10
 e61570,Effortfull,10
 e61cc8,Heart Attack Magenta,10
-e62100,Furry Orange,57
-e62111,Yiff Red,11
-e62169,Hot Furry Pink,36
-e621aa,Screaming Furry Pink,13
-e621e6,Yiffy Pink,9
 e6275d,Chofismuller,46
 e627c6,Chemical Rink,10
 e63960,Matthew Schulz,10
@@ -7584,14 +7036,12 @@ e659cf,Boyish Pink,9
 e66317,Copper Starlight,11
 e66793,Springtime Beauty,10
 e67676,Aura Farms,19
-e67737,Tyrannical Ochre,13
 e67a77,Shrimp,9
 e67a9b,Refreshing Rose,12
 e67bcc,Soda Pop,9
 e68057,Copper Coral,9
 e68125,Halloween Afternoon,14
 e6822d,Dragonbusters,13
-e68a12,Girls Are Funny,16
 e68a91,Maybe I Love You,10
 e68f38,Broken Carrot,9
 e69129,Amazon Prime Orange,12
@@ -7603,7 +7053,6 @@ e69c1e,Daiers,22
 e69dae,Bunny's Nose,10
 e6a488,Pale Primrose Quartz,10
 e6a747,Pixelated Fall,13
-e6a8ce,Boys Are Dreamers,16
 e6ac9c,Skinlike Rose Gold,10
 e6ad8e,Dissemble,10
 e6afb4,Diluted Strawberry Pink,11
@@ -7635,7 +7084,6 @@ e74343,I Forgot Sunscreen,10
 e74c25,Firelike,12
 e74c3c,Tenacious Cinnabar,22
 e74c6e,Warm Wildflower Blush,13
-e764ec,All Woman Are Queens,11
 e7736a,Silly Salmon Surprise,9
 e77d97,Eraser Pink,10
 e79237,Chicken Nugget,16
@@ -7691,7 +7139,6 @@ e86d26,Delusio,11
 e8721e,Persimmon,10
 e87373,Pink Summer Sunrise,10
 e87965,Grocery Store Sushi Salmon,13
-e87b41,Female Clownfish,12
 e88f18,Sunflower Golds,10
 e89038,Light Pumpkin Gingerbread,11
 e89210,Patty Blinger,21
@@ -7712,7 +7159,6 @@ e8b7ed,Mauvelise,13
 e8bf62,Golden Sand,10
 e8c0e5,Ava,9
 e8c784,Christmas Sugar Cookie,10
-e8c877,Hellmouth Sand,20
 e8c882,Light Muted Lemon,10
 e8cb41,Depressed Mustard,9
 e8cda3,Cake Batter,10
@@ -7735,7 +7181,6 @@ e91135,Poor Little Bug On The Wall,9
 e91333,Strawberry Fields Forever,10
 e91e63,FlipaClip Color,13
 e92a8a,Pinkish Fabulosa,9
-e930d6,Manly,14
 e93159,Wallamaybungya Pink,25
 e93def,Candied Nightmare,10
 e94476,Promiscuously Autobiographical,13
@@ -7780,7 +7225,6 @@ ea144f,My Lady's Chamber,11
 ea1c6b,Heejin,11
 ea213a,Weezer Red,43
 ea2b10,Uno Card Red,9
-ea2ea3,Secure Masculinity,15
 ea3f27,Spicy Chicken Sandwich,9
 ea4e88,Brockhoff Pink,10
 ea5352,Strawberry Creamcicle,9
@@ -7791,7 +7235,6 @@ ea763b,Faded Traffic Cone,10
 ea77cb,Bubblegum Sonata,9
 ea798e,Soft Cloudy Salmon Pink,9
 ea7aac,Strawberry Cake Frosting,9
-ea7ca8,Stereotypical Feminine Pink,11
 ea7ea7,Eat Me,13
 ea8080,Tongue,17
 ea8220,Haxe Orange,79
@@ -7824,7 +7267,6 @@ eae6bb,Banana Soft Serve,11
 eae9e5,Silica White,10
 eaeaea,EA White,206
 eaeba9,Backrooms Hue,19
-eaebdf,Voldemort's Nose Oh Wait,11
 eaeef0,Rarity,18
 eaefeb,Misty Taste Of Moonshine,10
 eb1047,Do You Listen To Girl In Red,12
@@ -7838,14 +7280,11 @@ eb285a,Flashy Watermelon,9
 eb2a67,The Crayon You Thought Was Red,10
 eb3318,Thermic Orange,32
 eb3436,Brilliant Cinnabar,9
-eb3ee2,Princess Testosterone,12
-eb44cc,Pointlessly Gendered Pink,10
 eb4518,Reddit Moment,43
 eb4696,1989 Prom Dress,10
 eb4a1f,Gourmet Tomato Paste,9
 eb5285,Dragon Fruit Pink,9
 eb5924,Proper Orange,15
-eb64ef,Male Purple,12
 eb6b8f,Bubblegum Distraction,11
 eb6dd1,Pink Floyd,9
 eb7189,Cosmic Valentine,17
@@ -7863,7 +7302,6 @@ eba4ac,Yum Yum Pink,9
 eba62f,African Lion Yellow,12
 ebabaf,Peony Petal Breeze,10
 ebb03b,Proprietary,13
-ebbad6,All Boys Are Beautiful,19
 ebbebb,Ebbing And Flowing,13
 ebc042,Golden Symphony,9
 ebc263,French Fry,9
@@ -7912,7 +7350,6 @@ ecbbc1,Cotton Candy Watermelon Rain,10
 ecbc64,Terrified Balsa,17
 ecbdba,Cherry Blush,9
 ecc097,Restraunt Toilet,9
-ecc6e6,Transgender Pink,11
 eccef0,Cotton Periwinkle Clouds,10
 eccfcf,'Vali,15
 ecd2e4,If La Croix Was A Color,9
@@ -7935,7 +7372,6 @@ ed1148,Amy Pink,15
 ed1711,Your Sister's Fire Engine,11
 ed1c16,Coca-Cola Red,11
 ed1c24,Dialtone,18
-ed27a9,Bimbo Hypnosis,9
 ed2939,Imperial Red,10
 ed2e92,Tokyo Pink,9
 ed387c,Trigonometry Magenta,12
@@ -7947,8 +7383,6 @@ ed61be,Bubble Pop Electric Zap Pink,9
 ed63d1,Nihachu,10
 ed685a,Acidic Copper,10
 ed68bf,Novichok,10
-ed7834,Tyrannical Flame,10
-ed7c9e,Girls Aren't Just Princessess,10
 ed8086,Sunburst Blush,10
 ed817d,Raw Cold Salmon,9
 ed8f2b,Arizona Sunset,9
@@ -7970,7 +7404,6 @@ edacaf,Reverse Facade,10
 edaf1c,Spooky Month,9
 edafc4,Charlotte,18
 edb2c4,Fallen Blossoms,9
-edb445,Pedophile Yellow,9
 edb458,Golden Fireside,9
 edb7b5,KLINK Pink,10
 edbeb7,Skin Rose Gold,11
@@ -7999,7 +7432,6 @@ edeb79,VSCO Yellow,9
 ededde,Ed Edd And Eddy,20
 ededed,Ed Ed N Eddy,119
 ee1012,The Glorious Lobster Emperor,18
-ee111c,Devil's Handprint,9
 ee1166,Vivid Bad Pink,18
 ee1285,Hot,9
 ee1373,Bjork,9
@@ -8011,10 +7443,7 @@ ee29b3,Retro Astro Space Heroine Pink,9
 ee3322,BuzzFeed Red,13
 ee35a4,Uvda,10
 ee362e,Can't Even Red,20
-ee3aad,Masculinity At It's Height,10
 ee3d75,Japanese Street Fashion Pink,9
-ee4cfb,Gaymer Girl,27
-ee53ee,Insufferable Fuchsia,10
 ee6130,Brainzooming Orange Blast,60
 ee6666,The Kind Honor Student,27
 ee67a0,Irapap,14
@@ -8034,7 +7463,6 @@ eeaa00,Guarded Golden Railing,26
 eeb5ba,Cats Nose Pink,15
 eeb959,Golden Caramel Sundae,9
 eebb4e,Golden Hour Somewhere,12
-eec2bc,Forced Femininity,10
 eec4da,Drained Cherry Blossom,9
 eec7e6,Sugary Rose Mist,10
 eecb63,Sunday,15
@@ -8061,18 +7489,14 @@ ef3340,Singapore Red,41
 ef36be,Unacceptable Lipstick For School,11
 ef3d3d,Looks Like Grapefruit Tastes,11
 ef4981,Nostalgic Berry,9
-ef4a7d,Feminine Stereotype,9
 ef4c79,Strawberry Taffy,11
 ef4da2,PrettyWomanKitchen,9
 ef5b39,Big Dreams,15
-ef5c1e,Goddess Of Flames,9
 ef5f3a,Canned Salmon Paste,9
-ef6775,Cliche Feminine,9
 ef6a42,Logistics Orange,12
 ef7694,Crush,16
 ef76e4,HyperPop Bubblegum,9
 ef796e,Artificial Shrimp,14
-ef7ada,Most Masculine Pink,14
 ef7b92,Pink Fairy Dust,9
 ef8086,Pink Lemonade Taffy,11
 ef8276,Not Salmon But Getting There,12
@@ -8104,7 +7528,6 @@ f01a1e,Evil Uterus,16
 f01d40,Crazy Hibiscus,10
 f01f42,The Shelled One's Pods,19
 f0303d,No Fear No More Neon Red,13
-f030a4,Legally Karen,10
 f03a17,Carcinized Cinnabar,22
 f03f32,Aether Of Reality,9
 f03f55,Ponyo,9
@@ -8117,7 +7540,6 @@ f05852,Persimmons In Bloom,12
 f059d2,Purple Pink Petunia,10
 f059d5,Misbehaved Peppa Pig,10
 f05aa5,Childhood Shirt,10
-f06000,Tyrannical Orange,27
 f06256,Mincoer,10
 f063f0,If This Is Your Idea Of Love,9
 f0668b,60s Bubblegum,9
@@ -8143,22 +7565,18 @@ f09c65,The End Of Autumn,9
 f09cb0,Sylphid Pink,12
 f09e67,Peachy Sundown,11
 f0a3a1,Had To Much Weed,19
-f0a6ce,The God Of Sugar Sprinkles,11
 f0a795,Coral Candy Milkshake,14
 f0a8ee,Flamingo Blossom Pink,10
 f0a927,Stay Gold Ponyboy,12
 f0aad0,Sednaya,10
 f0ab23,Dravidian Orange,22
 f0af9c,Strawberry Puree Shortbread,11
-f0afe4,Boys Are Dancers,16
 f0b1e2,Delicate Strawberry,14
 f0b45a,Presidential Fake Tan,11
 f0b4a5,Skin Colored Rose Gold,11
 f0bcb6,Pointe Shoes,11
 f0bf82,Warm Cinnamon Roll,9
 f0c1d1,Paul Hardcastle Smooth Jazz,10
-f0c5cd,Male Chinese Moon Moth,13
-f0c6e2,Kind Male Nurse,13
 f0c851,Apollo's Lyre,9
 f0cad4,Foolish Giggle,10
 f0ccca,Rosey Cotton,10
@@ -8206,23 +7624,18 @@ f33e9b,The Savior,30
 f37aa9,Flamingo,27
 f3dbb6,Fresh Oat Brown,29
 f3e1e2,Grace,32
-f42069,Haha Nice Pink,89
 f4e32a,Staffy Yellow,37
 f4e4a0,Sand,28
 f520c8,Hottest Of Pinks,31
 f5821f,Cloudflare Orange,36
-f5a9b8,Trans Pink,65
 f63e75,Truenamelcoche,29
-f69420,F Nice,28
 f6efe8,Nephyrus Beige,36
 f6ff00,Brighter Than My Future,217
 f7cac9,Rose Quartz,30
 f7ea48,Pupa,540
 f8d6d7,Lets Go Mills Baby Love Da Mills,28
 f8e080,Noise Yellow,27
-f974d6,Girls Aren't All Girly,30
 fa1a1a,Christmas Carol Red,47
-fa7fa7,Obesity Epidemic,25
 fa8072,Salmon,75
 fa96df,Lover,26
 faaaaa,Family Friendly Pink,62
@@ -8289,14 +7702,11 @@ ff1500,Carolina Reaper,161
 ff1515,Chiffoi Red,58
 ff1a1a,Mario,51
 ff1e1e,Rudolph's Red Nose,38
-ff3599,Animosity Against Nazis,26
 ff3a3a,Limited Edition Micah Archos Red,68
 ff3f3f,Choof Red,30
 ff4242,Realmy Red,30
 ff4711,Papyrus,29
 ff4715,FeberHett,210
-ff4b80,Proship Pink,106
-ff4c80,Radqueer Pink,61
 ff58e3,Official Grayfruit Pink,49
 ff5959,SoPRO Red,30
 ff5b5a,Balloon Ii Salmon,127
@@ -8304,12 +7714,9 @@ ff642b,Fysikorange,47
 ff6500,Hacker News Orange,290
 ff6592,Self Ship Pink,26
 ff66bc,Wonderhoy,30
-ff6969,Tyrannical Salmon,111
-ff69b4,Pink As Hell,66
 ff6b99,Takorii,28
 ff737a,Watermelon,29
 ff7424,Reddit Reviver Orange,27
-ff7b00,Donald Trump Flesh,106
 ff7bf0,Serp Serpal Serpals Pink,52
 ff7e14,Naruto,25
 ff7e30,Channel Orange,60
