@@ -11,6 +11,10 @@
   - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
   - Universal Tracker (check UT's channel in the discord server for more information and instructions)
 
+## WIP
+
+For detailed directions, see the [New to AP page](./new_to_ap.md)
+
 ## Obtaining your scenario file
 
 Once you have generated the multiworld, a `.zip` file will be generated for your world. If you generated locally, 
