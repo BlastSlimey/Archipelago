@@ -37,7 +37,7 @@ class RangerQuestClient(BizHawkClient):
                 (ADDR.header, 0xc0, "Main RAM"),
             )
         ))[0]
-        if header[:11] != b'POKE RANGER':
+        if header[:11] != b'POKE RANGER\0':
             return False
         if header[15:16] == b'P':
             self.version = 0
