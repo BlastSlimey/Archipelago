@@ -1,8 +1,6 @@
 from random import Random
 from typing import Callable, Any, ClassVar, TYPE_CHECKING
 
-import deprecated
-
 try:
     if TYPE_CHECKING:
         from BaseClasses import CollectionState, ItemClassification
@@ -48,11 +46,11 @@ class PluginProtocol:
 
     def get_overlay(self, ov_num: int) -> bytearray: ...
 
-    @deprecated.deprecated
     def get_arm9(self) -> bytearray: ...
+    """Deprecated, use self.arm9 instead"""
 
-    @deprecated.deprecated
     def get_arm7(self) -> bytearray: ...
+    """Deprecated, use self.arm7 instead"""
 
     @staticmethod
     def modify_rule(old: "ExtendedRule", new: Callable[["ExtendedRule", "CollectionState", "PokemonBWWorld"], bool]): ...
