@@ -15,14 +15,14 @@ If you find one, please report it to the #future-game-design thread for this gam
 ## Required Software
 
 - BizHawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-  - Version 2.9.1 is recommended; 2.10 is currently unable to connect.
-  - **Important**: Upon opening the emulator fo the first time, go to `Config > Customize... > Advanced` 
-    and **disable** `AutoSaveRam`. Else, save data might not be properly saved.
+  - Version 2.11.1 is recommended; 2.11 does not work and versions below that have a critical bug.
+  - **Important: If you decide to play on 2.10 or lower**, upon opening the emulator fo the first time, go to 
+    `Config > Customize... > Advanced` and **disable** `AutoSaveRam`. Else, save data will not be properly saved.
   - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prerequisite installer first, which can also be found at the above link.
 - The built-in BizHawk client within the Archipelago software, which can be installed 
   [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-- A .nds file for the USA version of Sonic Rush
+- A dumped .nds ROM for the USA version of Sonic Rush; the Archipelago community cannot provide that
 
 ## Optional software
 
@@ -40,8 +40,7 @@ multiworld can all have different options.
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the 
-[Sonic Rush Player Options Page](/games/Sonic%20Rush/player-options)
+Type &options into the #jenson-spam channel on the Discord server for more information.
 
 ## Joining a MultiWorld Game
 
