@@ -11,7 +11,7 @@
   - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
   - Universal Tracker (check UT's channel in the discord server for more information and instructions)
 
-## WIP
+## If you're new to AP
 
 For detailed directions, see the [New to AP page](./new_to_ap.md)
 

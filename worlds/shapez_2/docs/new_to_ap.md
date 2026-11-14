@@ -35,7 +35,8 @@ Though, the setup is a bit complicated, so let me explain it quickly:
    (this is the "plugin" for the AP software to know how to handle this game)
 3. Use steam's [Game Versions & Betas](https://partner.steamgames.com/doc/store/application/branches) feature to select the `modding_stable` branch, putting you on game version 1.0.3-rc3
 4. Install the 2hapezipelago mod from the Steam Workshop, allowing Steam to download all of its dependency mods
-5. Launch Shapez 2 and open the Mods menu to confirm the mod is installed properly. Click the 2hapezipelago mod's 📂 button to open the mod's files. Keep this open for later
+5. Launch Shapez 2 and open the Mods menu to confirm the mod is installed properly. Click the 2hapezipelago mod's 
+   📂 button to open the mod's files. Keep this open for later
 6. Put the apworld into `<AP install folder>/custom_worlds`, or on Windows, double-click it and AP will install it to the custom worlds folder automatically
 7. Run the AP Launcher
 8. Select Tool -> "Options Creator" -> shapez 2 (you'll have to scroll all the way to the bottom to find it)
@@ -43,11 +44,13 @@ Though, the setup is a bit complicated, so let me explain it quickly:
 10. Click "Export Options" and save the file to `<AP install folder>/Players`
 11. In the Launcher, click "Generate"
 12. If everything went right (i.e. no error message), a zip file has been created in `<AP install folder>/Output`
-13. Open that zip file, then inside of it open the other zip file (zip in another zip for technical reasons)
+13. Open that zip file, then inside of it open the other zip file (zip inside a zip, for technical reasons)
 14. From within that, copy the `scenario_...json` and `preset_...json` to `<2hapezipelago mod folder>/scenarios` and 
-    `<2hapezipelago mod folder>/scenario-presets` respectively. The mod folder is the one you opened earlier in step 5. You'll have to create the `scenario` and `scenario-presets` subfolders manually
+    `<2hapezipelago mod folder>/scenario-presets` respectively. The mod folder is the one you opened earlier in step 5. 
+    You'll have to create the `scenario` and `scenario-presets` subfolders manually
 15. Restart the game
-16. Create a new save file and select Classic -> "Archipelago (Player name)" as the scenario. A Shapez 2 bug means the button is partially cut off in the UI, so if it isn't clickable, use the game options to change your UI scale
+16. Create a new save file and select Classic -> "Archipelago (Player name)" as the scenario. However, a bug in the main game 
+    causes the button is partially cut off in the UI. If it isn't clickable, change your UI scale in the game's settings.
 
 If you play a singleplayer randomizer, you can jump straight ahead into the gameplay. Otherwise, I'd recommend reading
 the tutorials on https://archipelago.gg/ since that requires a bit more knowledge if you don't have someone 
