@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any
 
 from BaseClasses import Item
 from .data.items import buildings, all_items
+from .generate import reseed
 
 if TYPE_CHECKING:
     from . import Shapez2World
@@ -55,51 +56,52 @@ def get_starting_items(world: "Shapez2World") -> list[str]:
     ]
 
 
+@reseed
 def pre_generate_logic(world: "Shapez2World") -> None:
-    if "Random starting processor" in world.options.item_pool_modifiers:
+    if world.options.item_pool_modifiers.is_random_starting_processor:
         processors = list(buildings.simple_processors)
         world.starting_processor = world.random.choice(processors)
 
 
 def generate_filler(world: "Shapez2World") -> str:
     if world.filler_nested is None:
-        steps = [1, 2, 5, 10, 10, 20, 50, 100, 1000, 1000]
-        if "Arbitrary research points" in world.options.item_pool_modifiers:
-            steps[:4] = [1, 1, 1, 1]
-        if "Arbitrary platform items" in world.options.item_pool_modifiers:
+        steps = [100, 200, 500, 1000, 10, 20, 50, 100, 1000, 1000]
+        if world.options.item_pool_modifiers.is_arbitrary_research_credits:
+            steps[:4] = [100, 100, 100, 100]
+        if world.options.item_pool_modifiers.is_arbitrary_platform_capacity:
             steps[4:8] = [1, 1, 1, 1]
-        if "Arbitrary blueprint points" in world.options.item_pool_modifiers:
+        if world.options.item_pool_modifiers.is_arbitrary_blueprint_credits:
             steps[8:] = [100, 100]
         world.filler_nested = [
-            *(f"{x} Research Points" for x in range(1, 7, steps[0])),
+            *(f"{x} Research Credits" for x in range(100, 601, steps[0])),
             [
-                *(f"{x} Research Points" for x in range(8, 13, steps[1])),
+                *(f"{x} Research Credits" for x in range(800, 1201, steps[1])),
                 [
-                    *(f"{x} Research Points" for x in range(15, 31, steps[2])),
+                    *(f"{x} Research Credits" for x in range(1500, 3001, steps[2])),
                     [
-                        *(f"{x} Research Points" for x in range(40, 101, steps[3])),
+                        *(f"{x} Research Credits" for x in range(4000, 10001, steps[3])),
                     ],
                 ],
             ],
-            *(f"{x} Platforms" for x in range(10, 41, steps[4])),
+            *(f"{x} Platform Capacity" for x in range(10, 41, steps[4])),
             [
-                *(f"{x} Platforms" for x in range(60, 121, steps[5])),
+                *(f"{x} Platform Capacity" for x in range(60, 121, steps[5])),
                 [
-                    *(f"{x} Platforms" for x in range(150, 251, steps[6])),
+                    *(f"{x} Platform Capacity" for x in range(150, 251, steps[6])),
                     [
-                        *(f"{x} Platforms" for x in range(300, 501, steps[7])),
+                        *(f"{x} Platform Capacity" for x in range(300, 501, steps[7])),
                     ],
                 ],
             ],
         ]
-        if "Include blueprint points" in world.options.item_pool_modifiers:
+        if world.options.item_pool_modifiers.is_include_blueprint_credits:
             world.filler_nested.extend([
-                *(f"{x} Blueprint Points" for x in range(1000, 3000, steps[8])),
+                *(f"{x} Blueprint Credits" for x in range(1000, 3000, steps[8])),
                 [
-                    *(f"{x} Blueprint Points" for x in range(3000, 10000, steps[9])),
+                    *(f"{x} Blueprint Credits" for x in range(3000, 10000, steps[9])),
                 ],
             ])
-    return random_choice_nested(world.random, world.filler_nested)
+    return random_choice_nested(world.filler_rng, world.filler_nested)
 
 
 def random_choice_nested(random: Random, nested: list[Any | list | dict]) -> Any:

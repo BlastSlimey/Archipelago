@@ -1,9 +1,10 @@
 import logging
 from multiprocessing import Process
+from random import Random
 from typing import Mapping, Any, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, Tutorial
-from Options import Option, OptionError
+from Options import Option
 from worlds.AutoWorld import WebWorld, World
 from . import items, locations, options, output
 from worlds.LauncherComponents import components, Component
@@ -19,7 +20,7 @@ def run_client():
     p.start()
 
 
-components.append(Component("shapez 2 Client", func=run_client))
+# components.append(Component("shapez 2 Client", func=run_client))
 
 
 class Shapez2Web(WebWorld):
@@ -44,6 +45,9 @@ class Shapez2World(World):
     It is the successor to shapez and contains a variety of more features like crystals, space platforms and belts,
     trains, and an astounding new 3-dimensional gameplay environment in space.
     """
+    # Extra notes: The developers of the game apparently had many names for various features during development and
+    # even changed the shown names in updates. Due to that, there are quite a few things in this apworld's code that
+    # are named inconsistently and different from what they're called ingame, e.g. tasks = jobs. Sorry.
     game = "shapez 2"
     options_dataclass = options.Shapez2Options
     options: options.Shapez2Options
@@ -76,6 +80,8 @@ class Shapez2World(World):
         self.task_processors: list[list[Processor]] = []
         self.operator_processors: list[list[Processor]] = []
         self.milestone_checks_counts: list[int] = []
+        self.task_counts: list[int] = []
+        self.filler_rng = Random(self.random.getrandbits(64))
 
         self.ut_active: bool = False
         self.location_id_to_alias: dict[int, str] = {}
@@ -110,17 +116,8 @@ class Shapez2World(World):
 
         self.random.seed(self.seed)
 
-        adjust = self.options.location_adjustments
-
-        if self.options.goal == "operator_levels" and adjust["Operator level checks"] == 0:
-            raise OptionError(f"{self.player_name}: Goal operator_levels requires at least 1 operator level check.")
-        if adjust.count_min_locations() < (
-            70 + (adjust["Task lines"] if "Lock task lines" in self.options.location_modifiers else 0) +
-            (adjust["Operator lines"] if "Lock operator lines" in self.options.location_modifiers else 0)
-        ):
-            raise OptionError(f"{self.player_name}: Not enough guaranteed locations ({adjust.count_min_locations()}) "
-                              f"for required items ({80 + adjust['Task lines'] + adjust['Operator lines']}).")
-
+        options.fix_deprecated(self)
+        locations.calculate_locations_count(self)
         locations.pre_generate_logic(self)
         items.pre_generate_logic(self)
         self.starting_items = items.get_starting_items(self)
@@ -165,13 +162,18 @@ class Shapez2World(World):
         return {
             "options": {
                 "goal": self.options.goal.current_key,
-                "location_adjustments": self.options.location_adjustments.value,
+                "lock_locations": self.options.lock_locations.value,
+                "milestone_adjustments": self.options.milestone_adjustments.value,
+                "jobs_adjustments": self.options.jobs_adjustments.value,
+                "operator_levels_adjustments": self.options.operator_levels_adjustments.value,
+                "starting_points": self.options.starting_points.value,
+                "required_shapes_multiplier": self.options.required_shapes_multiplier.value,
                 "shape_configuration": self.options.shape_configuration.current_key,
-                "shape_generation_modifiers": self.options.shape_generation_modifiers.value,
+                "operator_lines_shapes": self.options.operator_lines_shapes.value,
                 "shape_generation_adjustments": self.options.shape_generation_adjustments.value,
                 "blueprint_shapes": self.options.blueprint_shapes.to_slot_data(),
                 "item_pool_modifiers": self.options.item_pool_modifiers.value,
-                "show_other_players_items": self.options.show_other_players_items.value,
+                "show_item_names": self.options.show_item_names.value,
                 "start_inventory": self.options.start_inventory.value,
                 "start_inventory_from_pool": self.options.start_inventory_from_pool.value,
             },

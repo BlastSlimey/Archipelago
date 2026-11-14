@@ -1,6 +1,6 @@
 import enum
 from random import Random
-from typing import Self, Sequence
+from typing import Self, Sequence, Iterator
 
 restr: dict | None = None
 
@@ -93,6 +93,10 @@ class ShapeBuilder:
 
     def build(self) -> str:
         return ":".join(self.shape)
+
+    def build_all_rotations(self) -> Iterator[str]:
+        for i in range(0, len(self.shape), 2):
+            yield ":".join(layer[i:]+layer[:i] for layer in self.shape)
 
     def debug_string(self) -> str:
         return (f"[shape = {self.shape}, processors = {self.processors}, tasked = {self.tasked}, "

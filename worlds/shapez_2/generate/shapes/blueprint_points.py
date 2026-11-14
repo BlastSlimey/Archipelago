@@ -1,11 +1,13 @@
 from typing import TYPE_CHECKING
 
 from . import Processor
+from .. import reseed
 
 if TYPE_CHECKING:
     from ... import Shapez2World
 
 
+@reseed
 def get_shapes_list(world: "Shapez2World") -> list[str]:
     from .generator import generate_shape
     from .downgrader import distinct_downgrades
@@ -18,7 +20,7 @@ def get_shapes_list(world: "Shapez2World") -> list[str]:
         for _ in range(5):
             Processor.add_random_next(world.random, proc, None)
         builder = generate_shape(world, proc, 25)
-        return distinct_downgrades(world, builder, proc, 4, 25, builder.build())[0]
+        return distinct_downgrades(world, builder, proc, 4, 25, builder.build(), [])[0]
     elif world.options.shape_configuration == "tetragonal":
         return blueprint_shapes.shapes[world.options.blueprint_shapes.current_key]
     else:

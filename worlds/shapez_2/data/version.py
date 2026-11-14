@@ -1,4 +1,3 @@
-
 from typing import NamedTuple
 
 
@@ -8,9 +7,10 @@ class VersionCompatibility(NamedTuple):
     ap_minimum: tuple[int, int, int]
 
 
-version: tuple[int, int, int] = (1, 0, 1)
+version: tuple[int, int, int] = (1, 1, 0)
 
 compatibility: dict[tuple[int, int, int], VersionCompatibility] = {
+    (1, 1, 0): VersionCompatibility((1, 1, 0), (1, 1, 0), (0, 6, 5)),
     (1, 0, 1): VersionCompatibility((1, 0, 0), (1, 0, 0), (0, 6, 5)),
     (1, 0, 0): VersionCompatibility((1, 0, 0), (1, 0, 0), (0, 6, 5)),
     (0, 99, 6): VersionCompatibility((0, 99, 5), (0, 99, 0), (0, 6, 5)),

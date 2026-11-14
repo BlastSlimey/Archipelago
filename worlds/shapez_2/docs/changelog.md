@@ -1,6 +1,25 @@
 # Changelog
 Versions are sorted in ascending order, i.e. the most recent changes are at the top.
 
+## 1.1.0
+
+- A lot of internal reworking
+- Updated names of buildings, space platforms, displayed research credits amount, and other features to 1.0.0+
+- Overhauled many options for better design
+  - Old yamls will be fixed by the apworld and do thereby **not** break
+- Added `Unlock pipes with pumps` to `Item Pool Modifiers`
+- Added `Jobs` to `Operator Lines Shapes` (formerly `Shape Generation Modifiers`)
+- Fixed the two final shapes of a milestone sometimes being randomized to the same shape
+- Tweaked RNG handling to reduce the risk of updates breaking UT accuracy
+- Fixed platform capacity items giving only half of the amount mentioned in their name
+- Lessened restrictions for minimum amount of locations
+- Added nested to randomness to list-based options
+- Merged multiple trains-related space platform items into `Shape Trains` and `Fluid Trains`
+  - This also fixes the `Rails` not actually unlocking the rails
+
+### Is this version compatible with older multiworld slots and save files?
+No
+
 ## 1.0.1
 
 - Fixed UT rejecting any slot

@@ -21,15 +21,27 @@ class ItemData(NamedTuple):
     # The following attribute names originate from how certain things are named in the game's code
     # and thereby might be confusing without context
     remote_id: str
-    reward_ids: tuple[str, ...]
-    reward_type: int
+    reward_ids_buildings: tuple[str, ...]
+    reward_ids_islands: tuple[str, ...]
+    reward_ids_mechanics: tuple[str, ...]
 
 
-class PointsItemData(NamedTuple):
+class RPItemData(NamedTuple):
     item_id: int
     classification: ClassificationMethod
     amount: int
-    reward_type: int
+
+
+class BPItemData(NamedTuple):
+    item_id: int
+    classification: ClassificationMethod
+    amount: int
+
+
+class PCItemData(NamedTuple):
+    item_id: int
+    classification: ClassificationMethod
+    amount: int
 
 
 class RegionConnectionData(NamedTuple):

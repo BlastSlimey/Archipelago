@@ -1,13 +1,14 @@
-
 from random import Random
 from typing import TYPE_CHECKING
 
 from . import Processor, generate_tetragonal, generate_hexagonal, ShapeBuilder
+from .. import reseed
 
 if TYPE_CHECKING:
     from ... import Shapez2World
 
 
+@reseed
 def generate_shape(world: "Shapez2World",
                    processors: list[Processor],
                    complexity: int,
@@ -34,7 +35,7 @@ def generate_new(rand: Random, processors: list[Processor], complexity: int, is_
     builder: ShapeBuilder | None = None
 
     # Use "exclude" as a blacklist
-    while builder is None or builder.shape in exclude:
+    while builder is None or any(rotation in exclude for rotation in builder.build_all_rotations()):
 
         current_comp = complexity
 

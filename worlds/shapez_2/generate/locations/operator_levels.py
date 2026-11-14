@@ -12,7 +12,7 @@ def create_locations(world: "Shapez2World", regions: dict[str, Region]) -> None:
     from ...data.locations import all_locations
 
     rule: "AccessRule" = lambda state: True
-    adjust = world.options.location_adjustments
+    adjust = world.options.operator_levels_adjustments
 
     for level in range(adjust["Operator level checks"]):
         region_num = level // max(5, adjust["Operator level checks"] // adjust["Operator lines"] + 1) + 1

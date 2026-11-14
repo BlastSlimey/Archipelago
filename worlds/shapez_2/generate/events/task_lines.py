@@ -13,21 +13,21 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
     from ..rules import extended_has
 
     def get_rule(_i: int) -> "AccessRule":
-        return lambda state: extended_has(world, state, f"Task line #{_i}")
+        return lambda state: extended_has(world, state, f"Job line #{_i}")
 
     reg = regions["Events"]
-    lines_count = world.options.location_adjustments["Task lines"]
-    all_unlocked = "Lock task lines" not in world.options.location_modifiers
+    lines_count = world.options.jobs_adjustments["Job lines"]
+    all_unlocked = world.options.lock_locations.is_job_lines
 
     for x in range(lines_count):
-        if all_unlocked or f"Task line #{x+1}" in world.starting_items:
-            world.starting_items.append(f"[ACCESS] Task line {x+1}")
+        if all_unlocked or f"Job line #{x+1}" in world.starting_items:
+            world.starting_items.append(f"[ACCESS] Job line {x+1}")
         else:
             loc = Shapez2Location(
-                world.player, f"[ACCESS] Task line {x+1}", None, reg, LocationProgressType.PRIORITY,
+                world.player, f"[ACCESS] Job line {x+1}", None, reg, LocationProgressType.PRIORITY,
                 get_rule(x+1)
             )
             loc.place_locked_item(Shapez2Item(
-                f"[ACCESS] Task line {x+1}", ItemClassification.progression, None, world.player
+                f"[ACCESS] Job line {x+1}", ItemClassification.progression, None, world.player
             ))
             reg.locations.append(loc)

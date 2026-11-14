@@ -1,15 +1,17 @@
 from typing import TYPE_CHECKING
 
 from . import Processor
+from .. import reseed
 
 if TYPE_CHECKING:
     from ... import Shapez2World
 
 
+@reseed
 def get_processors_list(world: "Shapez2World") -> list[list[Processor]]:
     milestone_processors: list[list[Processor]] = []
     milestone_order: list[Processor] = []
-    milestone_count = world.options.location_adjustments["Milestones"]
+    milestone_count = world.options.milestone_adjustments["Milestones"]
     max_processors = world.options.shape_generation_adjustments["Maximum processors per milestone"]
     for _ in range(min(milestone_count, 8)):
         Processor.add_random_next(world.random, milestone_order, None)
@@ -23,24 +25,21 @@ def get_processors_list(world: "Shapez2World") -> list[list[Processor]]:
     return milestone_processors
 
 
-def get_shapes_list(
-    world: "Shapez2World",
-    milestone_processors: list[list[Processor]]
-) -> list[tuple[list[str], list[str]]]:
+@reseed
+def get_shapes_list(world: "Shapez2World") -> list[tuple[list[str], list[str]]]:
     from .generator import generate_shape
     from .downgrader import distinct_downgrades
 
     milestone_shapes: list[tuple[list[str], list[str]]] = []
 
     i = 0
-    for milestone in milestone_processors:
+    for milestone in world.milestone_processors:
         i += 3
         # Assumes all milestones have at least 1 processor
         builder1 = generate_shape(world, milestone, i)
-        builder2 = generate_shape(world, milestone, i, [builder1.build()])
-        milestone_shapes.append((
-            distinct_downgrades(world, builder1, milestone.copy(), min(2, len(milestone)), i, builder1.build())[0],
-            distinct_downgrades(world, builder2, milestone.copy(), min(2, len(milestone)), i, builder2.build())[0],
-        ))
+        line_1 = distinct_downgrades(world, builder1, milestone.copy(), min(2, len(milestone)), i, builder1.build(), [])[0]
+        builder2 = generate_shape(world, milestone, i, line_1)
+        line_2 = distinct_downgrades(world, builder2, milestone.copy(), min(2, len(milestone)), i, builder2.build(), line_1)[0]
+        milestone_shapes.append((line_1, line_2))
 
     return milestone_shapes

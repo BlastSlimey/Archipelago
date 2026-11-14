@@ -1,9 +1,10 @@
-
 import math
 from typing import Optional, TYPE_CHECKING
 
 from BaseClasses import Location, Region, LocationProgressType, ItemClassification
+from Options import OptionError
 from .data.locations import milestones, tasks, operator_levels
+from .generate import reseed
 
 if TYPE_CHECKING:
     from . import Shapez2World
@@ -30,24 +31,24 @@ def lookup_table() -> dict[str, int]:
 
 def get_regions(world: "Shapez2World") -> dict[str, Region]:
 
-    adjust = world.options.location_adjustments
+    operator_adj = world.options.operator_levels_adjustments
 
     return {
         "Menu": Region("Menu", world.player, world.multiworld),
         "Events": Region("Events", world.player, world.multiworld),
     } | {
         f"Milestone {x}": Region(f"Milestone {x}", world.player, world.multiworld)
-        for x in range(1, adjust["Milestones"] + 1)
+        for x in range(1, world.options.milestone_adjustments["Milestones"] + 1)
     } | {
-        f"Task line {x}": Region(f"Task line {x}", world.player, world.multiworld)
-        for x in range(1, adjust["Task lines"] + 1)
+        f"Job line {x}": Region(f"Job line {x}", world.player, world.multiworld)
+        for x in range(1, world.options.jobs_adjustments["Job lines"] + 1)
     } | {
         f"Operator levels (section {x})": Region(f"Operator levels (section {x})", world.player, world.multiworld)
         for x in range(
             1,
-            adjust["Operator lines"] + 1
-            if adjust["Operator level checks"] // adjust["Operator lines"] >= 5
-            else int(math.ceil(adjust["Operator level checks"] / 5)) + 1
+            operator_adj["Operator lines"] + 1
+            if operator_adj["Operator level checks"] // operator_adj["Operator lines"] >= 5
+            else int(math.ceil(operator_adj["Operator level checks"] / 5)) + 1
         )
     }
 
@@ -70,19 +71,62 @@ def connect_regions(world: "Shapez2World", regions: dict[str, Region]) -> None:
             )
 
 
+@reseed
 def pre_generate_logic(world: "Shapez2World") -> None:
     from .generate.shapes import milestones, task_lines, operator_lines, blueprint_points
 
     world.milestone_processors = milestones.get_processors_list(world)
     world.task_processors = task_lines.get_processors_list(world)
-    world.operator_processors = operator_lines.get_processors_list(world, world.milestone_processors)
+    world.operator_processors = operator_lines.get_processors_list(world)
 
-    world.milestone_shapes = milestones.get_shapes_list(world, world.milestone_processors)
+    world.milestone_shapes = milestones.get_shapes_list(world)
     world.task_shapes = task_lines.get_shapes_list(world, world.task_processors)
     world.operator_shapes = operator_lines.get_shapes_list(world, world.operator_processors)
     world.blueprint_shapes = blueprint_points.get_shapes_list(world)
 
     world.blueprint_points = blueprint_points.get_points(world, world.blueprint_shapes)
+
+
+@reseed
+def calculate_locations_count(world: "Shapez2World"):
+    operator_lvl_adj = world.options.operator_levels_adjustments
+    lock_locs = world.options.lock_locations
+    miles_adj = world.options.milestone_adjustments
+    jobs_adj = world.options.jobs_adjustments
+    if world.options.goal == "operator_levels" and not operator_lvl_adj["Operator level checks"]:
+        raise OptionError(f"{world.player_name}: Goal operator_levels requires at least 1 operator level check.")
+    required_locations = (
+        60 +
+        jobs_adj["Job lines"] * lock_locs.is_job_lines +
+        operator_lvl_adj["Operator lines"] * lock_locs.is_operator_lines +
+        lock_locs.is_operator_levels_tab
+    )
+    max_possible_locations = (
+        miles_adj["Milestones"] * miles_adj["Maximum checks per milestone"] +
+        jobs_adj["Job lines"] * jobs_adj["Maximum checks per job line"] +
+        operator_lvl_adj["Operator level checks"]
+    )
+    if required_locations > max_possible_locations:
+        raise OptionError(f"{world.player_name}: Not enough possible locations ({max_possible_locations}) "
+                          f"for required items ({required_locations}).")
+    required_locations -= operator_lvl_adj["Operator level checks"]
+    world.milestone_checks_counts[:] = (miles_adj["Minimum checks per milestone"],) * miles_adj["Milestones"]
+    world.task_counts[:] = (jobs_adj["Minimum checks per job line"],) * jobs_adj["Job lines"]
+    required_locations -= sum(world.milestone_checks_counts) + sum(world.task_counts)
+    while required_locations > 0:
+        for i in range(min(required_locations, miles_adj["Milestones"])):
+            world.milestone_checks_counts[i] += 1
+        required_locations -= miles_adj["Milestones"]
+        for i in range(min(required_locations, jobs_adj["Job lines"])):
+            world.task_counts[i] += 1
+        required_locations -= jobs_adj["Job lines"]
+    for i in range(miles_adj["Milestones"]):
+        if world.milestone_checks_counts[i] < miles_adj["Maximum checks per milestone"]:
+            world.milestone_checks_counts[i] = world.random.randint(world.milestone_checks_counts[i],
+                                                                    miles_adj["Maximum checks per milestone"])
+    for i in range(jobs_adj["Job lines"]):
+        if world.task_counts[i] < jobs_adj["Maximum checks per job line"]:
+            world.task_counts[i] = world.random.randint(world.task_counts[i], jobs_adj["Maximum checks per job line"])
 
 
 def create_events(world: "Shapez2World",
@@ -98,7 +142,7 @@ def create_events(world: "Shapez2World",
 
     if world.options.goal == "milestones":
         world.multiworld.completion_condition[world.player] = lambda state: (
-            state.has(f"[ACCESS] Milestone {world.options.location_adjustments['Milestones']}", world.player)
+            state.has(f"[ACCESS] Milestone {world.options.milestone_adjustments['Milestones']}", world.player)
         )
     else:
         item = Shapez2Item("Goal", ItemClassification.progression, None, world.player)
@@ -106,7 +150,7 @@ def create_events(world: "Shapez2World",
         location = Shapez2Location(
             world.player, "[EVENT] Last operator level", None, region, LocationProgressType.DEFAULT,
             lambda state: state.can_reach_location(
-                f"Operator level {world.options.location_adjustments['Operator level checks']}", world.player
+                f"Operator level {world.options.operator_levels_adjustments['Operator level checks']}", world.player
             )
         )
         region.locations.append(location)

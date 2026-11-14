@@ -2,11 +2,13 @@ from random import Random
 from typing import TYPE_CHECKING
 
 from . import Processor, ShapeBuilder, downgrade_hexagonal, downgrade_tetragonal
+from .. import reseed
 
 if TYPE_CHECKING:
     from ... import Shapez2World
 
 
+@reseed
 def downgrade_shape(world: "Shapez2World", builder: ShapeBuilder, remaining_processors: list[Processor],
                     missing_processor: Processor, original_complexity: int) -> ShapeBuilder:
     # IMPORTANT: Modifies the builder itself
@@ -18,14 +20,18 @@ def downgrade_shape(world: "Shapez2World", builder: ShapeBuilder, remaining_proc
                                                original_complexity)
 
 
+@reseed
 def distinct_downgrades(world: "Shapez2World", builder: ShapeBuilder, processors: list[Processor], count: int,
-                        original_complexity: int, original_shape: str) -> tuple[list[str], ShapeBuilder]:
+                        original_complexity: int, original_shape: str,
+                        exclude: list[str]) -> tuple[list[str], ShapeBuilder]:
     return _distinct_downgrades(world.random, builder, processors, count,
-                                world.options.shape_configuration == "tetragonal", original_complexity, original_shape)
+                                world.options.shape_configuration == "tetragonal",
+                                original_complexity, original_shape, exclude)
 
 
 def _distinct_downgrades(rand: Random, builder: ShapeBuilder, processors: list[Processor], count: int, tetragonal: bool,
-                         original_complexity: int, original_shape: str) -> tuple[list[str], ShapeBuilder]:
+                         original_complexity: int, original_shape: str,
+                         exclude: list[str]) -> tuple[list[str], ShapeBuilder]:
     # IMPORTANT: Modifies the builder and processors list themselves
     # output is reversed, i.e. least to most remaining processors
     # original shape is also put into output
@@ -36,9 +42,9 @@ def _distinct_downgrades(rand: Random, builder: ShapeBuilder, processors: list[P
         builder = downgrade(rand, builder, processors, missing, original_complexity)
         down_shape = builder.build()
         tries = 0
-        while out[0] == down_shape:
+        while out[0] == down_shape or any(rotation in exclude for rotation in builder.build_all_rotations()):
             to_put = 0
-            if not processors or tries > 2:
+            if not processors or tries > 10:
                 break
             if missing in Processor.restrictions():
                 needed = Processor.restrictions()[missing]

@@ -8,15 +8,21 @@ if TYPE_CHECKING:
 def generate_default(world: "Shapez2World") -> Iterator[Shapez2Item]:
     from ...data.items.island_buildings import always, miners
 
+    pool_mods = world.options.item_pool_modifiers
+
     for name, data in always.items():
         yield Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
 
-    if "Unlock extensions with miners" not in world.options.item_pool_modifiers:
-        for name in ("Shape Miner Extension", "Fluid Miner Extension", "Fluid Miner"):
-            data = miners[name]
-            yield Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
+    if pool_mods.is_unlock_booster_with_miners and pool_mods.is_unlock_pipes_with_pumps:
+        to_add = ("Asteroid Pump + Booster + Pipe", )
+    elif pool_mods.is_unlock_booster_with_miners:
+        to_add = ("Asteroid Pump + Booster", "Space Pipe")
+    elif pool_mods.is_unlock_pipes_with_pumps:
+        to_add = ("Asteroid Pump + Pipe", "Asteroid Pump Booster", "Asteroid Miner Booster")
     else:
-        name = "Fluid Miner + Extension"
+        to_add = ("Asteroid Pump", "Asteroid Pump Booster", "Space Pipe", "Asteroid Miner Booster")
+
+    for name in to_add:
         data = miners[name]
         yield Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
 
@@ -26,7 +32,7 @@ def generate_starting(world: "Shapez2World") -> Iterator[str]:
 
     yield from starting
 
-    if "Unlock extensions with miners" in world.options.item_pool_modifiers:
-        yield "Shape Miner + Extension"
+    if world.options.item_pool_modifiers.is_unlock_booster_with_miners:
+        yield "Asteroid Miner + Booster"
     else:
-        yield "Shape Miner"
+        yield "Asteroid Miner"

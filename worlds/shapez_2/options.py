@@ -1,100 +1,18 @@
-import random
 import typing
 from dataclasses import dataclass
 
 from BaseClasses import PlandoOptions
-from Options import Choice, PerGameCommonOptions, OptionSet, OptionError, OptionCounter, StartInventoryPool
+from Options import Choice, PerGameCommonOptions, OptionError, StartInventoryPool, Visibility, Range
+
+from .data.common_options import ToggleSet, ExtendedOptionCounter
 
 if typing.TYPE_CHECKING:
     from worlds.AutoWorld import World
     from . import Shapez2World
 
 
-class CasefoldOptionSet(OptionSet):
-    valid_keys_casefold = True
-
-    def __init__(self, value: typing.Iterable[str]):
-        super().__init__(value)
-        self.value: set[str] = set(val.casefold() for val in value)
-
-    def __contains__(self, item: str):
-        return item.casefold() in self.value
-
-    def verify_keys(self) -> None:
-        if self.valid_keys:
-            dataset = set(word.casefold() for word in self.value)
-            extra = dataset - set(key.casefold() for key in self._valid_keys)
-            if extra:
-                raise OptionError(
-                    f"Found unexpected key {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
-                    f"Allowed keys: {self._valid_keys}."
-                )
-
-
-class ExtendedOptionCounter(OptionCounter):
-    value: dict[str, int]
-    individual_min_max: dict[str, tuple[int, int]] = {}
-    min_max_pairs: list[tuple[str, str]] = []
-
-    @classmethod
-    def from_any(cls, data: typing.Dict[str, typing.Any]):
-        data = data.copy()
-        if not isinstance(data, dict):
-            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
-        for key in cls.valid_keys:
-            if key not in data:
-                if key in cls.default:
-                    data[key] = cls.default[key]
-                else:
-                    data[key] = 0
-            data[key] = cls.resolve_value(data[key], key)
-        return cls(data)
-
-    def verify(self, world: type["World"], player_name: str, plando_options: PlandoOptions) -> None:
-        super().verify(world, player_name, plando_options)
-
-        errors = []
-
-        for key in self.value:
-            if key in self.individual_min_max:
-                _min, _max = self.individual_min_max[key]
-                if not _min <= self.value[key] <= _max:
-                    errors.append(f"{key}: {self.value[key]} not in range {_min} to {_max}")
-
-        for min_key, max_key in self.min_max_pairs:
-            if min_key in self.value and max_key in self.value:
-                if self.value[min_key] > self.value[max_key]:
-                    errors.append(f"{min_key} is higher than {max_key}")
-
-        if len(errors) != 0:
-            errors = [f"For option {getattr(self, 'display_name', self)} of player {player_name}:"] + errors
-            raise OptionError("\n".join(errors))
-
-    @classmethod
-    def resolve_value(cls, val: int | dict[typing.Any, int] | list | str, key: str) -> int:
-        if isinstance(val, int):
-            return val
-        elif isinstance(val, list):
-            return cls.resolve_value(random.choice(val), key)
-        elif isinstance(val, dict):
-            return cls.resolve_value(random.choices(list(val.keys()), list(val.values())), key)
-        elif isinstance(val, str) and val.startswith("random"):
-            if val == "random":
-                return random.randint(*(cls.individual_min_max[key]))
-            elif val.startswith("random-range-"):
-                parts = val.split("-")
-                if parts[-2].isnumeric() and parts[-1].isnumeric():
-                    start = int(parts[-2])
-                    end = int(parts[-1])
-                    _min, _max = cls.individual_min_max[key]
-                    if _min <= start <= _max and _min <= end <= _max and start <= end:
-                        return random.randint(start, end)
-        raise OptionError(
-            f"Invalid value \"{val}\" for key \"{key}\" in option \"{getattr(cls, 'display_name', cls)}\"."
-        )
-
-    def __getitem__(self, item: str) -> int:
-        return super().__getitem__(item)
+class Deprecated:
+    visibility = Visibility.none
 
 
 class Goal(Choice):
@@ -102,7 +20,9 @@ class Goal(Choice):
     Select your goal.
 
     - **Milestones** - Complete all milestones.
-    - **Operator levels** - Reach the operator level that contains your last operator level check. Requires an operator level checks number higher than 0.
+    - **Operator levels** - Reach the operator level that
+        contains your last operator level check. Requires
+        an operator level checks number higher than 0.
     """
     display_name = "Goal"
     option_milestones = 0
@@ -110,52 +30,197 @@ class Goal(Choice):
     default = 0
 
 
-class LocationModifiers(CasefoldOptionSet):
+class LockLocations(ToggleSet):
     """
-    Modifies Various aspects about location generation. You can add as many modifiers as you want.
+    Locks certain lines of locations behind keys.
+    You can add as many of the following modifiers as you want.
 
-    - **Lock task lines** - Makes task lines require an item to be unlocked. Task lines #1-3 are always unlocked.
-    - **Lock operator lines** - Makes operator lines require an item to be unlocked.
-    - **Lock operator levels tab** - Makes the operator levels tab require an item to be unlocked.
+    - **Job lines** - Makes job lines require an item to be
+        unlocked. Job lines #1-3 are always unlocked.
+    - **Operator lines** - Makes operator lines require an item
+        to be unlocked.
+    - **Operator levels tab** - Makes the operator levels tab
+        require an item to be unlocked.
+    """
+    display_name = "Lock Locations"
+    is_job_lines = False
+    is_operator_lines = True
+    is_operator_levels_tab = False
+
+
+class LocationModifiers(Deprecated, ToggleSet):
+    """
+    Deprecated, use **Lock Locations** instead.
     """
     display_name = "Location Modifiers"
-    valid_keys = [
-        "Lock task lines",
-        "Lock operator lines",
-        "Lock operator levels tab",
-    ]
-    default = ["Lock operator lines"]
+    is_lock_task_lines = False
+    is_lock_operator_lines = False
+    is_lock_operator_levels_tab = False
+    is_deprecated = True
 
 
-class LocationAdjustments(ExtendedOptionCounter):
+class MilestoneAdjustments(ExtendedOptionCounter):
     """
-    Adjust various parameters of milestones, task lines, operator lines, etc.
-    Any minimum parameter cannot be higher than its corresponding maximum parameter.
-    Weighting for each parameter individually, "random", and "random-range-x-y" are supported.
+    Adjust various parameters of milestones.
+    Any minimum parameter cannot be higher than its corresponding maximum
+    parameter. Weighting for each parameter individually, "random", and
+    "random-range-x-y" are supported.
 
-    Most names are self-explanatory. However, do note that...
-    - **Random operator lines** means "X out of all operator lines are random".
-    - **Required shapes multiplier** is in percent, i.e. 100 is default amount of shapes.
-      Also, default amounts are based on the (vanilla) regular scenario.
-
-    Do note that you have to add enough (minimum) locations to fit all non-filler items
-    (filler items are research/platform/blueprint points).
-    Excluding task line and operator line keys, there are ~70 items.
+    Do note that you have to add enough (minimum) locations in total to fit all
+    non-filler items (filler items are research/blueprint credits and platform
+    capacity). Excluding job/operator line keys, there are ~60 items.
 
     Allowed values (in range) are...
     - **Milestones** - 3-20
     - **Minimum checks per milestone** - 2-12
     - **Maximum checks per milestone** - 5-12
-    - **Starting platform points** - 250-2000
-    - **Starting research points** - 0-50
-    - **Starting blueprint points** - 0-10000
-    - **Task lines** - 3-200
-    - **Minimum checks per task line** - 1-5
-    - **Maximum checks per task line** - 1-5
-    - **Operator lines** - 1-100
-    - **Random operator lines** - 0-3
-    - **Operator level checks** - 0-200
-    - **Required shapes multiplier** - 1-1000
+    """
+    display_name = "Milestone Adjustments"
+    valid_keys = [
+        "Milestones",
+        "Minimum checks per milestone",
+        "Maximum checks per milestone",
+    ]
+    default = {
+        "Milestones": 8,
+        "Minimum checks per milestone": 8,
+        "Maximum checks per milestone": 12,
+    }
+    individual_min_max = {
+        "Milestones": (3, 20),
+        "Minimum checks per milestone": (2, 12),
+        "Maximum checks per milestone": (5, 12),
+    }
+    min_max_pairs = [
+        ("Minimum checks per milestone", "Maximum checks per milestone"),
+    ]
+
+
+class JobsAdjustments(ExtendedOptionCounter):
+    """
+    Adjust various parameters of job lines.
+    Any minimum parameter cannot be higher than its corresponding maximum
+    parameter. Weighting for each parameter individually, "random", and
+    "random-range-x-y" are supported.
+
+    Do note that you have to add enough (minimum) locations in total to fit all
+    non-filler items (filler items are research/blueprint credits and platform
+    capacity). Excluding job/operator line keys, there are ~60 items.
+
+    Allowed values (in range) are...
+    - **Job lines** - 3-200
+    - **Minimum checks per job line** - 1-5
+    - **Maximum checks per job line** - 1-5
+    """
+    display_name = "Jobs Adjustments"
+    valid_keys = [
+        "Job lines",
+        "Minimum checks per job line",
+        "Maximum checks per job line",
+    ]
+    default = {
+        "Job lines": 20,
+        "Minimum checks per job line": 3,
+        "Maximum checks per job line": 5,
+    }
+    individual_min_max = {
+        "Job lines": (3, 200),
+        "Minimum checks per job line": (1, 5),
+        "Maximum checks per job line": (1, 5),
+    }
+    min_max_pairs = [
+        ("Minimum checks per job line", "Maximum checks per job line"),
+    ]
+
+
+class OperatorLevelsAdjustments(ExtendedOptionCounter):
+    """
+    Adjust various parameters of operator levels.
+    Any minimum parameter cannot be higher than its corresponding maximum
+    parameter. Weighting for each parameter individually, "random", and
+    "random-range-x-y" are supported.
+
+    - **Operator lines** (1-100) - The amount of operator lines that can
+        contribute to your operator level.
+    - **Random operator lines** (0-3) - The amount of operator lines (out of the
+        value in **Operator lines**) that contain a random shape each level.
+    - **Operator level checks** (0-200) - The amount of operator levels that
+        can contain checks. Every level after this will grant extra
+        research/blueprint credits and platform capacity.
+
+    Do note that you have to add enough (minimum) locations in total to fit all
+    non-filler items (filler items are research/blueprint credits and platform
+    capacity). Excluding job/operator line keys, there are ~60 items.
+    """
+    display_name = "Operator Level Adjustments"
+    valid_keys = [
+        "Operator lines",
+        "Random operator lines",
+        "Operator level checks",
+    ]
+    default = {
+        "Operator lines": 8,
+        "Random operator lines": 2,
+        "Operator level checks": 0,
+    }
+    individual_min_max = {
+        "Operator lines": (1, 100),
+        "Random operator lines": (0, 3),
+        "Operator level checks": (0, 200),
+    }
+    min_max_pairs = [
+        ("Random operator lines", "Operator lines"),
+    ]
+
+
+class StartingPoints(ExtendedOptionCounter):
+    """
+    Adjust the amount of research/blueprint credits and platform
+    capacity given at the start of the game.
+    Any minimum parameter cannot be higher than its corresponding
+    maximum parameter. Weighting for each parameter individually,
+    "random", and "random-range-x-y" are supported.
+
+    Allowed values (in range) are...
+    - **Platform capacity** - 250-2000
+    - **Research credits** - 0-5000
+    - **Blueprint credits** - 0-10000
+    """
+    display_name = "Starting Points"
+    valid_keys = [
+        "Platform capacity",
+        "Research credits",
+        "Blueprint credits",
+    ]
+    default = {
+        "Platform capacity": 250,
+        "Research credits": 0,
+        "Blueprint credits": 0,
+    }
+    individual_min_max = {
+        "Platform capacity": (250, 2000),
+        "Research credits": (0, 5000),
+        "Blueprint credits": (0, 10000),
+    }
+
+
+class RequiredShapesMultiplier(Range):
+    """
+    Multiplies the amount of required shapes for milestones,
+    jobs, and operator levels. The value is in percent, i.e.
+    100 is the default amount of shapes. The default amounts
+    are based on the (vanilla) regular scenario.
+    """
+    display_name = "Required Shapes Multiplier"
+    rich_text_doc = True
+    range_start = 1
+    range_end = 1000
+    default = 100
+
+
+class LocationAdjustments(Deprecated, ExtendedOptionCounter):
+    """
+    Deprecated, use individual location adjustment options instead.
     """
     display_name = "Location Adjustments"
     valid_keys = [
@@ -172,22 +237,9 @@ class LocationAdjustments(ExtendedOptionCounter):
         "Random operator lines",
         "Operator level checks",
         "Required shapes multiplier",
+        "Deprecated",
     ]
-    default = {
-        "Milestones": 8,
-        "Minimum checks per milestone": 8,
-        "Maximum checks per milestone": 12,
-        "Starting platform points": 250,
-        "Starting research points": 0,
-        "Starting blueprint points": 0,
-        "Task lines": 20,
-        "Minimum checks per task line": 3,
-        "Maximum checks per task line": 5,
-        "Operator lines": 8,
-        "Random operator lines": 2,
-        "Operator level checks": 0,
-        "Required shapes multiplier": 100,
-    }
+    default = "deprecated"
     individual_min_max = {
         "Milestones": (3, 20),
         "Minimum checks per milestone": (2, 12),
@@ -202,16 +254,13 @@ class LocationAdjustments(ExtendedOptionCounter):
         "Random operator lines": (0, 3),
         "Operator level checks": (0, 200),
         "Required shapes multiplier": (1, 1000),
+        "Deprecated": (0, 0),
     }
     min_max_pairs = [
         ("Minimum checks per milestone", "Maximum checks per milestone"),
         ("Minimum checks per task line", "Maximum checks per task line"),
         ("Random operator lines", "Operator lines"),
     ]
-
-    def count_min_locations(self) -> int:
-        return (self["Milestones"] * self["Minimum checks per milestone"] +
-                self["Task lines"] * self["Minimum checks per task line"] + self["Operator level checks"])
 
 
 class ShapeConfiguration(Choice):
@@ -227,27 +276,40 @@ class ShapeConfiguration(Choice):
     default = 4
 
 
-class ShapeGenerationModifiers(CasefoldOptionSet):
+class OperatorLinesShapes(ToggleSet):
     """
-    Modifies what shapes are generated as requirements for milestones, tasks, and operator levels.
-    You can add as many modifiers as you want.
+    Modifies what shapes are generated for operator lines.
+    You can add as many of the following modifiers as you want.
 
-    - **Milestone operator lines** - Takes the final shapes of (some) milestones and reuses them as operator lines.
+    - **Milestones** - Uses the final shape(s) of (some) milestones.
+    - **Jobs** - Uses the final shape of (some) job lines.
+    """
+    display_name = "Operator Lines Shapes"
+    is_milestones = True
+    is_jobs = True
+
+
+class ShapeGenerationModifiers(Deprecated, ToggleSet):
+    """
+    Deprecated, use **Operator Lines Shapes** instead.
     """
     display_name = "Shape Generation Modifiers"
-    valid_keys = [
-        "Milestone operator lines",
-    ]
-    default = ["Milestone operator lines"]
+    is_milestone_operator_lines = False
+    is_deprecated = True
 
 
 class ShapeGenerationAdjustments(ExtendedOptionCounter):
     """
-    Adjust various parameters about how shape requirements for milestones, tasks, and operator levels are generated.
-    Weighting for each parameter individually, "random", and "random-range-x-y" are supported.
+    Adjust various parameters about how shape requirements for
+    milestones, jobs, and operator lines are generated.
+    Weighting for each parameter individually, "random", and
+    "random-range-x-y" are supported.
 
-    - **Maximum layers** - The maximum number of layers any shape can have.
-    - **Maximum processors per milestone** - The maximum number of certain buildings that are required to produce the final shapes of milestones.
+    - **Maximum layers** (2-10) - The maximum number of layers any
+        shape can have.
+    - **Maximum processors per milestone** (3-8) - The maximum number
+        of certain buildings that are required to produce the final
+        shapes of milestones.
     """
     display_name = "Shape Generation Adjustments"
     valid_keys = [
@@ -268,11 +330,15 @@ class BlueprintShapes(Choice):
     """
     Choose which set of shapes rewards the player with blueprint points.
 
-    If tetragonal shapes are chosen, **Regular**, **Hard**, and **Insane** use the corresponding scenario's set.
-    If hexagonal shapes are chosen, all of those three options use the hexagonal scenario's set.
-    **Randomized** generates a random set of 3 to 5 different blueprint shapes.
+    If tetragonal shapes are chosen, **Regular**, **Hard**, and **Insane**
+    use the corresponding scenario's set.
+    If hexagonal shapes are chosen, all of those three options use the
+    hexagonal scenario's only set.
+    **Randomized** generates a random set of 3 to 5 different blueprint
+    shapes.
 
-    You can also put in a list of custom blueprint shapes. See this game's option guides for more information.
+    You can also put in a list of custom blueprint shapes.
+    See this game's option guides for more information.
     """
     display_name = "Blueprint Shapes"
     option_regular = 0
@@ -326,40 +392,65 @@ class BlueprintShapes(Choice):
             return self.current_key
 
 
-class ItemPoolModifiers(CasefoldOptionSet):
+class ItemPoolModifiers(ToggleSet):
     """
-    Modifies what items your world puts into the item pool. You can add as many modifiers as you want.
+    Modifies what items your world puts into the item pool.
+    You can add as many of the following modifiers as you want.
 
-    - **Random starting processor** - Adds a random processor building that doesn't require other buildings to the starting milestone.
-    - **Include blueprint points** - Allows blueprint points to be added as filler items. If blueprint costs are disabled ingame, blueprint point rewards will be invisible ingame.
-    - **Arbitrary research points** - Allows research points items to give any amount in range of 1-100 instead of snapping them to nice numbers.
-    - **Arbitrary platform items** - Allows platform items to give any amount in range of 1-500 instead of snapping them to nice numbers.
-    - **Arbitrary blueprint points** - Allows blueprint points to give amounts in range of 1000-10000 snapped to 100-step numbers instead of 1000-step numbers.
-    - **Unlock extensions with miners** - Makes shape and fluid miners also unlock their extensions with them.
+    - **Random starting processor** - Adds a random processor building that
+        doesn't require other buildings to the starting milestone.
+    - **Include blueprint credits** - Allows blueprint credits to be added as
+        filler items. If blueprint costs are disabled ingame, blueprint credits
+        and rewards granting them will be invisible ingame.
+    - **Arbitrary research credits** - Allows research credits items to give any
+        amount in range of 100-10000 instead of snapping them to nice numbers.
+    - **Arbitrary platform capacity** - Allows platform capacity items to give
+        any amount in range of 1-500 instead of snapping them to nice numbers.
+    - **Arbitrary blueprint credits** - Allows blueprint credits to give
+        amounts in range of 1000-10000 snapped to 100-step numbers instead of
+        only 1000-step numbers.
+    - **Unlock boosters with miners** - Makes the asteroid miner and pumps also
+        unlock their respective booster with them.
+    - **Unlock pipes with pumps** - Makes mini/asteroid pumps also unlock their
+        respective pipe with them.
     """
     # - **Add sandbox buildings** - Adds the sandbox item and fluid producers to the itempool.
     display_name = "Item Pool Modifiers"
-    valid_keys = [
-        # "Add sandbox buildings",
-        "Random starting processor",
-        "Include blueprint points",
-        "Arbitrary research points",
-        "Arbitrary platform items",
-        "Arbitrary blueprint points",
-        "Unlock extensions with miners",
+    is_random_starting_processor = True
+    is_include_blueprint_credits = False
+    is_arbitrary_research_credits = False
+    is_arbitrary_blueprint_credits = False
+    is_arbitrary_platform_capacity = False
+    is_unlock_booster_with_miners = True
+    is_unlock_pipes_with_pumps = True
+    aliases_convert = [
+        ("Include blueprint points", "Include blueprint credits"),
+        ("Arbitrary research points", "Arbitrary research credits"),
+        ("Arbitrary blueprint points", "Arbitrary blueprint credits"),
+        ("Arbitrary platform items", "Arbitrary platform capacity"),
+        ("Unlock extensions with miners", "Unlock boosters with miners"),
     ]
-    default = ["Random starting processor", "Unlock extensions with miners"]
 
 
-class ShowOtherPlayersItems(Choice):
+class ShowItemNames(ToggleSet):
     """
-    Shows the names of items in-game that do not belong to your own world.
+    Adds some information to items belonging to other players in your game.
+    You can add as many of the following modifiers as you want.
 
-    - **No** - Labels all of those items as "AP Item".
-    - **Item** - Shows the name of each of those items.
-    - **Player** - Additionally appends the player's name to the item's name.
-    - **Classification** - Additionally appends the item's classification (progression, filler, ...) to its name.
-    - **Player & Classification** - Appends both the player's name and the classification to the item's name.
+    - **Item** - Shows the item's name, otherwise it will be called "AP Item".
+    - **Player** - Appends the player's name to the item's name.
+    - **Classification** - Appends the item's classification (progression,
+        filler, ...) to its name.
+    """
+    display_name = "Show Item Names"
+    is_item = True
+    is_player = False
+    is_classification = False
+
+
+class ShowOtherPlayersItems(Deprecated, Choice):
+    """
+    Deprecated, use *+Show Item Names** instead.
     """
     display_name = "Show other players' items"
     option_no = 0
@@ -367,18 +458,58 @@ class ShowOtherPlayersItems(Choice):
     option_player = 2
     option_classification = 3
     option_player_classification = 4
-    default = 1
+    option_deprecated = 99
+    default = 99
+
+
+def fix_deprecated(world: "Shapez2World"):
+    options = world.options
+    if options.show_other_players_items != "deprecated":
+        opt = options.show_other_players_items.current_key
+        if opt in ("item", "player", "classification"):
+            options.show_item_names.set_afterwards(opt, True)
+        elif opt == "player_classification":
+            options.show_item_names.set_afterwards("player", True)
+            options.show_item_names.set_afterwards("classification", True)
+    if not options.location_modifiers.is_deprecated:
+        options.lock_locations.set_afterwards("job lines", options.location_modifiers.is_lock_task_lines)
+        options.lock_locations.set_afterwards("operator lines", options.location_modifiers.is_lock_operator_lines)
+        options.lock_locations.set_afterwards("operator levels tab", options.location_modifiers.is_lock_operator_levels_tab)
+    if not options.location_adjustments.reported_deprecated:
+        options.milestone_adjustments["Milestones"] = options.location_adjustments["Milestones"]
+        options.milestone_adjustments["Minimum checks per milestone"] = options.location_adjustments["Minimum checks per milestone"]
+        options.milestone_adjustments["Maximum checks per milestone"] = options.location_adjustments["Maximum checks per milestone"]
+        options.starting_points["Platform capacity"] = options.location_adjustments["Starting platform points"]
+        options.starting_points["Research credits"] = options.location_adjustments["Starting research points"]
+        options.starting_points["Blueprint credits"] = options.location_adjustments["Starting blueprint points"]
+        options.jobs_adjustments["Job lines"] = options.location_adjustments["Task lines"]
+        options.jobs_adjustments["Minimum checks per job line"] = options.location_adjustments["Minimum checks per task line"]
+        options.jobs_adjustments["Maximum checks per job line"] = options.location_adjustments["Maximum checks per task line"]
+        options.operator_levels_adjustments["Operator lines"] = options.location_adjustments["Operator lines"]
+        options.operator_levels_adjustments["Random operator lines"] = options.location_adjustments["Random operator lines"]
+        options.operator_levels_adjustments["Operator level checks"] = options.location_adjustments["Operator level checks"]
+        options.required_shapes_multiplier.value = options.location_adjustments["Required shapes multiplier"]
+    if not options.shape_generation_modifiers.is_deprecated:
+        options.operator_lines_shapes.set_afterwards("milestones", options.shape_generation_modifiers.is_milestone_operator_lines)
 
 
 @dataclass
 class Shapez2Options(PerGameCommonOptions):
     goal: Goal
-    location_modifiers: LocationModifiers
-    location_adjustments: LocationAdjustments
+    lock_locations: LockLocations
+    location_modifiers: LocationModifiers  # Deprecated
+    milestone_adjustments: MilestoneAdjustments
+    jobs_adjustments: JobsAdjustments
+    operator_levels_adjustments: OperatorLevelsAdjustments
+    starting_points: StartingPoints
+    required_shapes_multiplier: RequiredShapesMultiplier
+    location_adjustments: LocationAdjustments  # Deprecated
     shape_configuration: ShapeConfiguration
-    shape_generation_modifiers: ShapeGenerationModifiers
+    operator_lines_shapes: OperatorLinesShapes
+    shape_generation_modifiers: ShapeGenerationModifiers  # Deprecated
     shape_generation_adjustments: ShapeGenerationAdjustments
     blueprint_shapes: BlueprintShapes
     item_pool_modifiers: ItemPoolModifiers
-    show_other_players_items: ShowOtherPlayersItems
+    show_item_names: ShowItemNames
+    show_other_players_items: ShowOtherPlayersItems  # Deprecated
     start_inventory_from_pool: StartInventoryPool

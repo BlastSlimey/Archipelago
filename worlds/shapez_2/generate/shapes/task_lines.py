@@ -1,20 +1,20 @@
 from typing import TYPE_CHECKING
 
 from . import Processor
+from .. import reseed
 
 if TYPE_CHECKING:
     from ... import Shapez2World
 
 
+@reseed
 def get_processors_list(world: "Shapez2World") -> list[list[Processor]]:
 
     task_processors: list[list[Processor]] = []
-    line_count = world.options.location_adjustments["Task lines"]
-    min_per_line = world.options.location_adjustments["Minimum checks per task line"]
-    max_per_line = world.options.location_adjustments["Maximum checks per task line"]
+    line_count = world.options.jobs_adjustments["Job lines"]
 
     for i in range(line_count):
-        task_count = world.random.randint(min_per_line, max_per_line)
+        task_count = world.task_counts[i]
         if i < 3 and task_count == 5:  # Ensures that the first three lines **can** always have a sphere 1 shape
             task_count = 4
         task: list[Processor] = []
@@ -25,6 +25,7 @@ def get_processors_list(world: "Shapez2World") -> list[list[Processor]]:
     return task_processors
 
 
+@reseed
 def get_shapes_list(
     world: "Shapez2World",
     task_processors: list[list[Processor]]
@@ -38,7 +39,7 @@ def get_shapes_list(
         i += 1
         complexity = world.random.randint(len(task) + 2 + (i // 3), len(task) + 3 + i)
         builder = generate_shape(world, task, complexity)
-        shapes, builder = distinct_downgrades(world, builder, task.copy(), len(task)-1, complexity, builder.build())
+        shapes, builder = distinct_downgrades(world, builder, task.copy(), len(task)-1, complexity, builder.build(), [])
         if i < 3 or (len(task) < 5 and world.random.choice((True, False, False))):
             # Assumes the first three lines always have less than 5 processors
             shapes.insert(0, downgrade_shape(world, builder, [], task[0], complexity).build())
