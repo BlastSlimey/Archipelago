@@ -1211,7 +1211,7 @@ def simulate_falling(builder: ShapeBuilder):
     to_check = [(-1, start, True) for start in range(0, width, 2)]
     while to_check:
         next_layer, next_pos, is_pin = to_check.pop()
-        if next_layer < len(builder.shape) and parts[next_layer+1][next_pos//2] == -1:
+        if next_layer+1 < len(builder.shape) and parts[next_layer+1][next_pos//2] == -1:
             part = builder.shape[next_layer+1][next_pos:next_pos + 2]
             is_full = part != "--"
             parts[next_layer+1][next_pos // 2] = is_full
