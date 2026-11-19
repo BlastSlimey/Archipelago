@@ -7,35 +7,39 @@ if TYPE_CHECKING:
     from ... import Shapez2World
 
 
-classification_names = {
-    ItCl.progression: "Progression",
-    ItCl.useful: "Useful",
-    ItCl.filler: "Filler",
-    ItCl.trap: "Trap",
-}
+def get_classification_name(c: ItCl) -> str:
+    if c & ItCl.progression:
+        return "Progression"
+    if c & ItCl.useful:
+        return "Useful"
+    if c & ItCl.trap:
+        return "Trap"
+    return "Filler"
+
+
+def clean_name(name: str) -> str:
+    return "".join(c for c in name if c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_")
 
 
 def add_other_item(mechanic_defs: list[dict[str, str]], rewards: list[dict[str, Any]], item: Item,
                    other_players_items: set[str], world: "Shapez2World") -> None:
-    web = world.multiworld.worlds[item.player].web
-    option = world.options.show_other_players_items.current_key
-    if option == "no":
+    option = world.options.show_item_names
+    if not option.is_item and not option.is_classification and not option.is_player:
         rewards.append({"$type": "MechanicReward", "MechanicId": "RUAPItem"})
     else:
         name = item.name
-        mech_id = f"RU{item.player}_{name}"
+        mech_id = f"RU{item.player}_{clean_name(name)}"
         if mech_id not in other_players_items:
             display_name = name
-            if "player" in option:
+            if option.is_player:
                 display_name = world.multiworld.player_name[item.player] + "'s " + display_name
-            if web is not None and web.item_descriptions is not None and name in web.item_descriptions:
+            web = world.multiworld.worlds[item.player].web
+            if web and web.item_descriptions and isinstance(web.item_descriptions, dict) and name in web.item_descriptions:
                 description = web.item_descriptions[name]
             else:
                 description = "An item that belongs to another player."
-            if "classification" in option:
-                class_name = classification_names[item.classification & (ItCl.progression | ItCl.useful |
-                                                                         ItCl.filler | ItCl.trap)]
-                description = f"({class_name}) " + description
+            if option.is_classification:
+                description = f"({get_classification_name(item.classification)}) " + description
             mechanic_defs.append({
                 "Id": mech_id,
                 "Title": display_name,
@@ -49,9 +53,9 @@ def add_other_item(mechanic_defs: list[dict[str, str]], rewards: list[dict[str, 
 def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict[str, str]]:
     return [
         *({
-            "Id": f"TaskLine{x+1}",
-            "Title": f"Task line #{x+1}",
-            "Description": "Unlocks a certain task line.",
+            "Id": f"JobLine{x+1}",
+            "Title": f"Job line #{x+1}",
+            "Description": "Unlocks a certain job line.",
             "IconId": "PlayerLevel"
         } for x in range(len(container.world.task_shapes))),
         *({
@@ -114,12 +118,12 @@ def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict
             "Description": "@research.RUFluids.description",
             "IconId": "Fluids"
         },
-        # {
-        #     "Id": "RUWires",
-        #     "Title": "@research.RUWires.title",
-        #     "Description": "@research.RUWires.description",
-        #     "IconId": "Wires"
-        # },
+        {
+            "Id": "RUWires",
+            "Title": "@research.RUWires.title",
+            "Description": "@research.RUWires.description",
+            "IconId": "Wires"
+        },
         {
             "Id": "RUPlayerLevel",
             "Title": "@research.RUPlayerLevel.title",
@@ -199,58 +203,58 @@ def get_mechanic_definitions(container: "Shapez2ScenarioContainer") -> list[dict
             "Description": "@research.RUCrystals.description",
             "IconId": "building.CrystalGeneratorDefaultVariant"
         },
-        {
-            "Id": "RUTier1Ruby",
-            "Title": "@research.RUTier1Ruby.title",
-            "Description": "@research.RUTier1Ruby.description",
-            "IconId": "ConverterShape_tier1"
-        },
-        {
-            "Id": "RUTier2Sapphire",
-            "Title": "@research.RUTier2Sapphire.title",
-            "Description": "@research.RUTier2Sapphire.description",
-            "IconId": "ConverterShape_tier2"
-        },
-        {
-            "Id": "RUTier3Emerald",
-            "Title": "@research.RUTier3Emerald.title",
-            "Description": "@research.RUTier3Emerald.description",
-            "IconId": "ConverterShape_tier3"
-        },
-        {
-            "Id": "RUTier4Gold",
-            "Title": "@research.RUTier4Gold.title",
-            "Description": "@research.RUTier4Gold.description",
-            "IconId": "ConverterShape_tier4"
-        },
-        {
-            "Id": "RUTier5Aquamarine",
-            "Title": "@research.RUTier5Aquamarine.title",
-            "Description": "@research.RUTier5Aquamarine.description",
-            "IconId": "ConverterShape_tier5"
-        },
-        {
-            "Id": "RUTier6Amethyst",
-            "Title": "@research.RUTier6Amethyst.title",
-            "Description": "@research.RUTier6Amethyst.description",
-            "IconId": "ConverterShape_tier6"
-        },
-        {
-            "Id": "RUTier7Diamonds",
-            "Title": "@research.RUTier7Diamonds.title",
-            "Description": "@research.RUTier7Diamonds.description",
-            "IconId": "ConverterShape_tier7"
-        },
-        {
-            "Id": "RUTier8Painite",
-            "Title": "@research.RUTier8Painite.title",
-            "Description": "@research.RUTier8Painite.description",
-            "IconId": "ConverterShape_tier8"
-        },
-        {
-            "Id": "RUTier9VortexTrader",
-            "Title": "@research.RUTier9VortexTrader.title",
-            "Description": "@research.RUTier9VortexTrader.description",
-            "IconId": "ConverterShape_tier9"
-        }
+        # {
+        #     "Id": "RUTier1Ruby",
+        #     "Title": "@research.RUTier1Ruby.title",
+        #     "Description": "@research.RUTier1Ruby.description",
+        #     "IconId": "ConverterShape_tier1"
+        # },
+        # {
+        #     "Id": "RUTier2Sapphire",
+        #     "Title": "@research.RUTier2Sapphire.title",
+        #     "Description": "@research.RUTier2Sapphire.description",
+        #     "IconId": "ConverterShape_tier2"
+        # },
+        # {
+        #     "Id": "RUTier3Emerald",
+        #     "Title": "@research.RUTier3Emerald.title",
+        #     "Description": "@research.RUTier3Emerald.description",
+        #     "IconId": "ConverterShape_tier3"
+        # },
+        # {
+        #     "Id": "RUTier4Gold",
+        #     "Title": "@research.RUTier4Gold.title",
+        #     "Description": "@research.RUTier4Gold.description",
+        #     "IconId": "ConverterShape_tier4"
+        # },
+        # {
+        #     "Id": "RUTier5Aquamarine",
+        #     "Title": "@research.RUTier5Aquamarine.title",
+        #     "Description": "@research.RUTier5Aquamarine.description",
+        #     "IconId": "ConverterShape_tier5"
+        # },
+        # {
+        #     "Id": "RUTier6Amethyst",
+        #     "Title": "@research.RUTier6Amethyst.title",
+        #     "Description": "@research.RUTier6Amethyst.description",
+        #     "IconId": "ConverterShape_tier6"
+        # },
+        # {
+        #     "Id": "RUTier7Diamonds",
+        #     "Title": "@research.RUTier7Diamonds.title",
+        #     "Description": "@research.RUTier7Diamonds.description",
+        #     "IconId": "ConverterShape_tier7"
+        # },
+        # {
+        #     "Id": "RUTier8Painite",
+        #     "Title": "@research.RUTier8Painite.title",
+        #     "Description": "@research.RUTier8Painite.description",
+        #     "IconId": "ConverterShape_tier8"
+        # },
+        # {
+        #     "Id": "RUTier9VortexTrader",
+        #     "Title": "@research.RUTier9VortexTrader.title",
+        #     "Description": "@research.RUTier9VortexTrader.description",
+        #     "IconId": "ConverterShape_tier9"
+        # }
     ]

@@ -16,7 +16,7 @@ starting: dict[str, ItemData] = {
     "2nd Space Level": ItemData(2101, always_progression, "Remote2ndSpaceLevel", (), (), ("RUIslandLayer2", )),
     "Wires (Category)": ItemData(2102, always_useful, "RemoteWiresCategory", (), (), ("RUWires", )),
     "Fluids": ItemData(2104, always_progression, "RemoteFluids", (), (), ("RUFluids", )),
-    "Shop": ItemData(2105, always_progression, "RemoteUpgrades", (), (), ("RUSideUpgrades", )),
+    "Shop": ItemData(2105, always_progression, "RemoteShop", (), (), ("RUSideUpgrades", )),
 }
 
 special: dict[str, ItemData] = {

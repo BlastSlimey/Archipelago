@@ -24,24 +24,20 @@ class ItemData(NamedTuple):
     reward_ids_buildings: tuple[str, ...]
     reward_ids_islands: tuple[str, ...]
     reward_ids_mechanics: tuple[str, ...]
+    amount_rp: int = 0
+    amount_pc: int = 0
+    amount_bp: int = 0
 
 
-class RPItemData(NamedTuple):
+class PointsItemData(NamedTuple):
     item_id: int
     classification: ClassificationMethod
-    amount: int
-
-
-class BPItemData(NamedTuple):
-    item_id: int
-    classification: ClassificationMethod
-    amount: int
-
-
-class PCItemData(NamedTuple):
-    item_id: int
-    classification: ClassificationMethod
-    amount: int
+    amount_rp: int
+    amount_pc: int
+    amount_bp: int
+    reward_ids_buildings: tuple[str, ...] = ()
+    reward_ids_islands: tuple[str, ...] = ()
+    reward_ids_mechanics: tuple[str, ...] = ()
 
 
 class RegionConnectionData(NamedTuple):

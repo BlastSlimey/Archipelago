@@ -17,7 +17,7 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
 
     reg = regions["Events"]
     lines_count = world.options.jobs_adjustments["Job lines"]
-    all_unlocked = world.options.lock_locations.is_job_lines
+    all_unlocked = not world.options.lock_locations.is_job_lines
 
     for x in range(lines_count):
         if all_unlocked or f"Job line #{x+1}" in world.starting_items:

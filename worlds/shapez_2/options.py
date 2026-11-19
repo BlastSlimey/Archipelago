@@ -185,6 +185,8 @@ class StartingPoints(ExtendedOptionCounter):
     - **Platform capacity** - 250-2000
     - **Research credits** - 0-5000
     - **Blueprint credits** - 0-10000
+
+    Note that research credits only exist as 100 credits bundles.
     """
     display_name = "Starting Points"
     valid_keys = [

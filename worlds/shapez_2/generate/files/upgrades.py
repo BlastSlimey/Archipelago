@@ -2,15 +2,8 @@ from typing import Any
 
 from ...output import Shapez2ScenarioContainer
 from ...data import ItemData
-from ...data.items import buildings, island_buildings, mechanics, misc
-
-tabs: tuple[tuple[tuple[str, str], tuple[dict[str, ItemData], ...]], ...] = (
-    (("BuildingReward", "BuildingDefinitionGroupId"), (buildings.always, buildings.starting,
-                                                       buildings.simple_processors, buildings.sandbox)),
-    (("IslandGroupReward", "GroupId"), (island_buildings.always, island_buildings.starting, island_buildings.miners)),
-    (("MechanicReward", "MechanicId"), (mechanics.always, mechanics.starting, mechanics.special,
-                                        misc.task_lines, misc.operator_lines)),
-)
+from ...data.items import buildings, island_buildings, mechanics, misc, all_standard_items
+from .rewards import get_rewards
 
 milestone_ids: tuple[str, ...] = ("Milestone_FluidPainting", "Milestone_ShapeTrains",
                                   "Milestone_PinPusher", "Milestone_ColorMixing", "Milestone_SpaceFloor3",
@@ -21,9 +14,22 @@ milestone_ids: tuple[str, ...] = ("Milestone_FluidPainting", "Milestone_ShapeTra
 
 def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
 
-    reward_type, tables = container.world.random.choice(tabs)
-    table = container.world.random.choice(tables)
-    surprise_item, data = container.world.random.choice(tuple(table.items()))
+    allowed_surprises = [
+        buildings.always, buildings.simple_processors, buildings.pump_pipe,
+        island_buildings.always, island_buildings.miners,
+    ]
+    if container.world.options.lock_locations.is_job_lines:
+        allowed_surprises.append({f"Job line #{i}": None for i in
+                                  range(3, container.world.options.jobs_adjustments["Job lines"] + 1)})
+    if container.world.options.lock_locations.is_operator_lines:
+        allowed_surprises.append({f"Operator line #{i}": None for i in
+                                  range(1, container.world.options.operator_levels_adjustments["Operator lines"] + 1)})
+    if container.world.options.lock_locations.is_operator_levels_tab:
+        allowed_surprises.append(mechanics.always | mechanics.special)
+    else:
+        allowed_surprises.append(mechanics.always)
+    table = container.world.random.choice(allowed_surprises)
+    surprise = container.world.random.choice(list(table.keys()))
     out = [{
         "Id": "RNSurprise",
         "PreviewImageId": "CBBelts_Core",
@@ -35,8 +41,7 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
         "Category": "Other",
         "RequiredUpgradeIds": [],
         "RequiredMechanicIds": [],
-        "Rewards": [{"$type": reward_type[0], reward_type[1]: reward}
-                    for reward in data.reward_ids],
+        "Rewards": list(get_rewards(surprise)),
         "Costs": [{"$type": "ResearchPointsCost", "Amount": 100}]
     }]
 
@@ -53,27 +58,24 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
             "RequiredUpgradeIds": [],
             "RequiredMechanicIds": [],
             "Rewards": [],
-            "Costs": [{"$type": "ResearchPointsCost", "Amount": 1}]
+            "Costs": []
         })
 
-    for reward_type, tables in tabs:
-        for table in tables:
-            for name, data in table.items():
-                out.append({
-                    "Id": data.remote_id,
-                    "PreviewImageId": "",
-                    "VideoId": "PlaceholderVideoVD",
-                    "Title": name,
-                    "IconId": "building.SandboxItemProducerDefaultVariant",
-                    "Description": "",
-                    "Hidden": True,
-                    "Category": "Other",
-                    "RequiredUpgradeIds": [],
-                    "RequiredMechanicIds": [],
-                    "Rewards": [{"$type": reward_type[0], reward_type[1]: reward}
-                                for reward in data.reward_ids],
-                    "Costs": [{"$type": "ResearchPointsCost", "Amount": 1}]
-                })
+    for name, data in all_standard_items.items():
+        out.append({
+            "Id": data.remote_id,
+            "PreviewImageId": "",
+            "VideoId": "PlaceholderVideoVD",
+            "Title": name,
+            "IconId": "building.SandboxItemProducerDefaultVariant",
+            "Description": "",
+            "Hidden": True,
+            "Category": "Other",
+            "RequiredUpgradeIds": [],
+            "RequiredMechanicIds": [],
+            "Rewards": list(get_rewards(name)),
+            "Costs": []
+        })
 
     return out
 

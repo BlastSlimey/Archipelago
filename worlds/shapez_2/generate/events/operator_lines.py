@@ -21,8 +21,8 @@ def get_events(world: "Shapez2World",
 
     reg = regions["Events"]
     lines = world.operator_processors
-    all_unlocked = world.options.lock_locations.is_operator_lines
-    tab_unlocked = world.options.lock_locations.is_operator_levels_tab
+    all_unlocked = not world.options.lock_locations.is_operator_lines
+    tab_unlocked = not world.options.lock_locations.is_operator_levels_tab
 
     if tab_unlocked or "Operator Levels" in world.starting_items:
         world.starting_items.append("[ACCESS] Operator levels")

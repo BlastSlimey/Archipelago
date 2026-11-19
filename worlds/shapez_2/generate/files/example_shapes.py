@@ -2,32 +2,33 @@ from ...output import Shapez2ScenarioContainer
 
 
 def get_example_shapes(container: "Shapez2ScenarioContainer") -> list[str]:
-    milestones = container.world.milestone_shapes
-    tasks = container.world.task_shapes
-    task_processors = container.world.task_processors
-    if container.world.options.shape_configuration == "tetragonal":
-        task_1, task_2, found = "CuCuCuCu", "CuCuCuCu", 0
-    else:
-        task_1, task_2, found = "FuFuFuFuFuFu", "FuFuFuFuFuFu", 0
-    for count in reversed(range(6)):
-        for i in reversed(range(len(task_processors))):
-            if len(task_processors[i]) >= count:
-                if not found:
-                    task_1 = tasks[i][-1]
-                    found = 1
-                elif found == 1:
-                    task_2 = tasks[i][-1]
-                    break
-        else:
-            continue
-        break
-    return [
-        milestones[-1][0][-1],
-        milestones[-1][1][-1],
-        task_1,
-        milestones[-2][container.world.random.randint(0, 1)][-1] if len(milestones) >= 4 else task_2,
-        container.world.blueprint_shapes[-1],
-    ]
+    return [container.world.milestone_shapes[-1][0][-1]]
+    # milestones = container.world.milestone_shapes
+    # tasks = container.world.task_shapes
+    # task_processors = container.world.task_processors
+    # if container.world.options.shape_configuration == "tetragonal":
+    #     task_1, task_2, found = "CuCuCuCu", "CuCuCuCu", 0
+    # else:
+    #     task_1, task_2, found = "FuFuFuFuFuFu", "FuFuFuFuFuFu", 0
+    # for count in reversed(range(6)):
+    #     for i in reversed(range(len(task_processors))):
+    #         if len(task_processors[i]) >= count:
+    #             if not found:
+    #                 task_1 = tasks[i][-1]
+    #                 found = 1
+    #             elif found == 1:
+    #                 task_2 = tasks[i][-1]
+    #                 break
+    #     else:
+    #         continue
+    #     break
+    # return [
+    #     milestones[-1][0][-1],
+    #     milestones[-1][1][-1],
+    #     task_1,
+    #     milestones[-2][container.world.random.randint(0, 1)][-1] if len(milestones) >= 4 else task_2,
+    #     container.world.blueprint_shapes[-1],
+    # ]
 
 
 def get_iconic_shapes(container: "Shapez2ScenarioContainer") -> list[str]:

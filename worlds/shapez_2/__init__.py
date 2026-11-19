@@ -1,8 +1,9 @@
 import logging
 from multiprocessing import Process
 from random import Random
-from typing import Mapping, Any, TYPE_CHECKING
+from typing import Mapping, Any, TYPE_CHECKING, ClassVar
 
+import settings
 from BaseClasses import MultiWorld, Tutorial
 from Options import Option
 from worlds.AutoWorld import WebWorld, World
@@ -20,7 +21,30 @@ def run_client():
     p.start()
 
 
-# components.append(Component("shapez 2 Client", func=run_client))
+components.append(Component("shapez 2 Client", func=run_client))
+
+
+class Shapez2Settings(settings.Group):
+
+    class SaveDataFolder(settings.UserFolderPath):
+        """Path to the game's save data folder, which contains the **savegames** and **mods** subfolders."""
+        description = "Shapez 2 AppData folder"
+        required = True
+
+        def browse(self, **kwargs):
+            from Utils import messagebox
+            messagebox("Save data folder not found",
+                       "Patching couldn't detect the save data folder.\n"
+                       "Please select it manually.\n"
+                       "If you don't know where it is, open the game, select PLAY, select SHOW FOLDER, "
+                       "and go one folder up.")
+            super().browse(**kwargs)
+
+    class OverwriteScenario(settings.Bool):
+        """If enabled, running the patch file overwrites the already installed AP scenario, if one exists."""
+
+    save_data_folder: SaveDataFolder = SaveDataFolder("%appdata%/../LocalLow/tobspr Games/shapez 2")
+    overwrite_scenario: OverwriteScenario | bool = True
 
 
 class Shapez2Web(WebWorld):
@@ -45,12 +69,14 @@ class Shapez2World(World):
     It is the successor to shapez and contains a variety of more features like crystals, space platforms and belts,
     trains, and an astounding new 3-dimensional gameplay environment in space.
     """
-    # Extra notes: The developers of the game apparently had many names for various features during development and
+    # Extra dev notes: The developers of the game apparently had many names for various features during development and
     # even changed the shown names in updates. Due to that, there are quite a few things in this apworld's code that
     # are named inconsistently and different from what they're called ingame, e.g. tasks = jobs. Sorry.
     game = "shapez 2"
     options_dataclass = options.Shapez2Options
     options: options.Shapez2Options
+    settings_key = "shapez_2_settings"
+    settings: ClassVar[Shapez2Settings]
     topology_present = True
     web = Shapez2Web()
     item_name_to_id = items.lookup_table()

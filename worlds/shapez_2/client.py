@@ -43,7 +43,7 @@ class Shapez2Context(CommonContext):
             def build(self) -> Layout:
                 container = super().build()
                 self.add_client_tab("Milestones", self.build_milestones_panel())
-                self.add_client_tab("Tasks", self.build_tasks_panel())
+                self.add_client_tab("Jobs", self.build_tasks_panel())
                 self.add_client_tab("Operator levels", self.build_operator_panel())
                 self.add_client_tab("Goal", self.build_goal_panel())
                 return container
@@ -53,7 +53,7 @@ class Shapez2Context(CommonContext):
                     def action(num: int) -> Callable:
                         return lambda instance: self.send_milestone(num)
 
-                    milestones: int = 20
+                    milestones: int = self.ctx.slot_data["options"]["milestone_adjustments"]["Milestones"]
                     scroll = ScrollView(do_scroll=(False, True))
                     commander_group = GridLayout(cols=5, size_hint_y=None)
                     for i in range(milestones):
@@ -70,12 +70,12 @@ class Shapez2Context(CommonContext):
                     def action(line: int, num: int) -> Callable:
                         return lambda instance: self.send_task(line, num)
 
-                    task_lines: int = 200
+                    task_lines: int = self.ctx.slot_data["options"]["jobs_adjustments"]["Job lines"]
                     scroll = ScrollView(do_scroll=(False, True))
-                    commander_group = GridLayout(cols=5, height=6000, size_hint_y=None)
+                    commander_group = GridLayout(cols=5, height=task_lines*30, size_hint_y=None)
                     for i in range(task_lines):
                         for j in range(1, 6):
-                            commander_button = Button(text=f"Task #{i+1}-{j}", height=30, size_hint_y=None)
+                            commander_button = Button(text=f"Job #{i+1}-{j}", height=30, size_hint_y=None)
                             commander_button.bind(on_press=action(i+1, j))
                             commander_group.add_widget(commander_button)
                     scroll.add_widget(commander_group)
@@ -88,9 +88,9 @@ class Shapez2Context(CommonContext):
                     def action(level: int) -> Callable:
                         return lambda instance: self.send_operator_level(level)
 
-                    operator_levels: int = 200
+                    operator_levels: int = self.ctx.slot_data["options"]["operator_levels_adjustments"]["Operator level checks"]
                     scroll = ScrollView(do_scroll=(False, True))
-                    commander_group = GridLayout(cols=5, height=600, size_hint_y=None)
+                    commander_group = GridLayout(cols=5, height=operator_levels*3, size_hint_y=None)
                     for i in range(operator_levels):
                         commander_button = Button(text=f"Operator level {i+1}", height=30, size_hint_y=None)
                         commander_button.bind(on_press=action(i+1))
@@ -120,7 +120,7 @@ class Shapez2Context(CommonContext):
                 )))
 
             def send_task(self, line: int, num: int):
-                asyncio.create_task(self.ctx.check_locations((all_locations[f"Task #{line}-{num}"].location_id, )))
+                asyncio.create_task(self.ctx.check_locations((all_locations[f"Job #{line}-{num}"].location_id, )))
 
             def send_operator_level(self, level: int):
                 asyncio.create_task(self.ctx.check_locations((all_locations[f"Operator level {level}"].location_id, )))

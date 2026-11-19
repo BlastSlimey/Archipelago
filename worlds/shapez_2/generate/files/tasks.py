@@ -1,56 +1,31 @@
-from typing import Any, Iterator
+from typing import Any
 
-from ...data import PointsItemData
-from ...data.items import RewardType, all_items
+from .rewards import get_bundle
 from ...output import Shapez2ScenarioContainer
 from ...data.required_amounts import task_lines as shape_amounts
-
-
-reward_types = {
-    RewardType.building: ("BuildingReward", "BuildingDefinitionGroupId"),
-    RewardType.island_building: ("IslandGroupReward", "GroupId"),
-    RewardType.mechanic: ("MechanicReward", "MechanicId"),
-    RewardType.platforms: ("ChunkLimitReward", "Amount"),
-    RewardType.blueprint_points: ("BlueprintCurrencyReward", "Amount"),
-    RewardType.research_points: ("ResearchPointsReward", "Amount"),
-}
 
 
 def get_task_lines(container: "Shapez2ScenarioContainer", mechanics: list[dict[str, str]],
                    other_players_items: set[str]) -> list[dict[str, Any]]:
     from .mechanics import add_other_item
 
-    multiplier = container.world.options.location_adjustments["Required shapes multiplier"]
-    locked = "Lock task lines" in container.world.options.location_modifiers
-    show_other = container.world.options.show_other_players_items.value
-    all_worlds = container.world.multiworld.worlds
-
-    def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
-        _data = all_items[_item]
-        _type, _key = reward_types[_data.reward_type]
-        if isinstance(_data, PointsItemData):
-            yield {"$type": _type, "Amount": _data.amount}
-        else:
-            for _rew in _data.reward_ids:
-                yield {"$type": _type, _key: _rew}
+    multiplier = container.world.options.required_shapes_multiplier.value
+    locked = container.world.options.lock_locations.is_job_lines
 
     out = []
-    for task_line in range(container.world.options.location_adjustments["Task lines"]):
+    for task_line in range(container.world.options.jobs_adjustments["Job lines"]):
         shapes = container.world.task_shapes[task_line]
         amounts = shape_amounts[task_line]
         tasks = []
         for task_num in range(len(shapes)):
-            loc_item = container.world.get_location(f"Task #{task_line+1}-{task_num+1}").item
+            loc_item = container.world.get_location(f"Job #{task_line+1}-{task_num+1}").item
             if loc_item.player != container.world.player:
-                if not show_other:
-                    rewards = [{"$type": "MechanicReward", "MechanicId": "RUAPItem"}]
-                else:
-                    rewards = []
-                    add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
+                rewards = []
+                add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
             else:
-                rewards = [*get_rewards(loc_item.name)]
+                rewards = [*get_bundle(loc_item.name)]
             tasks.append({
-                "Id": f"LocTask_{task_line}_{task_num}",
+                "Id": f"LocJob_{task_line}_{task_num}",
                 "Rewards": rewards,
                 "Costs": [{
                     "Shape": shapes[task_num],
@@ -61,9 +36,9 @@ def get_task_lines(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
                 }]
             })
         out.append({
-            "Title": f"Task Line #{task_line + 1}",
+            "Title": f"Job Line #{task_line + 1}",
             "RequiredUpgradeIds": [],
-            "RequiredMechanicIds": [f"TaskLine{task_line + 1}"] if locked else [],
+            "RequiredMechanicIds": [f"JobLine{task_line + 1}"] if locked else [],
             "SideQuests": tasks,
         })
 

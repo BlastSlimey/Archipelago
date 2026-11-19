@@ -1,4 +1,4 @@
-from .. import ItemData, BPItemData, PCItemData, RPItemData
+from .. import ItemData, PointsItemData
 from ..classification import *
 
 task_lines: dict[str, ItemData] = {
@@ -12,17 +12,17 @@ operator_lines: dict[str, ItemData] = {
     for i in range(1, 101)
 }
 
-research_points: dict[str, RPItemData] = {
-    f"{i*100} Research Credits": RPItemData(5000+i, always_filler, i)
+research_points: dict[str, PointsItemData] = {
+    f"{i*100} Research Credits": PointsItemData(5000+i, always_filler, i, 0, 0)
     for i in range(1, 101)
 }
 
-platforms: dict[str, PCItemData] = {
-    f"{i} Platform Capacity": PCItemData(6000+i, always_filler, i*2)
+platforms: dict[str, PointsItemData] = {
+    f"{i} Platform Capacity": PointsItemData(6000+i, always_filler, 0, i*2, 0)
     for i in range(1, 501)
 }
 
-blueprint_points: dict[str, BPItemData] = {
-    f"{i*100} Blueprint Credits": BPItemData(7000+i, always_filler, i*100)
+blueprint_points: dict[str, PointsItemData] = {
+    f"{i*100} Blueprint Credits": PointsItemData(7000+i, always_filler, 0, 0, i*100)
     for i in range(1, 101)
 }

@@ -1,23 +1,13 @@
 from typing import Any, Iterator
 
+from .rewards import get_bundle
 from ...output import Shapez2ScenarioContainer
-from ...data.items import RewardType, all_items
-from ...data import PointsItemData
 from ...data.required_amounts import milestones as shape_amounts
 
 
 wiki_entry_rewards = ["WKVortexLTD_Handbook", "WKFluids_Intro", "WKTrains_Intro", "WKProcessing_PinPusher",
                       "WKFluids_Mixing", "WKIslands_Floors", "WKFluids_CrystalGenerator", "WKTrains_VortexDelivery",
                       "WKWires_MaM"]
-
-reward_types = {
-    RewardType.building: ("BuildingReward", "BuildingDefinitionGroupId"),
-    RewardType.island_building: ("IslandGroupReward", "GroupId"),
-    RewardType.mechanic: ("MechanicReward", "MechanicId"),
-    RewardType.platforms: ("ChunkLimitReward", "Amount"),
-    RewardType.blueprint_points: ("BlueprintCurrencyReward", "Amount"),
-    RewardType.research_points: ("ResearchPointsReward", "Amount"),
-}
 
 milestone_graphics = [("MilestoneClassicInitialVD", "building.BeltDefaultVariant"),
                       ("MilestoneClassicPainterVD", "building.PainterDefaultVariant"),
@@ -30,30 +20,26 @@ milestone_graphics = [("MilestoneClassicInitialVD", "building.BeltDefaultVariant
                       ("MilestoneClassicFinalVD", "ConverterVortex")]
 
 
+def rotate(shape: str) -> Iterator[str]:
+    yield shape
+    parts = shape.split(":")
+    for i in range(2, len(parts[0]), 2):
+        yield ":".join(layer[i:] + layer[:i] for layer in parts)
+
+
 def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[str, str]],
                    other_players_items: set[str]) -> list[dict[str, Any]]:
     from .mechanics import add_other_item
 
-    multiplier = container.world.options.location_adjustments["Required shapes multiplier"]
-    research_points = container.world.options.location_adjustments["Starting research points"]
-    blueprint_points = container.world.options.location_adjustments["Starting blueprint points"]
-    show_other = container.world.options.show_other_players_items.current_key
-
-    def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
-        if _item[0] != "[":  # event item
-            _data = all_items[_item]
-            _type, _key = reward_types[_data.reward_type]
-            if isinstance(_data, PointsItemData):
-                yield {"$type": _type, "Amount": _data.amount}
-            else:
-                for _rew in _data.reward_ids:
-                    yield {"$type": _type, _key: _rew}
+    multiplier = container.world.options.required_shapes_multiplier.value
+    research_points = container.world.options.starting_points["Research credits"] // 100
+    blueprint_points = container.world.options.starting_points["Blueprint credits"]
 
     video, icon = container.world.random.choice(milestone_graphics)
     rewards = [
         {"$type": "ChunkLimitReward",
-         "Amount": container.world.options.location_adjustments["Starting platform points"]},
-        *(reward for item in container.world.starting_items for reward in get_rewards(item)),
+         "Amount": container.world.options.starting_points["Platform capacity"] * 2},
+        *(get_bundle(item) for item in container.world.starting_items),
     ]
     if research_points:
         rewards.append({"$type": "ResearchPointsReward", "Amount": research_points})
@@ -74,22 +60,33 @@ def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
         "Rewards": {"Rewards": rewards}
     }]
 
-    for milestone_num in range(container.world.options.location_adjustments["Milestones"]):
+    for milestone_num in range(container.world.options.milestone_adjustments["Milestones"]):
         video, icon = container.world.random.choice(milestone_graphics)
         checks_count = container.world.milestone_checks_counts[milestone_num]
-        shapes_1, shapes_2 = container.world.milestone_shapes[milestone_num]
+        raw_shapes_1, raw_shapes_2 = container.world.milestone_shapes[milestone_num]
         amounts = shape_amounts[milestone_num]
+
+        shapes_1, shapes_2 = [], []
+        unique = set()  # Only lookup!
+        for s in raw_shapes_1:
+            if s not in unique:
+                shapes_1.append(s)
+                for rot in rotate(s):
+                    unique.add(rot)
+        for s in raw_shapes_2:
+            if s not in unique:
+                shapes_2.append(s)
+                unique.add(s)
+                for rot in rotate(s):
+                    unique.add(rot)
 
         rewards = []
         for check_num in range(checks_count):
             loc_item = container.world.get_location(f"Milestone {milestone_num + 1} reward #{check_num + 1}").item
             if loc_item.player != container.world.player:
-                if show_other == "no_names":
-                    rewards.append({"$type": "MechanicReward", "MechanicId": "RUAPItem"})
-                else:
-                    add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
+                add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
             else:
-                rewards.extend(get_rewards(loc_item.name))
+                rewards.append(get_bundle(loc_item.name))
 
         out.append({
             "Definition": {

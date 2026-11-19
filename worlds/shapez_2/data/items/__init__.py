@@ -1,7 +1,7 @@
 
 from typing import ChainMap
 from . import buildings, island_buildings, mechanics, misc
-from .. import ItemData, RPItemData, BPItemData, PCItemData
+from .. import ItemData, PointsItemData
 
 # ID domains:
 # buildings < 1000
@@ -22,7 +22,7 @@ class RewardType:
     research_points = 5
 
 
-all_items = ChainMap[str, ItemData | RPItemData | BPItemData | PCItemData](
+all_items = ChainMap[str, ItemData | PointsItemData](
     buildings.always,
     buildings.starting,
     buildings.simple_processors,
@@ -57,7 +57,7 @@ all_standard_items = ChainMap[str, ItemData](
     misc.operator_lines,
 )
 
-all_points_items = ChainMap[str, RPItemData | BPItemData | PCItemData](
+all_points_items = ChainMap[str, PointsItemData](
     misc.research_points,
     misc.platforms,
     misc.blueprint_points,

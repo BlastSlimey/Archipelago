@@ -36,45 +36,57 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         ))
         reg.locations.append(loc)
 
-    if "2nd Floor" in world.starting_items and any(it in world.starting_items for it in ("Stacker", "Stacker (Bent)")):
+    if "2nd Machine Level" in world.starting_items and any(it in world.starting_items for it in ("Stacker", "Stacker (Bent)")):
         world.starting_items.append("[PROCESSOR] Stacker")
     else:
         loc = Shapez2Location(
             world.player, "[PROCESSOR] Stacker", None, reg, LocationProgressType.PRIORITY,
             lambda state: extended_has_any(world, state, "Stacker", "Stacker (Bent)")
-                          and extended_has(world, state, "2nd Floor")
+                          and extended_has(world, state, "2nd Machine Level")
         )
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Stacker", ItemClassification.progression, None, world.player
         ))
         reg.locations.append(loc)
 
-    if (
-        all(it in world.starting_items for it in ("Painter", "Pump", "Pipe", "Space Pipe")) and
-        any(it in world.starting_items for it in ("Fluid Miner", "Fluid Miner + Extension"))
-    ):
+    # Shared requirements of fluid-related processors
+    if world.options.item_pool_modifiers.is_unlock_pipes_with_pumps:
+        fluids_rule = lambda state: (
+            extended_has_any(world, state, "Asteroid Pump + Booster + Pipe", "Asteroid Pump + Pipe")
+            and extended_has(world, state, "Mini Pump + Pipe")
+        )
+        fluids_condition = "Mini Pump + Pipe" in world.starting_items and any(
+            it in world.starting_items for it in ("Asteroid Pump + Booster + Pipe", "Asteroid Pump + Pipe")
+        )
+    else:
+        fluids_rule = lambda state: (
+            extended_has_all(world, state, "Space Pipe", "Pipe", "Mini Pump")
+            and extended_has_any(world, state, "Asteroid Pump + Booster", "Asteroid Pump")
+        )
+        fluids_condition = any(
+            it in world.starting_items for it in ("Asteroid Pump + Booster", "Asteroid Pump")
+        ) and all(
+            it in world.starting_items for it in ("Space Pipe", "Pipe", "Mini Pump")
+        )
+
+    if fluids_condition and "Painter" in world.starting_items:
         world.starting_items.append("[PROCESSOR] Painter")
     else:
         loc = Shapez2Location(
             world.player, "[PROCESSOR] Painter", None, reg, LocationProgressType.PRIORITY,
-            lambda state: extended_has_all(world, state, "Painter", "Pump", "Pipe", "Space Pipe") and
-                          extended_has_any(world, state, "Fluid Miner", "Fluid Miner + Extension")
+            lambda state: extended_has(world, state, "Painter") and fluids_rule(state)
         )
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Painter", ItemClassification.progression, None, world.player
         ))
         reg.locations.append(loc)
 
-    if (
-        all(it in world.starting_items for it in ("Color Mixer", "Pump", "Pipe", "Space Pipe")) and
-        any(it in world.starting_items for it in ("Fluid Miner", "Fluid Miner + Extension"))
-    ):
+    if fluids_condition and "Color Mixer" in world.starting_items:
         world.starting_items.append("[PROCESSOR] Mixer")
     else:
         loc = Shapez2Location(
             world.player, "[PROCESSOR] Mixer", None, reg, LocationProgressType.PRIORITY,
-            lambda state: extended_has_all(world, state, "Color Mixer", "Pump", "Pipe", "Space Pipe") and
-                          extended_has_any(world, state, "Fluid Miner", "Fluid Miner + Extension")
+            lambda state: extended_has(world, state, "Color Mixer") and fluids_rule(state)
         )
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Mixer", ItemClassification.progression, None, world.player
@@ -93,16 +105,12 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         ))
         reg.locations.append(loc)
 
-    if (
-        all(it in world.starting_items for it in ("Crystal Generator", "Pump", "Pipe", "Space Pipe")) and
-        any(it in world.starting_items for it in ("Fluid Miner", "Fluid Miner + Extension"))
-    ):
+    if fluids_condition and all(it in world.starting_items for it in ("Crystal Generator", "2nd Machine Level")):
         world.starting_items.append("[PROCESSOR] Crystallizer")
     else:
         loc = Shapez2Location(
             world.player, "[PROCESSOR] Crystallizer", None, reg, LocationProgressType.PRIORITY,
-            lambda state: extended_has_all(world, state, "Crystal Generator", "Pump", "Pipe", "Space Pipe") and
-                          extended_has_any(world, state, "Fluid Miner", "Fluid Miner + Extension")
+            lambda state: extended_has_all(world, state, "Crystal Generator", "2nd Machine Level") and fluids_rule(state)
         )
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Crystallizer", ItemClassification.progression, None, world.player

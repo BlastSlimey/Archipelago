@@ -1,5 +1,5 @@
 from random import Random
-from typing import Callable
+from typing import Callable, Iterator
 
 from . import Processor, ShapeBuilder
 
@@ -932,43 +932,50 @@ def stack(rand: Random, builder: ShapeBuilder, layer: str, has_non_crystal: bool
             fill_crystal(builder, crys_col)
             builder.shape.append(layer)
         else:
-            for j in range(0, 8, 2):
-                if layer[j:j+2] != "--" and builder.shape[-1][j:j+2] != "--":
-                    builder.shape.append(layer)
-                    break
-            else:
-                for i in reversed(range(len(builder.shape) - 1)):
-                    for j in range(0, 8, 2):
-                        if layer[j:j+2] != "--" and builder.shape[i][j:j+2] != "--":
-                            builder.shape[i+1] = merge_layers(layer, builder.shape[i+1])
-                            break
-                    else:
-                        continue
-                    break
+            for falling_part in break_falling_parts(layer):
+                for j in range(0, 8, 2):
+                    if falling_part[j:j+2] != "--" and builder.shape[-1][j:j+2] != "--":
+                        builder.shape.append(falling_part)
+                        break
                 else:
-                    builder.shape[0] = merge_layers(layer, builder.shape[0])
-    else:
-        for j in range(0, 8, 2):
-            if layer[j:j+2] != "--" and builder.shape[0][j:j+2] != "--":
-                builder.shape.insert(0, layer)
-                for i in range(0, 8, 2):
-                    if builder.shape[0][i] == "-" and builder.shape[1][i] == "P":
-                        for k in range(2, len(builder.shape)):
-                            if builder.shape[k][i] != "P":
-                                builder.shape[k-1] = builder.shape[k-1][:i] + "-" + builder.shape[k-1][i+1:]
-                                builder.shape[0] = builder.shape[0][:i] + "P" + builder.shape[0][i+1:]
+                    for i in reversed(range(len(builder.shape) - 1)):
+                        for j in range(0, 8, 2):
+                            if falling_part[j:j+2] != "--" and builder.shape[i][j:j+2] != "--":
+                                builder.shape[i+1] = merge_layers(falling_part, builder.shape[i+1])
                                 break
                         else:
-                            builder.shape[-1] = builder.shape[-1][:i] + "-" + builder.shape[-1][i+1:]
-                            builder.shape[0] = builder.shape[0][:i] + "P" + builder.shape[0][i+1:]
-                break
-        else:
-            builder.shape[0] = merge_layers(layer, builder.shape[0])
+                            continue
+                        break
+                    else:
+                        builder.shape[0] = merge_layers(falling_part, builder.shape[0])
+    else:
+        builder.shape.insert(0, layer)
+        simulate_falling(builder)
 
     if crystal_colors:
         builder.has_crystals = True
 
     return stack_top
+
+
+def break_falling_parts(layer: str) -> Iterator[str]:
+    if "--" not in layer:
+        yield layer
+        return
+    full_starts = []
+    empty_starts = []
+    state = None
+    for j in range(0, len(layer), 2):
+        if state != (state := (layer[j:j + 2] != "--")):  # It works, trust me
+            (full_starts if state else empty_starts).append(j)
+    if (sections := min(len(full_starts), len(empty_starts))) < 2:
+        yield layer
+    else:
+        for i in range(sections - 1):
+            st_this, st_next = full_starts[i - sections], full_starts[i + 1 - sections]
+            yield "--" * st_this + layer[st_this:st_next] + "--" * (len(layer) - st_next)
+        st_this, st_next = full_starts[-1], full_starts[-sections]
+        yield layer[:st_next] + "--" * (st_this - st_next) + layer[st_this:]
 
 
 def merge_layers(layer_1: str, layer_2: str) -> str:
@@ -979,6 +986,51 @@ def merge_layers(layer_1: str, layer_2: str) -> str:
         else:
             merged += layer_2[k:k + 2]
     return merged
+
+
+def simulate_falling(builder: ShapeBuilder):
+    # Assumes a non-empty non-crystals shape is put on a single layer
+    width = len(builder.shape[0])
+    parts = [[-1] * len(layer) for layer in builder.shape]  # 0 is empty, 1 is full, and -1 is unknown
+    to_check = [(-1, start, True) for start in range(0, width, 2)]
+    while to_check:
+        next_layer, next_pos, is_pin = to_check.pop()
+        if next_layer < len(builder.shape) and parts[next_layer+1][next_pos//2] == -1:
+            part = builder.shape[next_layer+1][next_pos:next_pos + 2]
+            is_full = part != "--"
+            parts[next_layer+1][next_pos // 2] = is_full
+            if is_full:
+                to_check.append((next_layer+1, next_pos, part == "P-"))
+        if not is_pin:
+            for neighbor in ((next_pos+2)%width, (next_pos-2)%width):
+                if parts[next_layer][neighbor//2] == -1 and (
+                    part := builder.shape[next_layer][neighbor:neighbor+2]
+                ) != "P-":
+                    is_full = part != "--"
+                    parts[next_layer][neighbor//2] = is_full
+                    if is_full:
+                        to_check.append((next_layer, neighbor, part == "P-"))
+            if next_layer and parts[next_layer-1][next_pos//2] == -1 and (
+                part := builder.shape[next_layer-1][next_pos:next_pos+2]
+            ) != "P-":
+                is_full = part != "--"
+                parts[next_layer-1][next_pos // 2] = is_full
+                if is_full:
+                    to_check.append((next_layer-1, next_pos, part == "P-"))
+    for l in range(len(builder.shape) - 1):
+        lower = upper = ""
+        for i in range(0, width, 2):
+            # Assumes the lower layer doesn't have -1 values in parts, and that no -1 is on top of a 1
+            if parts[l][i//2] == 0 and parts[l+1][i//2] != 1:
+                lower += builder.shape[l+1][i:i+2]
+                upper += "--"
+                parts[l + 1][i // 2] = 0
+            else:
+                lower += builder.shape[l][i:i+2]
+                upper += builder.shape[l+1][i:i+2]
+        builder.shape[l], builder.shape[l+1] = lower, upper
+    if builder.shape[-1] == "-" * width:
+        builder.shape.pop()
 
 
 def fill_crystal(builder: ShapeBuilder, color: str) -> None:

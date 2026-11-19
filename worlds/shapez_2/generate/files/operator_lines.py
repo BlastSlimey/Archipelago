@@ -1,19 +1,9 @@
-from typing import Any, Iterator
+from typing import Any
 
-from ...data import PointsItemData
-from ...data.items import RewardType, all_items
 from ...output import Shapez2ScenarioContainer
 from ...generate.shapes import Processor
+from .rewards import get_rewards
 
-
-reward_types = {
-    RewardType.building: ("BuildingReward", "BuildingDefinitionGroupId"),
-    RewardType.island_building: ("IslandGroupReward", "GroupId"),
-    RewardType.mechanic: ("MechanicReward", "MechanicId"),
-    RewardType.platforms: ("ChunkLimitReward", "Amount"),
-    RewardType.blueprint_points: ("BlueprintCurrencyReward", "Amount"),
-    RewardType.research_points: ("ResearchPointsReward", "Amount"),
-}
 
 line_data_by_processors = {
     0: (50000, 30),
@@ -30,11 +20,11 @@ line_data_by_processors = {
 
 def get_operator_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
 
-    multiplier = container.world.options.location_adjustments["Required shapes multiplier"]
-    locked = "Lock operator lines" in container.world.options.location_modifiers
+    multiplier = container.world.options.required_shapes_multiplier.value
+    locked = container.world.options.lock_locations.is_operator_lines
 
     out = []
-    for line in range(container.world.options.location_adjustments["Operator lines"]):
+    for line in range(container.world.options.operator_levels_adjustments["Operator lines"]):
         processors = container.world.operator_processors[line]
         shape = container.world.operator_shapes[line]
         line_obj = {
@@ -71,18 +61,7 @@ def get_operator_rewards(container: "Shapez2ScenarioContainer", mechanics: list[
                          other_players_items: set[str]) -> list[dict[str, Any]]:
     from .mechanics import add_other_item
 
-    show_other = container.world.options.show_other_players_items.value
-
-    def get_rewards(_item: str) -> Iterator[dict[str, str | int]]:
-        _data = all_items[_item]
-        _type, _key = reward_types[_data.reward_type]
-        if isinstance(_data, PointsItemData):
-            yield {"$type": _type, "Amount": _data.amount}
-        else:
-            for _rew in _data.reward_ids:
-                yield {"$type": _type, _key: _rew}
-
-    checks_count = container.world.options.location_adjustments["Operator level checks"]
+    checks_count = container.world.options.operator_levels_adjustments["Operator level checks"]
     out = [{
         "MinimumLevel": max(25, checks_count + 1),
         "Rewards": [
@@ -112,11 +91,8 @@ def get_operator_rewards(container: "Shapez2ScenarioContainer", mechanics: list[
     for check in range(checks_count):
         loc_item = container.world.get_location(f"Operator level {checks_count - check}").item
         if loc_item.player != container.world.player:
-            if not show_other:
-                rewards = [{"$type": "MechanicReward", "MechanicId": "RUAPItem"}]
-            else:
-                rewards = []
-                add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
+            rewards = []
+            add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
         else:
             rewards = [*get_rewards(loc_item.name)]
         out.append({
