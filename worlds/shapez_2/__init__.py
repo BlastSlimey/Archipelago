@@ -1,4 +1,5 @@
 import logging
+import os
 from multiprocessing import Process
 from random import Random
 from typing import Mapping, Any, TYPE_CHECKING, ClassVar
@@ -34,16 +35,16 @@ class Shapez2Settings(settings.Group):
         def browse(self, **kwargs):
             from Utils import messagebox
             messagebox("Save data folder not found",
-                       "Patching couldn't detect the save data folder.\n"
+                       "Couldn't detect the save data folder.\n"
                        "Please select it manually.\n"
                        "If you don't know where it is, open the game, select PLAY, select SHOW FOLDER, "
                        "and go one folder up.")
-            super().browse(**kwargs)
+            return super().browse(**kwargs)
 
     class OverwriteScenario(settings.Bool):
         """If enabled, running the patch file overwrites the already installed AP scenario, if one exists."""
 
-    save_data_folder: SaveDataFolder = SaveDataFolder("%appdata%/../LocalLow/tobspr Games/shapez 2")
+    save_data_folder: SaveDataFolder = SaveDataFolder(os.getenv("AppData") + "/../LocalLow/tobspr Games/shapez 2")
     overwrite_scenario: OverwriteScenario | bool = True
 
 
@@ -184,7 +185,10 @@ class Shapez2World(World):
         self.multiworld.itempool.extend(item_pool)
 
     def generate_output(self, output_directory: str) -> None:
-        output.Shapez2ScenarioContainer(self, output_directory).write()
+        output.Shapez2ScenarioContainer(
+            os.path.join(output_directory, self.multiworld.get_out_file_name_base(self.player) + ".spz2scenario"),
+            self.player, self.player_name, self
+        ).write()
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         from .data import version

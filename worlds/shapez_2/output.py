@@ -16,10 +16,10 @@ class Shapez2ScenarioContainer(APAutoPatchInterface):
     result_file_ending = ".json"
     files: dict[str, Any]
 
-    def __init__(self, world: "Shapez2World", output_directory: str):
+    def __init__(self, path: str, player=None, player_name="", world: "Shapez2World" = None):
         self.world = world
         self.files = {}
-        super().__init__(path=output_directory, player=world.player, player_name=world.player_name, server="")
+        super().__init__(path=path, player=player, player_name=player_name, server="")
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         from .generate.files import (example_shapes, blueprint, milestones, tasks, upgrades, operator_lines,
@@ -157,11 +157,12 @@ class Shapez2ScenarioContainer(APAutoPatchInterface):
     def patch(self, target: str) -> None:
         from Utils import messagebox
 
+        self.read()
         mod = os.path.join(get_settings()["shapez_2_settings"]["save_data_folder"], "mods", "APScenario")
         scenarios = os.path.join(mod, "scenarios")
         presets = os.path.join(mod, "scenario-presets")
-        os.makedirs(scenarios)
-        os.makedirs(presets)
+        os.makedirs(scenarios, exist_ok=True)
+        os.makedirs(presets, exist_ok=True)
         append = "" if get_settings()["shapez_2_settings"]["overwrite_scenario"] else "_" + os.path.split(target)[1]
         with (open(os.path.join(scenarios, f"scenario{append}.json"), "wb") as sc_out,
               open(os.path.join(presets, f"preset{append}.json"), "wb") as pr_out,
