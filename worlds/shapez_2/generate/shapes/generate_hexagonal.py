@@ -1207,7 +1207,7 @@ def stack(rand: Random, builder: ShapeBuilder, layer: str, has_non_crystal: bool
 def simulate_falling(builder: ShapeBuilder):
     # Assumes a non-empty non-crystals shape is put on a single layer
     width = len(builder.shape[0])
-    parts = [[-1] * len(layer) for layer in builder.shape]  # 0 is empty, 1 is full, and -1 is unknown
+    parts = [[-1] * (len(layer) // 2) for layer in builder.shape]  # 0 is empty, 1 is full, and -1 is unknown
     to_check = [(-1, start, True) for start in range(0, width, 2)]
     while to_check:
         next_layer, next_pos, is_pin = to_check.pop()
@@ -1264,9 +1264,9 @@ def break_falling_parts(layer: str) -> Iterator[str]:
     else:
         for i in range(sections - 1):
             st_this, st_next = full_starts[i - sections], full_starts[i + 1 - sections]
-            yield "--" * st_this + layer[st_this:st_next] + "--" * (len(layer) - st_next)
+            yield "-" * st_this + layer[st_this:st_next] + "-" * (len(layer) - st_next)
         st_this, st_next = full_starts[-1], full_starts[-sections]
-        yield layer[:st_next] + "--" * (st_this - st_next) + layer[st_this:]
+        yield layer[:st_next] + "-" * (st_this - st_next) + layer[st_this:]
 
 
 def merge_layers(layer_1: str, layer_2: str) -> str:
