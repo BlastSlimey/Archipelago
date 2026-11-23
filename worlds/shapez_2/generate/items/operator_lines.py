@@ -1,15 +1,11 @@
 from typing import TYPE_CHECKING, Iterator
-from ...items import Shapez2Item
 
 if TYPE_CHECKING:
     from ... import Shapez2World
 
 
-def generate_default(world: "Shapez2World") -> Iterator[Shapez2Item]:
-    from ...data.items.misc import operator_lines
+def generate_default(world: "Shapez2World") -> Iterator[str]:
 
     if world.options.lock_locations.is_operator_lines:
         for i in range(world.options.operator_levels_adjustments["Operator lines"]):
-            name = f"Operator line #{i + 1}"
-            data = operator_lines[name]
-            yield Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
+            yield f"Operator line #{i + 1}"

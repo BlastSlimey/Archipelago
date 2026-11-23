@@ -1,6 +1,6 @@
 from typing import Any
 
-from .rewards import get_bundle
+from .rewards import get_rewards
 from ...output import Shapez2ScenarioContainer
 from ...data.required_amounts import task_lines as shape_amounts
 
@@ -23,7 +23,7 @@ def get_task_lines(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
                 rewards = []
                 add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
             else:
-                rewards = [*get_bundle(loc_item.name)]
+                rewards = [*get_rewards(loc_item.name)]
             tasks.append({
                 "Id": f"LocJob_{task_line}_{task_num}",
                 "Rewards": rewards,

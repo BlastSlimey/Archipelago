@@ -31,7 +31,7 @@ def get_item_lookup_table() -> dict[str, int]:
     return {name: data.item_id for name, data in all_items.items()}
 
 
-def get_main_item_pool(world: "Shapez2World") -> list[Shapez2Item]:
+def get_main_item_pool(world: "Shapez2World") -> list[str]:
     from .generate.items import buildings, island_buildings, mechanics, task_lines, operator_lines
 
     return [

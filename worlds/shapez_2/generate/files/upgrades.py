@@ -43,23 +43,36 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
         "RequiredMechanicIds": [],
         "Rewards": list(get_rewards(surprise)),
         "Costs": [{"$type": "ResearchPointsCost", "Amount": 100}]
+    }, {
+        "Id": "CBWires_Core",
+        "PreviewImageId": "CBWires_Core",
+        "VideoId": "PlaceholderVideoVD",
+        "Title": "Wires (Category)",
+        "IconId": "SignalTransportGroup",
+        "Description": "@research.CBWires_Core.description",
+        "Hidden": True,
+        "Category": "Wires",
+        "RequiredUpgradeIds": [],
+        "RequiredMechanicIds": [],
+        "Rewards": [{"$type": "MechanicReward", "MechanicId": "RUWires"}],
+        "Costs": [{"$type": "ResearchPointsCost", "Amount": 1}]
     }]
 
-    for vanilla in milestone_ids:
-        out.append({
-            "Id": vanilla,
-            "PreviewImageId": "",
-            "VideoId": "PlaceholderVideoVD",
-            "Title": vanilla,
-            "IconId": "building.SandboxItemProducerDefaultVariant",
-            "Description": "",
-            "Hidden": True,
-            "Category": "Other",
-            "RequiredUpgradeIds": [],
-            "RequiredMechanicIds": [],
-            "Rewards": [],
-            "Costs": []
-        })
+    # for vanilla in milestone_ids:
+    #     out.append({
+    #         "Id": vanilla,
+    #         "PreviewImageId": "",
+    #         "VideoId": "PlaceholderVideoVD",
+    #         "Title": vanilla,
+    #         "IconId": "building.SandboxItemProducerDefaultVariant",
+    #         "Description": "",
+    #         "Hidden": True,
+    #         "Category": "Other",
+    #         "RequiredUpgradeIds": [],
+    #         "RequiredMechanicIds": [],
+    #         "Rewards": [],
+    #         "Costs": []
+    #     })
 
     for name, data in all_standard_items.items():
         out.append({
@@ -67,7 +80,7 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
             "PreviewImageId": "",
             "VideoId": "PlaceholderVideoVD",
             "Title": name,
-            "IconId": "building.SandboxItemProducerDefaultVariant",
+            "IconId": data.icon,
             "Description": "",
             "Hidden": True,
             "Category": "Other",

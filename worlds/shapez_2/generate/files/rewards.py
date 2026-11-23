@@ -1,15 +1,6 @@
 from typing import Iterator
 
-from ...data.items import RewardType, all_items
-
-reward_types = {
-    RewardType.building: ("BuildingReward", "BuildingDefinitionGroupId"),
-    RewardType.island_building: ("IslandGroupReward", "GroupId"),
-    RewardType.mechanic: ("MechanicReward", "MechanicId"),
-    RewardType.platforms: ("ChunkLimitReward", "Amount"),
-    RewardType.blueprint_points: ("BlueprintCurrencyReward", "Amount"),
-    RewardType.research_points: ("ResearchPointsReward", "Amount"),
-}
+from ...data.items import all_items
 
 
 def get_rewards(item: str) -> Iterator[dict[str, str | int]]:

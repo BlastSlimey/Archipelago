@@ -1,32 +1,26 @@
 from typing import TYPE_CHECKING, Iterator
-from ...items import Shapez2Item
 
 if TYPE_CHECKING:
     from ... import Shapez2World
 
 
-def generate_default(world: "Shapez2World") -> Iterator[Shapez2Item]:
-    from ...data.items.buildings import always, simple_processors, pump_pipe
+def generate_default(world: "Shapez2World") -> Iterator[str]:
+    from ...data.items.buildings import always, simple_processors
 
-    for name, data in always.items():
-        yield Shapez2Item(name, data.classification(world), data.item_id, world.player)
+    yield from always.keys()
 
-    for name, data in simple_processors.items():
+    for name in simple_processors:
         if name != world.starting_processor:
-            yield Shapez2Item(name, data.classification(world), data.item_id, world.player)
+            yield name
 
     if world.options.item_pool_modifiers.is_unlock_pipes_with_pumps:
-        data = pump_pipe["Mini Pump + Pipe"]
-        yield Shapez2Item("Mini Pump + Pipe", data.classification(world), data.item_id, world.player)
+        yield "Mini Pump + Pipe"
     else:
-        data = pump_pipe["Mini Pump"]
-        yield Shapez2Item("Mini Pump", data.classification(world), data.item_id, world.player)
-        data = pump_pipe["Pipe"]
-        yield Shapez2Item("Pipe", data.classification(world), data.item_id, world.player)
+        yield "Mini Pump"
+        yield "Pipe"
 
     # if world.options.item_pool_modifiers.is_add_sandbox_buildings:
-    #     for name, data in sandbox.items():
-    #         yield Shapez2Item(name, data.classification(world), data.item_id, world.player)
+    #     yield from sandbox.keys()
 
 
 def generate_starting(world: "Shapez2World") -> Iterator[str]:

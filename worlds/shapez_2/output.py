@@ -55,7 +55,6 @@ class Shapez2ScenarioContainer(APAutoPatchInterface):
                 "ResearchLevelsAreProgressive": True,
                 "BlueprintCurrencyShapes": blueprint.get_blueprint_shapes(self),
                 "IntroductionWikiEntryId": "WKClassicRegularWelcome",
-                # "InitiallyUnlockedUpgrades": ["Milestone_Initial", *upgrades.milestone_ids],
                 "InitiallyUnlockedUpgrades": ["Milestone_Initial"],
                 "TutorialConfig": "TCNoTutorial"
             },
@@ -151,12 +150,8 @@ class Shapez2ScenarioContainer(APAutoPatchInterface):
             "GameRuleParameters": {"RuleIds": []}
           }
         }
-        scenario_json: bytes = orjson.dumps(scenario)
-        position = scenario_json.find(b'"FormatVersion":3,')
-        if position != -1:
-            scenario_json = scenario_json[:position] + b'"FormatVersion": 3,' + scenario_json[position+18:]
-        opened_zipfile.writestr("scenario.json", scenario_json)
-        opened_zipfile.writestr("preset.json", orjson.dumps(scenario_preset))
+        opened_zipfile.writestr("scenario.json", orjson.dumps(scenario, option=orjson.OPT_INDENT_2))
+        opened_zipfile.writestr("preset.json", orjson.dumps(scenario_preset, option=orjson.OPT_INDENT_2))
         opened_zipfile.writestr("shapes_debug.txt", debug.write_shapes_debug(self))
 
     def patch(self, target: str) -> None:
@@ -184,7 +179,7 @@ class Shapez2ScenarioContainer(APAutoPatchInterface):
                 "Assemblies": [],
                 "Dependencies": [],
                 "Conflicts": []
-            }))
+            }, option=orjson.OPT_INDENT_2))
         messagebox("Success",
                    "Successfully installed the scenario and preset files into <save_data_folder>/mods/APScenario")
 

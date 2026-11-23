@@ -1,30 +1,30 @@
 from typing import TYPE_CHECKING, Iterator
-from ...items import Shapez2Item
 
 if TYPE_CHECKING:
     from ... import Shapez2World
 
 
-def generate_default(world: "Shapez2World") -> Iterator[Shapez2Item]:
-    from ...data.items.island_buildings import always, miners
+def generate_default(world: "Shapez2World") -> Iterator[str]:
+    from ...data.items.island_buildings import always
 
     pool_mods = world.options.item_pool_modifiers
 
-    for name, data in always.items():
-        yield Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
+    yield from always.keys()
 
     if pool_mods.is_unlock_booster_with_miners and pool_mods.is_unlock_pipes_with_pumps:
-        to_add = ("Asteroid Pump + Booster + Pipe", )
+        yield "Asteroid Pump + Booster + Pipe"
     elif pool_mods.is_unlock_booster_with_miners:
-        to_add = ("Asteroid Pump + Booster", "Space Pipe")
+        yield "Asteroid Pump + Booster"
+        yield "Space Pipe"
     elif pool_mods.is_unlock_pipes_with_pumps:
-        to_add = ("Asteroid Pump + Pipe", "Asteroid Pump Booster", "Asteroid Miner Booster")
+        yield "Asteroid Pump + Pipe"
+        yield "Asteroid Pump Booster"
+        yield "Asteroid Miner Booster"
     else:
-        to_add = ("Asteroid Pump", "Asteroid Pump Booster", "Space Pipe", "Asteroid Miner Booster")
-
-    for name in to_add:
-        data = miners[name]
-        yield Shapez2Item(name, data.classification(world), world.item_name_to_id[name], world.player)
+        yield "Asteroid Pump"
+        yield "Asteroid Pump Booster"
+        yield "Space Pipe Pipe"
+        yield "Asteroid Miner Booster"
 
 
 def generate_starting(world: "Shapez2World") -> Iterator[str]:

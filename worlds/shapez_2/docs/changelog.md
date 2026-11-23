@@ -9,7 +9,7 @@ Versions are sorted in ascending order, i.e. the most recent changes are at the 
   - Old yamls will be fixed by the apworld and do thereby **not** break
 - Added `Unlock pipes with pumps` to `Item Pool Modifiers`
 - Added `Jobs` to `Operator Lines Shapes` (formerly `Shape Generation Modifiers`)
-- Fixed the two final shapes of a milestone sometimes being randomized to the same shape
+- Fixed the two final shapes of a milestone potentially being randomized to the same shape
 - Fixed milestones sometimes containing the same shape twice
 - Tweaked RNG handling to reduce the risk of updates breaking UT accuracy
 - Fixed platform capacity items giving only half of the amount mentioned in their name

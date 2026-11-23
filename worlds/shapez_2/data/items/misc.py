@@ -2,13 +2,14 @@ from .. import ItemData, PointsItemData
 from ..classification import *
 
 task_lines: dict[str, ItemData] = {
-    f"Job line #{i}": ItemData(3000+i, always_progression_deprioritized, f"RemoteJobLine{i}", (), (), (f"JobLine{i}", ))
+    f"Job line #{i}": ItemData(3000+i, always_progression_deprioritized, "VirtualProcessorsGroup",
+                               f"RemoteJobLine{i}", (), (), (f"JobLine{i}", ))
     for i in range(1, 201)
 }
 
 operator_lines: dict[str, ItemData] = {
-    f"Operator line #{i}": ItemData(4000+i, always_progression_deprioritized, f"RemoteOperatorLine{i}", (), (),
-                                    (f"OperatorLine{i}", ))
+    f"Operator line #{i}": ItemData(4000+i, always_progression_deprioritized, "VirtualProcessorsGroup",
+                                    f"RemoteOperatorLine{i}", (), (), (f"OperatorLine{i}", ))
     for i in range(1, 101)
 }
 

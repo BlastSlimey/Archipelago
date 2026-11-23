@@ -108,6 +108,7 @@ class Shapez2World(World):
         self.milestone_checks_counts: list[int] = []
         self.task_counts: list[int] = []
         self.filler_rng = Random(self.random.getrandbits(64))
+        self.main_item_names: list[str] | None = None
 
         self.ut_active: bool = False
         self.location_id_to_alias: dict[int, str] = {}
@@ -169,11 +170,15 @@ class Shapez2World(World):
         self.multiworld.regions.extend(regions.values())
 
     def create_items(self) -> None:
-        item_pool = items.get_main_item_pool(self)
-        if len(item_pool) > self.to_be_filled_locations:
-            raise Exception(f"Player {self.player_name} has more guaranteed items ({len(item_pool)}) "
+        from .data.items import all_items
+
+        self.main_item_names = items.get_main_item_pool(self)
+        if len(self.main_item_names) > self.to_be_filled_locations:
+            raise Exception(f"Player {self.player_name} has more guaranteed items ({len(self.main_item_names)}) "
                             f"than to-be-filled locations ({self.to_be_filled_locations})."
                             f"Please report this to the apworld dev and provide the yaml used for generating.")
+        item_pool = [items.Shapez2Item(name, all_items[name].classification(self),
+                                       self.item_name_to_id[name], self.player) for name in self.main_item_names]
         for _ in range(self.to_be_filled_locations-len(item_pool)):
             item_pool.append(self.create_item(self.get_filler_item_name()))
         self.multiworld.itempool.extend(item_pool)

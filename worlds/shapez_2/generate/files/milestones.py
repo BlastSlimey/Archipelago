@@ -1,6 +1,7 @@
 from typing import Any, Iterator
 
-from .rewards import get_bundle
+from .rewards import get_rewards
+from ...data.items import all_items
 from ...output import Shapez2ScenarioContainer
 from ...data.required_amounts import milestones as shape_amounts
 
@@ -37,9 +38,9 @@ def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
 
     video, icon = container.world.random.choice(milestone_graphics)
     rewards = [
-        {"$type": "ChunkLimitReward",
-         "Amount": container.world.options.starting_points["Platform capacity"] * 2},
-        *(get_bundle(item) for item in container.world.starting_items),
+        {"$type": "ChunkLimitReward", "Amount": container.world.options.starting_points["Platform capacity"] * 2},
+        {"$type": 'ContentBundleReward', 'ContentBundleId': "CBWires_Core"},
+        *(reward for item in container.world.starting_items if item in all_items for reward in get_rewards(item)),
     ]
     if research_points:
         rewards.append({"$type": "ResearchPointsReward", "Amount": research_points})
@@ -86,7 +87,7 @@ def get_milestones(container: "Shapez2ScenarioContainer", mechanics: list[dict[s
             if loc_item.player != container.world.player:
                 add_other_item(mechanics, rewards, loc_item, other_players_items, container.world)
             else:
-                rewards.append(get_bundle(loc_item.name))
+                rewards.extend(get_rewards(loc_item.name))
 
         out.append({
             "Definition": {

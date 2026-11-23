@@ -18,6 +18,7 @@ else:
 class ItemData(NamedTuple):
     item_id: int
     classification: ClassificationMethod
+    icon: str
     # The following attribute names originate from how certain things are named in the game's code
     # and thereby might be confusing without context
     remote_id: str
