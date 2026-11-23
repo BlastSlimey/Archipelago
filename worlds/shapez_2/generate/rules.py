@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterable
 
 if TYPE_CHECKING:
     from .. import Shapez2World
@@ -20,7 +20,7 @@ def extended_has_any(world: "Shapez2World", state: CollectionState, *items: str)
     return state.has_any(items, world.player) or any(item in world.starting_items for item in items)
 
 
-def extended_has_from_list_unique(world: "Shapez2World", state: CollectionState, count: int, *items: str) -> bool:
+def extended_has_from_list_unique(world: "Shapez2World", state: CollectionState, count: int, items: Iterable[str]) -> bool:
     found = 0
     for item in items:
         if state.has(item, world.player) or item in world.starting_items:
