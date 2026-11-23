@@ -22,6 +22,7 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Cutter", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)
 
     if any(it in world.starting_items for it in ("Rotator (CW)", "Rotator (CCW)")):
@@ -34,6 +35,7 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Rotator", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)
 
     if "2nd Machine Level" in world.starting_items and any(it in world.starting_items for it in ("Stacker", "Stacker (Bent)")):
@@ -47,6 +49,7 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Stacker", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)
 
     # Shared requirements of fluid-related processors
@@ -79,6 +82,7 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Painter", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)
 
     if fluids_condition and "Color Mixer" in world.starting_items:
@@ -91,6 +95,7 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Mixer", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)
 
     if "Pin Pusher" in world.starting_items:
@@ -103,6 +108,7 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Pin Pusher", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)
 
     if fluids_condition and all(it in world.starting_items for it in ("Crystal Generator", "2nd Machine Level")):
@@ -115,6 +121,7 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Crystallizer", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)
 
     if "Swapper" in world.starting_items:
@@ -127,4 +134,5 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
         loc.place_locked_item(Shapez2Item(
             "[PROCESSOR] Swapper", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)

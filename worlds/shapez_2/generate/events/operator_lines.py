@@ -34,6 +34,7 @@ def get_events(world: "Shapez2World",
         loc.place_locked_item(Shapez2Item(
             "[ACCESS] Operator levels", ItemClassification.progression, None, world.player
         ))
+        loc.show_in_spoiler = False
         reg.locations.append(loc)
 
     for x in range(len(lines)):
@@ -48,4 +49,5 @@ def get_events(world: "Shapez2World",
             loc.place_locked_item(Shapez2Item(
                 f"[ACCESS] Operator line {x+1}", ItemClassification.progression, None, world.player
             ))
+            loc.show_in_spoiler = False
             reg.locations.append(loc)

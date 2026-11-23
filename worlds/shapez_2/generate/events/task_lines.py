@@ -30,4 +30,5 @@ def get_events(world: "Shapez2World", regions: dict[str, Region]) -> None:
             loc.place_locked_item(Shapez2Item(
                 f"[ACCESS] Job line {x+1}", ItemClassification.progression, None, world.player
             ))
+            loc.show_in_spoiler = False
             reg.locations.append(loc)
