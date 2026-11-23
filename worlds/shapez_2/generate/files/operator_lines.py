@@ -42,11 +42,18 @@ def get_operator_lines(container: "Shapez2ScenarioContainer") -> list[dict[str, 
                 "ExponentialGrowthPercentPerLevel": 4 if has_crystals else 5,
             })
         elif isinstance(shape, int):
-            line_obj.update({
-                "Shape": container.world.milestone_shapes[shape][0][-1],
-                "StartingAmount": max(1, line_data_by_processors[len(processors)][0] * multiplier // 100),
-                "ExponentialGrowthPercentPerLevel": line_data_by_processors[len(processors)][1],
-            })
+            if shape > 0:
+                line_obj.update({
+                    "Shape": container.world.milestone_shapes[shape][0][-1],
+                    "StartingAmount": max(1, line_data_by_processors[len(processors)][0] * multiplier // 100),
+                    "ExponentialGrowthPercentPerLevel": line_data_by_processors[len(processors)][1],
+                })
+            else:
+                line_obj.update({
+                    "Shape": container.world.task_shapes[-shape][-1],
+                    "StartingAmount": max(1, line_data_by_processors[len(processors)][0] * multiplier // 100),
+                    "ExponentialGrowthPercentPerLevel": line_data_by_processors[len(processors)][1],
+                })
         else:
             line_obj.update({
                 "Shape": shape,

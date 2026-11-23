@@ -1,6 +1,6 @@
 ### Important
 
-- some rewards appear to not be supported on operator levels
+- some rewards appear to not be supported on operator levels, might be outdated
 - fluid miner + extension does not work
 - look if starting inv from pool needs extra handling
 - what about player names with `:`
