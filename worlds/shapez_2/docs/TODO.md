@@ -5,6 +5,7 @@
 - look if starting inv from pool needs extra handling
 - what about player names with `:`
 - Add screenshots where to find the custom scenario in scenario selection screen
+- update unittests
 
 ### Features
 
