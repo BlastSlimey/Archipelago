@@ -33,11 +33,10 @@ Though, the setup is a bit complicated, so let me explain it quickly:
 1. Download the Archipelago software and install it: https://github.com/ArchipelagoMW/Archipelago/releases
 2. Download the latest shapez 2 apworld: https://github.com/BlastSlimey/2hapezipelago/releases 
    (this is the "plugin" for the AP software to know how to handle this game)
-3. ~~Install the 2hapezipelago mod from the Steam Workshop, allowing Steam to download all of its dependency mods~~
-   - As of writing this, the mod is incompatible with the latest apworld and should thereby be skipped for now
+3. Install the 2hapezipelago mod from the Steam Workshop, allowing Steam to download all of its dependency mods
 4. Put the apworld into `<AP install folder>/custom_worlds`, or on Windows, double-click it and AP will install it 
    to the custom worlds folder automatically
-5. Run the AP Launcher
+5. Run the AP Launcher (or close and re-open it if it was already open)
 6. Select Tool -> "Options Creator" -> shapez 2 (you'll have to scroll all the way to the bottom to find it)
 7. Change the options to your liking (hovering over an option's name will show you some information)
 8. Click "Export Options" and save the file to `<AP install folder>/Players`
@@ -45,7 +44,7 @@ Though, the setup is a bit complicated, so let me explain it quickly:
 10. If everything went right (i.e. no error message), a zip file has been created in `<AP install folder>/Output`
 11. Open that zip file and extract the `.spz2scenario` file with your player name
     - That zip file also contains a spoiler for the placement of all items
-12. Either double-click the `.spz2scenario` file or click "Open Patch" in the Launcher
+12. Either double-click the `.spz2scenario` file and choose Archipelago to run it with or click "Open Patch" in the Launcher and choose the file
     - A folder selection window might pop up if the save data folder could not be detected automatically
     - If everything went right, a success message will pop up at the end
     - Doing so again with a different generated seed will overwrite the already installed scenario
