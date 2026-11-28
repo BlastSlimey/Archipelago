@@ -434,6 +434,34 @@ class ItemPoolModifiers(ToggleSet):
     ]
 
 
+class SurpriseOutOfLogicItems(ExtendedOptionCounter):
+    """
+    Adds mysterious items to the shop that can contain a copy of any building,
+    space platform, or mechanic in your item pool, without being accounted for
+    in logic.
+    You can adjust various parameters of these shop items. Weighting for each
+    parameter individually, "random", and "random-range-x-y" are supported.
+
+    - **Amount** (0-6) - The amount of surprise out-of-logic items in the shop.
+    - **Cost per item** (1000-50000) - The amount of research credits required
+        to purchase each item. The actual cost ingame is always rounded down to
+        the nearest 100-step.
+    """
+    display_name = "Surprise Out-Of-Logic Item"
+    valid_keys = [
+        "Amount",
+        "Cost per item",
+    ]
+    default = {
+        "Amount": 1,
+        "Cost per item": 10000,
+    }
+    individual_min_max = {
+        "Amount": (0, 6),
+        "Cost per item": (1000, 50000),
+    }
+
+
 class ShowItemNames(ToggleSet):
     """
     Adds some information to items belonging to other players in your game.
@@ -512,6 +540,7 @@ class Shapez2Options(PerGameCommonOptions):
     shape_generation_adjustments: ShapeGenerationAdjustments
     blueprint_shapes: BlueprintShapes
     item_pool_modifiers: ItemPoolModifiers
+    surprise_out_of_logic_item: SurpriseOutOfLogicItems
     show_item_names: ShowItemNames
     show_other_players_items: ShowOtherPlayersItems  # Deprecated
     start_inventory_from_pool: StartInventoryPool

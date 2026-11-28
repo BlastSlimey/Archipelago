@@ -1,33 +1,14 @@
 from typing import Any
 
 from ...output import Shapez2ScenarioContainer
-from ...data.items import all_standard_items
+from ...data.items import all_remote_items
 from .rewards import get_rewards
-
-milestone_ids: tuple[str, ...] = ("Milestone_FluidPainting", "Milestone_ShapeTrains",
-                                  "Milestone_PinPusher", "Milestone_ColorMixing", "Milestone_SpaceFloor3",
-                                  "Milestone_Crystals", "Milestone_VortexDelivery", "Milestone_FinalConverters",
-                                  "Milestone_PostFinal_Tier0", "Milestone_PostFinal_Tier1", "Milestone_PostFinal_Tier2",
-                                  "Milestone_PostFinal_Tier3")
 
 
 def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
 
     surprise = container.world.random.choice(container.world.main_item_names)
     out = [{
-        "Id": "RNSurprise",
-        "PreviewImageId": "CBBelts_Core",
-        "VideoId": "PlaceholderVideoVD",
-        "Title": "Surprise out-of-logic item",
-        "IconId": "building.SandboxItemProducerDefaultVariant",
-        "Description": "Rewards you with a random building, island platform, or mechanic "
-                       "without being taken into account by logic.",
-        "Category": "Other",
-        "RequiredUpgradeIds": [],
-        "RequiredMechanicIds": [],
-        "Rewards": list(get_rewards(surprise)),
-        "Costs": [{"$type": "ResearchPointsCost", "Amount": 100}]
-    }, {
         "Id": "CBWires_Core",
         "PreviewImageId": "CBWires_Core",
         "VideoId": "PlaceholderVideoVD",
@@ -42,21 +23,23 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
         "Costs": [{"$type": "ResearchPointsCost", "Amount": 1}]
     }]
 
-    # for vanilla in milestone_ids:
-    #     out.append({
-    #         "Id": vanilla,
-    #         "PreviewImageId": "",
-    #         "VideoId": "PlaceholderVideoVD",
-    #         "Title": vanilla,
-    #         "IconId": "building.SandboxItemProducerDefaultVariant",
-    #         "Description": "",
-    #         "Hidden": True,
-    #         "Category": "Other",
-    #         "RequiredUpgradeIds": [],
-    #         "RequiredMechanicIds": [],
-    #         "Rewards": [],
-    #         "Costs": []
-    #     })
+    surprise_count = container.world.options.surprise_out_of_logic_item["Amount"]
+    surprise_cost = container.world.options.surprise_out_of_logic_item["Cost per item"]
+    for i in range(surprise_count):
+        out.append({
+            "Id": f"RNSurprise{i+1}",
+            "PreviewImageId": "CBBelts_Core",
+            "VideoId": "PlaceholderVideoVD",
+            "Title": "Surprise out-of-logic item" + ("" if surprise_count == 1 else f" #{i+1}"),
+            "IconId": "building.SandboxItemProducerDefaultVariant",
+            "Description": "Rewards you with a random building, space platform, or mechanic "
+                           "without being taken into account by logic.",
+            "Category": "Other",
+            "RequiredUpgradeIds": [],
+            "RequiredMechanicIds": [],
+            "Rewards": list(get_rewards(surprise)),
+            "Costs": [{"$type": "ResearchPointsCost", "Amount": surprise_cost // 100}]
+        })
 
     for name, data in all_remote_items.items():
         out.append({
