@@ -148,9 +148,9 @@ class OperatorLevelsAdjustments(ExtendedOptionCounter):
         can contain checks. Every level after this will grant extra
         research/blueprint credits and platform capacity.
 
-    Do note that you have to add enough (minimum) locations in total to fit all
-    non-filler items (filler items are research/blueprint credits and platform
-    capacity). Excluding job/operator line keys, there are ~60 items.
+    Do note that operator levels cannot contain buildings, space platforms,
+    and mechanics of your own world, for technical reasons. They thereby don't
+    count towards the minimum location count requirement.
     """
     display_name = "Operator Level Adjustments"
     valid_keys = [

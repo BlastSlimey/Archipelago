@@ -103,13 +103,11 @@ def calculate_locations_count(world: "Shapez2World"):
     )
     max_possible_locations = (
         miles_adj["Milestones"] * miles_adj["Maximum checks per milestone"] +
-        jobs_adj["Job lines"] * jobs_adj["Maximum checks per job line"] +
-        operator_lvl_adj["Operator level checks"]
+        jobs_adj["Job lines"] * jobs_adj["Maximum checks per job line"]
     )
     if required_locations > max_possible_locations:
         raise OptionError(f"{world.player_name}: Not enough possible locations ({max_possible_locations}) "
                           f"for required items ({required_locations}).")
-    required_locations -= operator_lvl_adj["Operator level checks"]
     world.milestone_checks_counts[:] = (miles_adj["Minimum checks per milestone"],) * miles_adj["Milestones"]
     world.task_counts[:] = (jobs_adj["Minimum checks per job line"],) * jobs_adj["Job lines"]
     required_locations -= sum(world.milestone_checks_counts) + sum(world.task_counts)
