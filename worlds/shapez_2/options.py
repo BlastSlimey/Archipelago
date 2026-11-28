@@ -404,6 +404,9 @@ class ItemPoolModifiers(ToggleSet):
     - **Include blueprint credits** - Allows blueprint credits to be added as
         filler items. If blueprint costs are disabled ingame, blueprint credits
         and rewards granting them will be invisible ingame.
+    - **Include platform capacity** - Allows platform capacity to be added as
+        filler items. If platform costs are disabled ingame, platform capacity
+        and rewards granting it will be invisible ingame.
     - **Arbitrary research credits** - Allows research credits items to give any
         amount in range of 100-10000 instead of snapping them to nice numbers.
     - **Arbitrary platform capacity** - Allows platform capacity items to give
@@ -420,6 +423,7 @@ class ItemPoolModifiers(ToggleSet):
     display_name = "Item Pool Modifiers"
     is_random_starting_processor = True
     is_include_blueprint_credits = False
+    is_include_platform_capacity = True
     is_arbitrary_research_credits = False
     is_arbitrary_blueprint_credits = False
     is_arbitrary_platform_capacity = False

@@ -83,17 +83,20 @@ def generate_filler(world: "Shapez2World") -> str:
                     ],
                 ],
             ],
-            *(f"{x} Platform Capacity" for x in range(10, 41, steps[4])),
-            [
-                *(f"{x} Platform Capacity" for x in range(60, 121, steps[5])),
+        ]
+        if world.options.item_pool_modifiers.is_include_platform_capacity:
+            world.filler_nested.extend([
+                *(f"{x} Platform Capacity" for x in range(10, 41, steps[4])),
                 [
-                    *(f"{x} Platform Capacity" for x in range(150, 251, steps[6])),
+                    *(f"{x} Platform Capacity" for x in range(60, 121, steps[5])),
                     [
-                        *(f"{x} Platform Capacity" for x in range(300, 501, steps[7])),
+                        *(f"{x} Platform Capacity" for x in range(150, 251, steps[6])),
+                        [
+                            *(f"{x} Platform Capacity" for x in range(300, 501, steps[7])),
+                        ],
                     ],
                 ],
-            ],
-        ]
+            ])
         if world.options.item_pool_modifiers.is_include_blueprint_credits:
             world.filler_nested.extend([
                 *(f"{x} Blueprint Credits" for x in range(1000, 3000, steps[8])),
