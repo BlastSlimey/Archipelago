@@ -58,7 +58,7 @@ def get_remote_upgrades(container: "Shapez2ScenarioContainer") -> list[dict[str,
     #         "Costs": []
     #     })
 
-    for name, data in all_standard_items.items():
+    for name, data in all_remote_items.items():
         out.append({
             "Id": data.remote_id,
             "PreviewImageId": "",
